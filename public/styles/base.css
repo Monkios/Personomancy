@@ -1,0 +1,54 @@
+body {
+	padding: 0;
+	margin: 0;
+	color: #333;
+	background-color: #EEE;
+}
+
+body > * {
+	max-width: 800px;
+}
+
+h1 + p {
+	padding: 0;
+	margin: 0;
+	font-style: italic;
+	color: #CC4444;
+	text-transform: lowercase;
+	font-variant: small-caps;
+}
+
+a:link {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+table td, table th {
+	white-space: nowrap;
+	padding: 0 0.5em;
+	border: 1px dotted #888;
+}
+
+table tr:nth-child( 2n ){
+	background-color: #CCC;
+}
+
+dt {
+	margin-bottom: 0.3em;
+	font-weight: bold;
+}
+
+dd {
+	margin-bottom: 0.6em;
+}
+
+ul#messages_list {
+	font-weight: bold;
+	color: #333;
+}
+
+.is_yes { color: #4A4; }
+.is_no { color: #A44; }
