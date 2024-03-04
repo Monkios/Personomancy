@@ -68,9 +68,11 @@
 	
 	session_start();
 	
-	require_once "./includes/libs/PHPMailer/class.phpmailer.php";
-	require_once "./includes/libs/PHPMailer/class.smtp.php";
-	define( "PHPMAILER_LANG", "./includes/libs/PHPMailer/" );
+	require_once "./vendor/phpmailer/phpmailer/class.phpmailer.php";
+	require_once "./vendor/phpmailer/phpmailer/class.smtp.php";
+	define( "PHPMAILER_LANG", "./vendor/phpmailer/phpmailer/" );
+
+	include "./vendor/tecnickcom/tcpdf/tcpdf.php";
 	
 	header('Content-Type: text/html; charset=utf-8');
 ?>
