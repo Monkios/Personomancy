@@ -53,10 +53,10 @@ ALTER TABLE `capacite_liste`
 
 CREATE TABLE `capacite_liste_capacite` (
   `capacite_liste_id` int(3) UNSIGNED NOT NULL,
-  `capacite_id` int(3) UNSIGNED NOT NULL,
+  `capacite_id` int(3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
-ALTER TABLE `capacite_capacite_categorie`
+ALTER TABLE `capacite_liste_capacite`
   ADD UNIQUE KEY `id_sort` (`capacite_liste_id`,`capacite_id`);
 
 -- --------------------------------------------------------
@@ -93,7 +93,6 @@ CREATE TABLE `connaissance` (
   `voie_id` int(3) UNSIGNED NOT NULL DEFAULT 0,
   `capacite_prerequis` int(3) UNSIGNED NOT NULL DEFAULT 0,
   `voie_prerequis_prim` int(3) UNSIGNED NOT NULL DEFAULT 0,
-  `voie_prerequis_sec` int(3) UNSIGNED NOT NULL DEFAULT 0,
   `voie_prerequis_sec` int(3) UNSIGNED NOT NULL DEFAULT 0,
   `active` bit(1) NOT NULL DEFAULT 1,
   `supprime` bit(1) NOT NULL DEFAULT 0
