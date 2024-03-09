@@ -10,12 +10,12 @@
 				$new_firstname = $new_lastname = "";
 				if( isset( $_POST['firstname'] ) && $_POST['firstname'] !== $player->FirstName ){
 					// Prepare firstname
-					$new_firstname = Security::FilterInput( utf8_decode( $_POST['firstname'] ) );
+					$new_firstname = Security::FilterInput( mb_convert_encoding( $_POST['firstname'], 'ISO-8859-1', 'UTF-8') );
 				}
 				
 				if( isset( $_POST['lastname'] ) && $_POST['lastname'] !== $player->LastName ){
 					// Prepare lastname
-					$new_lastname = Security::FilterInput( utf8_decode( $_POST['lastname'] ) );
+					$new_lastname = Security::FilterInput( mb_convert_encoding( $_POST['lastname'], 'ISO-8859-1', 'UTF-8') );
 				}
 				
 				if( $new_firstname != "" || $new_lastname != "" ){

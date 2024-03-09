@@ -50,10 +50,7 @@
 	// Test if user has access
 	if( $logged_in ){
 		// GM access to GM page
-		if( ( $control_section == "gm" && !$user_identity->HasAccess( Identity::IS_ANIM ) ) ||
-				// Admin access to Admin page
-				( $control_section == "admin" && !$user_identity->HasAccess( Identity::IS_ADMIN ) )
-		){
+		if( $control_section == "gm" && !$user_identity->HasAccess( Identity::IS_ANIM ) ){
 			$control_section = $default_section;
 			$control_action = $default_action;
 		}
@@ -63,7 +60,10 @@
 	$control_dir = "./controller/" . $section_types[ $control_section ];
 	$control_path = $control_dir . "/" . $control_action . ".php";
 	if( file_exists( $control_path ) ){
-		if( realpath( $control_path ) !== realpath( $control_dir ) . "/" . $control_action . ".php" ){
+		// Verify if the requested path is the same as the control path
+		$requested_path = realpath( $control_dir ) . "/" . $control_action . ".php";
+		$requested_path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $requested_path); // Works in all OS
+		if( realpath( $control_path ) !== $requested_path ){
 			Message::Fatale( "Relative path traversal attack." );
 		}
 	} else {

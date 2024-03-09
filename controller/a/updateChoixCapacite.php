@@ -8,7 +8,7 @@
 		
 		if( isset( $_POST["choix_capacite_id"] ) && $_GET["i"] == $_POST["choix_capacite_id"] ){
 			if( isset( $_POST["save_choix_capacite"] ) ){
-				$choixCapacite->nom = utf8_decode( Security::FilterInput( $_POST["choix_capacite_nom"] ) );
+				$choixCapacite->nom = mb_convert_encoding( Security::FilterInput( $_POST["choix_capacite_nom"] ), 'ISO-8859-1', 'UTF-8');
 				$choixCapacite->active = isset( $_POST["choix_capacite_active"] );
 				
 				// ...

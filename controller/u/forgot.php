@@ -1,6 +1,6 @@
 <?php
 	if( isset( $_POST['send'] ) && isset( $_POST['email'] ) ){
-		$player = Community::GetPlayerByEmail( utf8_decode( Security::FilterInput( $_POST['email'] ) ) );
+		$player = Community::GetPlayerByEmail( mb_convert_encoding( Security::FilterInput( $_POST['email'] ), 'ISO-8859-1', 'UTF-8') );
 		
 		if( $player ){
 			//if( $player->IsActive ){

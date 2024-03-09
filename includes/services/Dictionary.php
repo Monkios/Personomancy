@@ -235,12 +235,12 @@
 		
 		public static function GetStatistiques(){
 			$statistiques = array(
-				1 => utf8_decode( "Constitution" ),
-				2 => utf8_decode( "Intelligence" ),
-				3 => utf8_decode( "Alerte" ),
-				4 => utf8_decode( "Spiritisme" ),
-				5 => utf8_decode( "Vigueur" ),
-				6 => utf8_decode( "Volonté" )
+				1 => mb_convert_encoding( "Constitution", 'ISO-8859-1', 'UTF-8'),
+				2 => mb_convert_encoding( "Intelligence", 'ISO-8859-1', 'UTF-8'),
+				3 => mb_convert_encoding( "Alerte", 'ISO-8859-1', 'UTF-8'),
+				4 => mb_convert_encoding( "Spiritisme", 'ISO-8859-1', 'UTF-8'),
+				5 => mb_convert_encoding( "Vigueur", 'ISO-8859-1', 'UTF-8'),
+				6 => mb_convert_encoding( "Volonté", 'ISO-8859-1', 'UTF-8')
 			);
 			asort( $statistiques );
 			

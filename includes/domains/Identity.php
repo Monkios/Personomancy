@@ -1,8 +1,8 @@
 <?php
 	class Identity {
 		const IS_ACTIVE = "active";
-		const IS_ANIM = "est_anim";
-		const IS_ADMIN = "est_admin";
+		const IS_ANIM = "est_animateur";
+		const IS_ADMIN = "est_administrateur";
 		
 		private $player = FALSE;
 		
@@ -62,29 +62,18 @@
 		public static function Create( $email, $firstname, $lastname ){
 			if( !Community::GetPlayerByEMail( $email ) ){
 				$db = new Database();
-				
-				$salt = "";
-				$password_temp = Identity::GenerateRandomPassword();
-				$login = str_replace( " ", "", strtoupper( substr( $firstname, 0, 1 ) ) . substr( ucfirst( $lastname ), 0, 5 ) . time() );
-				
-				$sql = "INSERT INTO joueur ( login, prenom, nom, courriel, date_naissance, salt, password, old_password, est_anim, est_admin, active, date_insert, date_modify )
-						VALUES( ?, ?, ?, ?, '', 'salt', 'password', 'old_password', '0', '0', '0', NOW(), NOW() )";
-				$db->Query( $sql, array( $login, $firstname, $lastname, $email ) );
+				$sql = "INSERT INTO joueur ( prenom, nom, courriel, salt, password )
+						VALUES( ?, ?, ?, 'temp_salt', 'temp_password' )"; // Le sel et le mot de passe sont créés tout de suite après
+				$db->Query( $sql, array( $firstname, $lastname, $email ) );
 				
 				if( $joueur = Community::GetPlayerByEMail( $email ) ){
+					$password_temp = Identity::GenerateRandomPassword();
+					$generation_key_salt = self::GetNewSalt();
+
 					$identity = new Identity( $joueur->Id );
 					$identity->ChangePasswordTo( $password_temp );
 					
-					$activation_url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?s=user&a=activate&m=" . urlencode( $email ) . "&k=" . urlencode( self::GenerateActivationKey( $email, $salt ) );
-				
-					$body  = "Une requête de création de compte vient d'être faite en votre nom.<br />\n";
-					$body .= "<br />\n";
-					$body .= "Pour activer votre compte, veuillez suivre le lien suivant : <a href='" . $activation_url . "'>Activation</a><br />\n";
-					$body .= "<br />\n";
-					$body .= "Lors de votre prochaine connexion, veuillez utiliser le mot de passe suivant : <b>" . $password_temp . "</b><br />\n";
-					$body .= "Pour plus de sécurité, pensez à changer ce mot de passe dès que possible.<br />\n";
-						
-					return Email::Send( $email, "Nouveau compte", $body );
+					return self::SendActivationEmail( $email, $generation_key_salt, $password_temp );
 				}
 			}
 			return FALSE;
@@ -96,11 +85,11 @@
 					case Identity::IS_ACTIVE :
 						return $this->player->IsActive == 1;
 						break;
-					case Identity::IS_ANIM :
+					case Identity::IS_ANIMATEUR :
 						return $this->player->IsAnimateur == 1;
 						break;
-					case Identity::IS_ADMIN :
-						return $this->player->IsAdmin == 1;
+					case Identity::IS_ADMINISTRATEUR :
+						return $this->player->IsAdministrateur == 1;
 						break;
 					default :
 						Message::Fatale( "Type d'accès inconnu.", $access );
@@ -119,11 +108,11 @@
 					case Identity::IS_ACTIVE :
 						$sql .= "active";
 						break;
-					case Identity::IS_ANIM :
-						$sql .= "est_anim";
+					case Identity::IS_ANIMATEUR :
+						$sql .= "est_animateur";
 						break;
-					case Identity::IS_ADMIN :
-						$sql .= "est_admin";
+					case Identity::IS_ADMINISTRATEUR :
+						$sql .= "est_administrateur";
 						break;
 					default :
 						Message::Fatale( "Type d'accès inconnu.", $access );
@@ -191,10 +180,10 @@
 		public function ChangePasswordTo( $password ){
 			if( $this->player ){
 				$db = new Database();
-				$new_salt = mt_rand();
+				$new_salt = self::GetNewSalt();
 				$hashed_password = self::HashPassword( $new_salt, $password );
 			
-				$sql = "UPDATE joueur SET password = ?, old_password = '', salt = ?, date_modify = NOW() WHERE id = ?";
+				$sql = "UPDATE joueur SET password = ?, salt = ?, date_modify = NOW() WHERE id = ?";
 				$db->Query( $sql, array( $hashed_password, $new_salt, $this->player->Id ) );
 				
 				$this->player->Salt = $new_salt;
@@ -202,6 +191,10 @@
 				return TRUE;
 			}
 			return FALSE;
+		}
+
+		private static function GetNewSalt(){
+			return mt_rand();
 		}
 		
 		public function AssignCharacter( $character_id ){
@@ -214,25 +207,27 @@
 			}
 			return FALSE;
 		}
-		
-		public function ChangePasseSaison( $add ){
-			$return = FALSE;
-			if( $this->player ){
-				$db = new Database();
+
+		private static function GetActivationUrl( $player_email, $generation_key_salt ){
+			return "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?s=user&a=activate&m=" . urlencode( $player_email ) . "&k=" . urlencode( self::GenerateActivationKey( $player_email, $generation_key_salt ) );
+		}
+
+		private static function SendActivationEmail( $email, $salt, $password_temp ){
+			$activation_url = self::GetActivationUrl($email, $salt);
 				
-				$sql = "UPDATE joueur SET passe_saison = '" . ( $add ? 1 : 0 ) . "', date_modify = NOW() WHERE id = ?";
+			$body  = "Une requête de création de compte vient d'être faite en votre nom.<br />\n";
+			$body .= "<br />\n";
+			$body .= "Pour activer votre compte, veuillez suivre le lien suivant : <a href='" . $activation_url . "'>Activation</a><br />\n";
+			$body .= "<br />\n";
+			$body .= "Lors de votre prochaine connexion, veuillez utiliser le mot de passe suivant : <b>" . $password_temp . "</b><br />\n";
+			$body .= "Pour plus de sécurité, pensez à changer ce mot de passe dès que possible.<br />\n";
 				
-				$db->Query( $sql, array( $this->player->Id ) );
-				
-				$return = TRUE;
-			}
-			
-			return $return;
+			return Email::Send( $email, "Nouveau compte", $body );
 		}
 		
 		public function SendValidationEmail(){
 			if( $this->player ){
-				$activation_url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?s=user&a=activate&m=" . urlencode( $this->player->Email ) . "&k=" . urlencode( self::GenerateActivationKey( $this->player->Email, $this->player->Salt ) );
+				$activation_url = self::GetActivationUrl( $this->player->Email, $this->player->Salt );
 					
 				$body  = "Une demande d'activation de compte vient d'être faite en votre nom.<br />\n";
 				$body .= "<br />\n";

@@ -12,7 +12,6 @@
 	$default_section = "user";
 	$default_action = "index";
 	$section_types = array(
-		"admin"  => "a",
 		"gm"  => "g",
 		"player" => "p",
 		"user"  => "u"
@@ -32,15 +31,10 @@
 	require_once "./includes/entities/GenericEntity.php";
 	require_once "./includes/entities/Capacite.php";
 	require_once "./includes/entities/ChoixCapacite.php";
-	require_once "./includes/entities/ChoixConnaissance.php";
-	require_once "./includes/entities/ChoixPouvoir.php";
 	require_once "./includes/entities/Connaissance.php";
 	require_once "./includes/entities/PersonnagePartiel.php";
 	require_once "./includes/entities/Personnage.php";
-	require_once "./includes/entities/Pouvoir.php";
-	require_once "./includes/entities/Prestige.php";
 	require_once "./includes/entities/Race.php";
-	require_once "./includes/entities/Sort.php";
 	require_once "./includes/entities/Voie.php";
 	
 	require_once "./includes/domains/CharacterSheet.php";
@@ -56,23 +50,16 @@
 	
 	require_once "./includes/repositories/CapaciteRepository.php";
 	require_once "./includes/repositories/ChoixCapaciteRepository.php";
-	require_once "./includes/repositories/ChoixConnaissanceRepository.php";
-	require_once "./includes/repositories/ChoixPouvoirRepository.php";
 	require_once "./includes/repositories/ConnaissanceRepository.php";
 	require_once "./includes/repositories/PersonnageRepository.php";
-	require_once "./includes/repositories/PrestigeRepository.php";
-	require_once "./includes/repositories/PouvoirRepository.php";
 	require_once "./includes/repositories/RaceRepository.php";
-	require_once "./includes/repositories/SortRepository.php";
 	require_once "./includes/repositories/VoieRepository.php";
 	
 	session_start();
 	
-	require_once "./vendor/phpmailer/phpmailer/class.phpmailer.php";
-	require_once "./vendor/phpmailer/phpmailer/class.smtp.php";
-	define( "PHPMAILER_LANG", "./vendor/phpmailer/phpmailer/" );
+	require "./vendor/autoload.php";
 
-	include "./vendor/tecnickcom/tcpdf/tcpdf.php";
+	define( "PHPMAILER_LANG", "./vendor/phpmailer/phpmailer/language" );
 	
 	header('Content-Type: text/html; charset=utf-8');
 ?>

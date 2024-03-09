@@ -10,7 +10,7 @@
 
 		if( $email != "" && $firstname != "" && $lastname != "" ){
 			if( Community::GetPlayerByEMail( $email ) === FALSE ){
-				if( Identity::Create( utf8_decode( $email ), utf8_decode( $firstname ), utf8_decode( $lastname ) ) ){
+				if( Identity::Create( $email, $firstname, $lastname ) ){
 					Message::Notice( "Votre compte a été créé avec succès. Un courriel d'activation vous a été envoyé." );
 					
 					header( "Location: ./index.php" );

@@ -8,7 +8,7 @@
 	}
 
 	if( $email != "" ){
-		$player = Community::GetPlayerByEMail( utf8_decode( $email ) );
+		$player = Community::GetPlayerByEMail( mb_convert_encoding( $email, 'ISO-8859-1', 'UTF-8') );
 		
 		if( !$player->IsActive ){
 			$identity = new Identity( $player->Id );

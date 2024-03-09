@@ -12,7 +12,7 @@
 		
 		if( isset( $_POST["connaissance_id"] ) && $_GET["i"] == $_POST["connaissance_id"] ){
 			if( isset( $_POST["save_connaissance"] ) ){
-				$connaissance->nom = utf8_decode( Security::FilterInput( $_POST["connaissance_nom"] ) );
+				$connaissance->nom = mb_convert_encoding( Security::FilterInput( $_POST["connaissance_nom"] ), 'ISO-8859-1', 'UTF-8');
 				$connaissance->active = isset( $_POST["connaissance_active"] );
 				
 				$connaissance->prereq_statistique_prim_id = ( array_key_exists( $_POST["connaissance_statistique_prim_id"], $list_statistiques ) ? $_POST["connaissance_statistique_prim_id"] : 0 );
