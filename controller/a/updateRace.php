@@ -7,7 +7,7 @@
 		
 		if( isset( $_POST["race_id"] ) && $_GET["i"] == $_POST["race_id"] ){
 			if( isset( $_POST["save_race"] ) ){
-				$race->nom = utf8_decode( Security::FilterInput( $_POST["race_nom"] ) );
+				$race->nom = mb_convert_encoding( Security::FilterInput( $_POST["race_nom"] ), 'ISO-8859-1', 'UTF-8');
 				$race->active = isset( $_POST["race_active"] );
 
 				$race->base_alerte = $_POST["race_alerte"];

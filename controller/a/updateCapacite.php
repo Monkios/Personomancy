@@ -8,7 +8,7 @@
 		
 		if( isset( $_POST["capacite_id"] ) && $_GET["i"] == $_POST["capacite_id"] ){
 			if( isset( $_POST["save_capacite"] ) && array_key_exists( $_POST["capacite_voie"], $list_voies ) ){
-				$capacite->nom = utf8_decode( Security::FilterInput( $_POST["capacite_nom"] ) );
+				$capacite->nom = mb_convert_encoding( Security::FilterInput( $_POST["capacite_nom"] ), 'ISO-8859-1', 'UTF-8');
 				$capacite->active = isset( $_POST["capacite_active"] );
 				
 				$capacite->voie_id = $_POST["capacite_voie"];

@@ -70,8 +70,8 @@
 			if( $c !== FALSE ){
 				$character_id = $c->id;
 				
-				$this->RecordAction( $c->id, CharacterSheet::RECORD_MESSAGE, 0, 0, utf8_decode( "Création du personnage" ), FALSE );
-				$this->RecordAction( $c->id, CharacterSheet::RECORD_XP, 1, CHARACTER_BASE_XP, utf8_decode( "Gain de " . CHARACTER_BASE_XP . "  points d'expérience. (Création du personnage)" ), FALSE );
+				$this->RecordAction( $c->id, CharacterSheet::RECORD_MESSAGE, 0, 0, mb_convert_encoding( "Création du personnage", 'ISO-8859-1', 'UTF-8'), FALSE );
+				$this->RecordAction( $c->id, CharacterSheet::RECORD_XP, 1, CHARACTER_BASE_XP, mb_convert_encoding( "Gain de " . CHARACTER_BASE_XP . "  points d'expérience. (Création du personnage)", 'ISO-8859-1', 'UTF-8'), FALSE );
 				
 				if( $this->AddRace( $c, $race_id ) ){
 					return $c;
@@ -149,7 +149,7 @@
 					$race = $rr->Find( $c->race_id );
 					if( $c->pc_raciales >= $race->list_capacites_raciales[ $new_cr ][ 1 ] ){
 						if( $pr->BuyCapaciteRaciale( $c, $new_cr ) ){
-							$this->RecordAction( $c->id, CharacterSheet::RECORD_RACIALE_CAPACITE, $new_cr, $race->list_capacites_raciales[ $new_cr ][ 1 ], utf8_decode( "Ajout de la capacité raciale : " ) . $cr->nom, TRUE );
+							$this->RecordAction( $c->id, CharacterSheet::RECORD_RACIALE_CAPACITE, $new_cr, $race->list_capacites_raciales[ $new_cr ][ 1 ], mb_convert_encoding( "Ajout de la capacité raciale : ", 'ISO-8859-1', 'UTF-8') . $cr->nom, TRUE );
 							return $c;
 						}
 					}
@@ -164,7 +164,7 @@
 			if( count( $race ) == 1 ){
 				$pr = new PersonnageRepository();
 				if( $pr->AddRace( $character, $new_race ) != FALSE ){
-					$this->RecordAction( $character->id, CharacterSheet::RECORD_RACE, $new_race, 1, utf8_decode( "Sélection de la race : " ) . $race[ $new_race ], TRUE );
+					$this->RecordAction( $character->id, CharacterSheet::RECORD_RACE, $new_race, 1, mb_convert_encoding( "Sélection de la race : ", 'ISO-8859-1', 'UTF-8') . $race[ $new_race ], TRUE );
 					
 					return TRUE;
 				}
@@ -205,7 +205,7 @@
 				
 				$c->pc_raciales -= $remaining_pcr;
 				if( $pr->Save( $c ) ){
-					$this->RecordAction( $c->id, CharacterSheet::RECORD_RACIALE_EMPTY, 0, $remaining_pcr, utf8_decode( "Abandon des " . $remaining_pcr . " points de capacités raciales restants." ), TRUE );
+					$this->RecordAction( $c->id, CharacterSheet::RECORD_RACIALE_EMPTY, 0, $remaining_pcr, mb_convert_encoding( "Abandon des " . $remaining_pcr . " points de capacités raciales restants.", 'ISO-8859-1', 'UTF-8'), TRUE );
 					
 					return $pr->FindComplete( $character_id );
 				}
@@ -225,7 +225,7 @@
 					$liste_capacites = $ccr->GetCapacites( $choix_capacite );
 					if( array_key_exists( $choix_id, $liste_capacites ) ){
 						if( $pr->BuyChoixCapacite( $c, $list_id, $choix_id ) ){
-							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_CAPACITE, $list_id, $choix_id, utf8_decode( "Sélection de la capacité : " ) . $liste_capacites[ $choix_id ]->nom, TRUE );
+							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_CAPACITE, $list_id, $choix_id, mb_convert_encoding( "Sélection de la capacité : ", 'ISO-8859-1', 'UTF-8') . $liste_capacites[ $choix_id ]->nom, TRUE );
 							return $c;
 						}
 					}
@@ -265,7 +265,7 @@
 					$liste_connaissances = $ccr->GetConnaissances( $choix_connaissance );
 					if( array_key_exists( $choix_id, $liste_connaissances ) ){
 						if( $pr->BuyChoixConnaissance( $c, $list_id, $choix_id ) ){
-							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_CONNAISSANCE, $list_id, $choix_id, utf8_decode( "Sélection de la connaissance : " ) . $liste_connaissances[ $choix_id ]->nom, TRUE );
+							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_CONNAISSANCE, $list_id, $choix_id, mb_convert_encoding( "Sélection de la connaissance : ", 'ISO-8859-1', 'UTF-8') . $liste_connaissances[ $choix_id ]->nom, TRUE );
 							return $c;
 						}
 					}
@@ -306,7 +306,7 @@
 					$liste_pouvoirs = $cpr->GetPouvoirs( $choix_pouvoir );
 					if( array_key_exists( $choix_id, $liste_pouvoirs ) ){
 						if( $pr->BuyChoixPouvoir( $c, $list_id, $choix_id ) ){
-							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_POUVOIR, $list_id, $choix_id, utf8_decode( "Sélection du pouvoir : " ) . $liste_pouvoirs[ $choix_id ]->nom, TRUE );
+							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_POUVOIR, $list_id, $choix_id, mb_convert_encoding( "Sélection du pouvoir : ", 'ISO-8859-1', 'UTF-8') . $liste_pouvoirs[ $choix_id ]->nom, TRUE );
 							return $c;
 						}
 					}
@@ -403,7 +403,7 @@
 						$c->px_restants -= $xp_cost;
 						
 						if( $pr->Save( $c ) ){
-							$this->RecordAction( $c->id, CharacterSheet::RECORD_ATTRIBUT, $attr_id, $nb_selections, utf8_decode( "Augmentation " . $attr_name . " à " . ( $curr_score + $nb_selections ) . " (-" . $xp_cost . " XP)" ), TRUE );
+							$this->RecordAction( $c->id, CharacterSheet::RECORD_ATTRIBUT, $attr_id, $nb_selections, mb_convert_encoding( "Augmentation " . $attr_name . " à " . ( $curr_score + $nb_selections ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
 							
 							return $c;
 						}
@@ -496,7 +496,7 @@
 							$c->px_restants -= $xp_cost;
 						
 							if( $pr->Save( $c ) ){
-								$this->RecordAction( $c->id, CharacterSheet::RECORD_CAPACITE, $capacite_id, $nb_selections, utf8_decode( "Augmentation de la capacité " . utf8_encode( $capacite->nom ) . " à " . ( $curr_score + $nb_selections ) . " (-" . $xp_cost . " XP)" ), TRUE );
+								$this->RecordAction( $c->id, CharacterSheet::RECORD_CAPACITE, $capacite_id, $nb_selections, mb_convert_encoding( "Augmentation de la capacité " . utf8_encode( $capacite->nom ) . " à " . ( $curr_score + $nb_selections ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
 							
 								return $c;
 							}
@@ -545,7 +545,7 @@
 							$c->px_restants -= $xp_cost;
 						
 							if( $pr->Save( $c ) ){
-								$this->RecordAction( $c->id, CharacterSheet::RECORD_VOIE, $voie_id, 1, utf8_decode( "Ajout de la voie " . utf8_encode( $voie->nom ) . " (-" . $xp_cost . " XP)" ), TRUE );
+								$this->RecordAction( $c->id, CharacterSheet::RECORD_VOIE, $voie_id, 1, mb_convert_encoding( "Ajout de la voie " . utf8_encode( $voie->nom ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
 							
 								return $c;
 							}
@@ -592,7 +592,7 @@
 							$c->px_restants -= $xp_cost;
 						
 							if( $pr->Save( $c ) ){
-								$this->RecordAction( $c->id, CharacterSheet::RECORD_CONNAISSANCE, $connaissance_id, 1, utf8_decode( "Ajout de la connaissance " . utf8_encode( $connaissance->nom ) . " (-" . $xp_cost . " XP)" ), TRUE );
+								$this->RecordAction( $c->id, CharacterSheet::RECORD_CONNAISSANCE, $connaissance_id, 1, mb_convert_encoding( "Ajout de la connaissance " . utf8_encode( $connaissance->nom ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
 							
 								return $c;
 							}
@@ -644,7 +644,7 @@
 				){
 					if( $pr->AddSort( $c, $sort->id ) ){
 						$nom_sort = $sort->nom . " (" . substr( $sort->sphere_nom, 0, 4 ) . ". " . $sort->cercle . ")";
-						$this->RecordAction( $c->id, CharacterSheet::RECORD_SORT, $sort->id, 1, utf8_decode( "Ajout du sort " . utf8_encode( $nom_sort ) ), TRUE );
+						$this->RecordAction( $c->id, CharacterSheet::RECORD_SORT, $sort->id, 1, mb_convert_encoding( "Ajout du sort " . utf8_encode( $nom_sort ), 'ISO-8859-1', 'UTF-8'), TRUE );
 							
 						return $c;
 					}
@@ -690,7 +690,7 @@
 						$c->px_restants -= $xp_cost;
 						
 						if( $pr->Save( $c ) ){
-							$this->RecordAction( $c->id, CharacterSheet::RECORD_PRESTIGE, $prestige->id, 1, utf8_decode( "Ajout de la connaissance de prestige " . utf8_encode( $prestige->nom ) . " (-" . $xp_cost . " XP)" ), TRUE );
+							$this->RecordAction( $c->id, CharacterSheet::RECORD_PRESTIGE, $prestige->id, 1, mb_convert_encoding( "Ajout de la connaissance de prestige " . utf8_encode( $prestige->nom ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
 							
 							return $c;
 						}
@@ -764,7 +764,7 @@
 					&& count( $c->choix_pouvoirs ) == 0
 			){
 				if( $pr->Activate( $c ) ){
-					$this->RecordAction( $c->id, CharacterSheet::RECORD_ACTIVATE, 0, 0, utf8_decode( "Activation du personnage" ), FALSE );
+					$this->RecordAction( $c->id, CharacterSheet::RECORD_ACTIVATE, 0, 0, mb_convert_encoding( "Activation du personnage", 'ISO-8859-1', 'UTF-8'), FALSE );
 					return TRUE;
 				}
 			}
@@ -778,7 +778,7 @@
 			
 			if( $c && $c->est_vivant ){
 				if( $pr->Deactivate( $c ) ){
-					$this->RecordAction( $c->id, CharacterSheet::RECORD_DEACTIVATE, 0, 0, utf8_decode( "Désactivation du personnage" ), FALSE );
+					$this->RecordAction( $c->id, CharacterSheet::RECORD_DEACTIVATE, 0, 0, mb_convert_encoding( "Désactivation du personnage", 'ISO-8859-1', 'UTF-8'), FALSE );
 					return TRUE;
 				}
 			}
@@ -792,7 +792,7 @@
 			
 			if( $c && !$c->est_vivant ){
 				if( $pr->Delete( $c->id ) ){
-					$this->RecordAction( $c->id, CharacterSheet::RECORD_DESTROY, 0, 0, utf8_decode( "Destruction de " ) . $c->nom, FALSE );
+					$this->RecordAction( $c->id, CharacterSheet::RECORD_DESTROY, 0, 0, mb_convert_encoding( "Destruction de ", 'ISO-8859-1', 'UTF-8') . $c->nom, FALSE );
 					return TRUE;
 				}
 			}
@@ -805,7 +805,7 @@
 			$c = $pr->Find( $id );
 			
 			if( !$suffix ){
-				$suffix = utf8_decode( " [REMPLACÉ " . date( "Y-m-d" ) . "]" );
+				$suffix = mb_convert_encoding( " [REMPLACÉ " . date( "Y-m-d" ) . "]", 'ISO-8859-1', 'UTF-8');
 			}
 			
 			if( $c ){
@@ -819,7 +819,7 @@
 			$c = $pr->Find( $id );
 			
 			if( !$suffix ){
-				$suffix = utf8_decode( " [REMPLACÉ (à perte) " . date( "Y-m-d" ) . "]" );
+				$suffix = mb_convert_encoding( " [REMPLACÉ (à perte) " . date( "Y-m-d" ) . "]", 'ISO-8859-1', 'UTF-8');
 			}
 			
 			if( $c ){
@@ -831,18 +831,18 @@
 		private function Rebuild( $c, $xp_after_rebuild, $suffix ){
 			$rebuild = $this->Create( $c->joueur_id, $c->nom, $c->alignement_id, $c->faction_id, $c->religion_id, $c->race_id );
 			
-			$this->RecordAction( $c->id, 6, $rebuild->id, $rebuild->px_totaux, utf8_decode( "Personnage copié." ), FALSE );
+			$this->RecordAction( $c->id, 6, $rebuild->id, $rebuild->px_totaux, mb_convert_encoding( "Personnage copié.", 'ISO-8859-1', 'UTF-8'), FALSE );
 			if( $rebuild ){
 				// La différence entre l'XP que le personnage doit avoir et celui qu'il a déjà
 				$nouvel_xp = $xp_after_rebuild - $rebuild->px_totaux;
-				if( $nouvel_xp <= 0 || $this->ManageExperience( $rebuild->id, $nouvel_xp, FALSE, TRUE, utf8_decode( "Transfert des points d'expérience de l'ancien personnage vers le nouveau." ) ) ){
+				if( $nouvel_xp <= 0 || $this->ManageExperience( $rebuild->id, $nouvel_xp, FALSE, TRUE, mb_convert_encoding( "Transfert des points d'expérience de l'ancien personnage vers le nouveau.", 'ISO-8859-1', 'UTF-8') ) ){
 					if( $nouvel_xp > 0 ){
 						$rebuild->px_restants += $nouvel_xp;
 						$rebuild->px_totaux += $nouvel_xp;
 					}
 					
 					// Bloque les modifications
-					$this->RecordAction( $rebuild->id, 0, 0, $c->id, utf8_decode( "Copie du personnage." ), FALSE );
+					$this->RecordAction( $rebuild->id, 0, 0, $c->id, mb_convert_encoding( "Copie du personnage.", 'ISO-8859-1', 'UTF-8'), FALSE );
 					
 					// Laisse une trace sur l'ancetre
 					$this->UpdateBases( $c->id, $c->nom . $suffix, $c->alignement_id, $c->faction_id, $c->religion_id );
@@ -880,7 +880,7 @@
 							}
 						
 							// La raison recue a deja ete decodee par le controleur
-							$record_msg = utf8_decode( ( $modificateur >= 0 ? "Gain" : "Perte" ) . " de " . abs( $modificateur ) . " points d'expérience" ) . $raison;
+							$record_msg = mb_convert_encoding( ( $modificateur >= 0 ? "Gain" : "Perte" ) . " de " . abs( $modificateur ) . " points d'expérience", 'ISO-8859-1', 'UTF-8') . $raison;
 							$this->RecordAction( $c->id, CharacterSheet::RECORD_XP, 0, $modificateur, $record_msg, TRUE );
 						}
 						

@@ -8,7 +8,7 @@
 	}
 	
 	if( isset( $_POST["add_choix_capacite"] ) ){
-		$choixCapacite = $choixCapaciteRepository->Create( array( "nom" => utf8_decode( Security::FilterInput( $_POST["choix_capacite_nom"] ) ) ) );
+		$choixCapacite = $choixCapaciteRepository->Create( array( "nom" => mb_convert_encoding( Security::FilterInput( $_POST["choix_capacite_nom"] ), 'ISO-8859-1', 'UTF-8') ) );
 		
 		header( "Location: ?s=admin&a=updateChoixCapacite&i=" . $choixCapacite->id );
 		die();
