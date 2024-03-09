@@ -56,7 +56,7 @@
 		if( !$erreur ){
 			// Inserer le nouveau personnage
 			$sheet = new CharacterSheet();
-			$character = $sheet->Create( $joueur->Id, utf8_decode( $character_name ), $character_alignment, $character_faction, $character_religion, $character_race );
+			$character = $sheet->Create( $joueur->Id, mb_convert_encoding( $character_name, 'ISO-8859-1', 'UTF-8'), $character_alignment, $character_faction, $character_religion, $character_race );
 			if( $character !== FALSE ){
 				Message::Notice( "Création du personnage : ". $character_name );
 				

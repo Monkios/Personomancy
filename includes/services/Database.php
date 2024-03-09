@@ -7,13 +7,13 @@
 			try {
 				$this->Connect();
 			} catch( PDOException $e ){
-				Message::Fatale( "Connexion à la base de données impossible.", $e->getMessage() );
+				Message::Fatale( "Connexion Ã  la base de donnÃ©es impossible.", $e->getMessage() );
 			}
 		}
 		
 		public function Query( $sql, $params = array() ){
 			if( !is_array( $params ) ){
-				Message::Fatale( "Params doit être un array." );
+				Message::Fatale( "Params doit Ãªtre un array." );
 			}
 			
 			if( $this->dbh !== FALSE ){
@@ -21,10 +21,10 @@
 					$this->sth = $this->dbh->prepare( $sql );
 					$this->sth->execute( $params );
 				} catch( PDOException $e ) {
-					Message::Fatale( "Incapable de lancer la requête sur la base de données.", $e->getMessage() );
+					Message::Fatale( "Incapable de lancer la requÃªte sur la base de donnÃ©es.", $e->getMessage() );
 				}
 			} else {
-				Message::Fatale( "La connexion à la base de données n'est pas initialisée." );
+				Message::Fatale( "La connexion Ã  la base de donnÃ©es n'est pas initialisÃ©e." );
 			}
 		}
 		
@@ -32,7 +32,7 @@
 			if( $this->dbh !== FALSE && $this->sth !== FALSE ){
 				return $this->sth->fetch( PDO::FETCH_ASSOC );
 			} else {
-				Message::Fatale( "Incapable d'atteindre le résultat de la requête." );
+				Message::Fatale( "Incapable d'atteindre le rÃ©sultat de la requÃªte." );
 			}
 		}
 		
@@ -46,7 +46,7 @@
 				}
 				return $insert_id;
 			}
-			Message::Fatale( "Une insertion doit être faite avant d'en retirer l'identifiant." );
+			Message::Fatale( "Une insertion doit Ãªtre faite avant d'en retirer l'identifiant." );
 		}
 		
 		private function Connect(){

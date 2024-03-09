@@ -5,18 +5,13 @@
 		public static function GetPlayer( $id ){
 			if( is_numeric( $id ) ){
 				$sql = "SELECT j.id, j.prenom, j.nom, j.courriel, j.salt,
-						j.est_anim, j.est_admin, j.passe_saison, j.active, j.date_insert, j.date_modify,
-						(
-							SELECT COUNT( p.id )
-							FROM personnage p
-							WHERE p.est_vivant = '1' AND p.est_cree = '1' AND p.est_detruit = '0' AND p.joueur = j.id
-						)  AS nb_characters
+						j.est_animateur, j.est_administrateur, j.active, j.date_insert, j.date_modify
 					FROM joueur j
 					WHERE j.id = ?";
 			
 				$t = Community::FetchPlayerList( $sql, array( $id ) );
 				if( $t && count( $t ) == 1 ){
-					return reset( $t );
+					return reset( $t ); // Retourne le premier élément de la liste
 				} else {
 					return FALSE;
 				}
@@ -37,18 +32,12 @@
 		
 		public static function GetPlayerList( $active_only = FALSE ){
 			$sql = "SELECT j.id, j.prenom, j.nom, j.courriel, j.salt,
-						j.est_anim, j.est_admin, j.passe_saison, j.active, j.date_insert, j.date_modify,
-						(
-							SELECT COUNT( p.id )
-							FROM personnage p
-							WHERE p.est_vivant = '1' AND p.est_cree = '1' AND p.est_detruit = '0' AND p.joueur = j.id
-						)  AS nb_characters
+						j.est_animateur, j.est_administrateur, j.active, j.date_insert, j.date_modify
 					FROM joueur j ";
-			if( $active_only ){
+			if( $active_only != FALSE ){
 				$sql .= "WHERE j.active = '1' ";
 			}
-			$sql .= "GROUP By j.id
-					ORDER BY j.prenom, j.nom, j.courriel";
+			$sql .= "ORDER BY j.prenom, j.nom, j.courriel";
 			
 			return Community::FetchPlayerList( $sql );
 		}
@@ -67,23 +56,15 @@
 				$player->Email = $r[ "courriel" ];
 				$player->Salt = $r[ "salt" ];
 				$player->IsActive = $r[ "active" ] == 1;
-				$player->IsAnimateur = $r[ "est_anim" ] == 1;
-				$player->IsAdmin = $r[ "est_admin" ] == 1;
-				$player->PasseSaison = $r[ "passe_saison" ] == 1;
+				$player->IsAnimateur = $r[ "est_animateur" ] == 1;
+				$player->IsAdministrateur = $r[ "est_administrateur" ] == 1;
 				$player->DateInsert = $r[ "date_insert" ];
 				$player->DateModify = $r[ "date_modify" ];
-				$player->NbCharacters = $r[ "nb_characters" ];
 				
 				$return[ $player->Id ] = $player;
 			}
 			
 			return $return;
-		}
-		
-		public static function ManageExperience( $players, $reason = -1, $comment = "" ){
-			if( $reason == -1 ){
-				
-			}
 		}
 	}
 ?>

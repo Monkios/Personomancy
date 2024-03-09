@@ -14,7 +14,7 @@
 		
 		if( isset( $_POST["capacite_raciale_id"] ) && $_GET["i"] == $_POST["capacite_raciale_id"] ){
 			if( isset( $_POST["save_capacite_raciale"] ) ){
-				$capaciteRaciale->nom = utf8_decode( Security::FilterInput( $_POST["capacite_raciale_nom"] ) );
+				$capaciteRaciale->nom = mb_convert_encoding( Security::FilterInput( $_POST["capacite_raciale_nom"] ), 'ISO-8859-1', 'UTF-8');
 				$capaciteRaciale->active = isset( $_POST["capacite_raciale_active"] );
 				$capaciteRaciale->affiche = isset( $_POST["capacite_raciale_affiche"] );
 				

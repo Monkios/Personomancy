@@ -8,7 +8,7 @@
 	}
 	
 	if( isset( $_POST["add_connaissance"] ) ){
-		$connaissance = $connaissanceRepository->Create( array( "nom" => utf8_decode( Security::FilterInput( $_POST["connaissance_nom"] ) ) ) );
+		$connaissance = $connaissanceRepository->Create( array( "nom" => mb_convert_encoding( Security::FilterInput( $_POST["connaissance_nom"] ), 'ISO-8859-1', 'UTF-8') ) );
 		
 		header( "Location: ?s=admin&a=updateConnaissance&i=" . $connaissance->id );
 		die();

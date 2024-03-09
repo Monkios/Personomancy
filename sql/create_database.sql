@@ -132,21 +132,20 @@ ALTER TABLE `croyance`
 
 CREATE TABLE `joueur` (
   `id` smallint(5) UNSIGNED NOT NULL,
-  `login` varchar(25) NOT NULL,
   `prenom` varchar(100) DEFAULT NULL,
   `nom` varchar(100) DEFAULT '',
   `courriel` varchar(100) DEFAULT NULL,
   `salt` char(33) NOT NULL,
   `password` varchar(40) NOT NULL,
-  `est_anim` bit(1) NOT NULL DEFAULT 0,
+  `est_animateur` bit(1) NOT NULL DEFAULT 0,
+  `est_administrateur` bit(1) NOT NULL DEFAULT 0,
   `active` bit(1) NOT NULL DEFAULT 1,
   `date_insert` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_modify` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `joueur`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nom` (`login`);
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `joueur`
   MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;

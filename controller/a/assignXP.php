@@ -22,7 +22,7 @@
 				$raison_xp = $reasons_list[ $_POST[ "reasons_list" ] ];
 			} else {
 				if( isset( $_POST[ "raison_xp" ] ) ){
-					$raison_xp = utf8_decode( Security::FilterInput( $_POST[ "raison_xp" ] ) );
+					$raison_xp = mb_convert_encoding( Security::FilterInput( $_POST[ "raison_xp" ] ), 'ISO-8859-1', 'UTF-8');
 				}
 			}
 			

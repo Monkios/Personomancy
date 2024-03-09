@@ -171,7 +171,7 @@
 									|| $perso_alignement != $personnage->alignement_id 
 									|| $perso_faction != $personnage->faction_id 
 									|| $perso_religion != $personnage->religion_id ){
-								$personnage = $char_sheet->UpdateBases( $personnage->id, utf8_decode( $perso_nom ), $perso_alignement, $perso_faction, $perso_religion );
+								$personnage = $char_sheet->UpdateBases( $personnage->id, mb_convert_encoding( $perso_nom, 'ISO-8859-1', 'UTF-8'), $perso_alignement, $perso_faction, $perso_religion );
 								
 								if( $personnage == FALSE ){
 									Message::Erreur( "Une erreur s'est produite en enregistrant les informations d'identification du personnage." );
@@ -204,7 +204,7 @@
 						}
 					// Alternativement, on peut aussi changer les points d'experience lorsque c'est permit
 					} else if( $can_change_xp && isset( $_POST['change_xp'] ) &&is_numeric( $_POST[ 'change_xp' ] ) ){
-						if( $char_sheet->ManageExperience( $personnage->id, $_POST[ 'change_xp' ], FALSE, TRUE, utf8_decode( "Modification manuelle." ) ) ){
+						if( $char_sheet->ManageExperience( $personnage->id, $_POST[ 'change_xp' ], FALSE, TRUE, mb_convert_encoding( "Modification manuelle.", 'ISO-8859-1', 'UTF-8') ) ){
 							Message::Notice( "Les points d'expérience du personnage ont été modifiés de " . $_POST['change_xp'] . "." );
 						}
 					}

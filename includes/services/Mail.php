@@ -1,26 +1,34 @@
 <?php
+	use PHPMailer\PHPMailer\PHPMailer;
+	use PHPMailer\PHPMailer\SMTP;
+	use PHPMailer\PHPMailer\Exception;
+
 	class Email {
 		private function __construct(){}
 		
 		public static function Send( $dest, $subject, $body ){
-			$mail = new PHPMailer;
+			$mail = new PHPMailer( true );
 			$mail->IsSMTP();
-			$mail->Host = SMTP_HOSTNAME;
-			$mail->Port = 587;
-			$mail->SMTPSecure = "tls";
+			$mail->SMTPDebug = SMTP::DEBUG_OFF; #SMTP::DEBUG_SERVER;
 
+
+			$mail->Host = SMTP_HOSTNAME;
+			$mail->Port = SMTP_PORT;
+			$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 			$mail->SMTPAuth = true;
+
 			$mail->Username = SMTP_USERNAME;
 			$mail->Password = SMTP_PASSWORD;
 			
 			$mail->setLanguage( "fr", PHPMAILER_LANG );
 			$mail->CharSet = "UTF-8";
 			
-			$mail->SetFrom( LARP_ADDRESS, LARP_NAME );
-			$mail->addReplyTo( LARP_ADDRESS, LARP_NAME );
+			$mail->SetFrom( SMTP_USERNAME, LARP_NAME );
+			$mail->addReplyTo( SMTP_USERNAME, LARP_NAME );
 			
 			$mail->addAddress( $dest );
-			$mail->addBCC( LARP_ADDRESS, LARP_NAME );
+			#$mail->addBCC( SMTP_USERNAME, LARP_NAME );
+
 			$mail->Subject = LARP_NAME . " - " . $subject;
 			
 			$body .= "<br />\n";
@@ -34,14 +42,32 @@
 			$body .= "Si cette demande ne vient pas de vous, veuillez en informer l'équipe d'animation dans les plus brefs délais.";
 			
 			$mail->Body = $body;
-			
 			$mail->AltBody = strip_tags( str_ireplace( array( "<br>", "<br/>", "<br />" ), "", $body ) );
 			
 			if( !$mail->Send() ){
 				Message::Erreur( "Le courriel n'a pu être envoyé.", $mail->ErrorInfo );
 				return FALSE;
 			}
+			if( !self::SaveMail( $mail ) ){
+				Message::Debug( "Le courriel n'a pu être archivé par GMail." );
+			}
 			Message::Debug( "Courriel '" . $subject . " envoyé à " . $dest );
 			return TRUE;
+		}
+
+		# Save the e-mail to the Sent Mail folder on GMail
+		# https://github.com/PHPMailer/PHPMailer/blob/master/examples/gmail.phps
+		private static function SaveMail($mail)
+		{
+			//You can change 'Sent Mail' to any other folder or tag
+			$path = '{imap.gmail.com:993/imap/ssl}[Gmail]/Sent Mail';
+		
+			//Tell your server to open an IMAP connection using the same username and password as you used for SMTP
+			$imapStream = imap_open($path, $mail->Username, $mail->Password);
+		
+			$result = imap_append($imapStream, $path, $mail->getSentMIMEMessage());
+			imap_close($imapStream);
+		
+			return $result;
 		}
 	}
