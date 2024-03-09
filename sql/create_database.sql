@@ -158,11 +158,11 @@ ALTER TABLE `joueur`
 
 CREATE TABLE `personnage` (
   `id` int(3) UNSIGNED NOT NULL,
-  `joueur` int(3) UNSIGNED NOT NULL DEFAULT 0,
+  `joueur` int(3) UNSIGNED NOT NULL,
   `nom` varchar(100) NOT NULL DEFAULT '',
-  `race_id` int(3) UNSIGNED NOT NULL DEFAULT 0,
-  `cite_etat_id` int(3) UNSIGNED NOT NULL DEFAULT 0,
-  `croyance_id` int(3) UNSIGNED NOT NULL DEFAULT 0,
+  `race_id` int(3) UNSIGNED NOT NULL,
+  `cite_etat_id` int(3) UNSIGNED NOT NULL,
+  `croyance_id` int(3) UNSIGNED NOT NULL,
   `point_capacite_raciale` tinyint(1) NOT NULL,
   `point_experience` smallint(4) NOT NULL DEFAULT 0,
   `total_experience` smallint(4) NOT NULL DEFAULT 0,

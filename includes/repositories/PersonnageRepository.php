@@ -6,7 +6,7 @@
 			$this->_db = new Database();
 		}
 		
-		public function Find( $id ){
+		public function Find( int $id ){
 			if( !is_numeric( $id ) ){
 				Message::Fatale( "Bad personnage entity ID.", func_get_args() );
 				return FALSE;
@@ -19,7 +19,7 @@
 			return array_shift( $characters_list );
 		}
 		
-		public function FindComplete( $id ){
+		public function FindComplete( int $id ) {
 			if( !is_numeric( $id ) ){
 				Message::Fatale( "Bad personnage complet entity ID.", func_get_args() );
 				return FALSE;
@@ -32,7 +32,7 @@
 			return FALSE;
 		}
 		
-		public function FindAll( $sort_by = "character" ){
+		public function FindAll( string $sort_by = "character" ){
 			$order_by = "";
 			switch( $sort_by ) {
 				case "character" :
@@ -92,88 +92,45 @@
 			return count( $this->FetchCharacterList( $order_by, $where, array( $player_id ) ) );
 		}
 		
-		public function Create( $opts = array() ){
-			if( !array_key_exists( "alignement", $opts ) || !is_numeric( $opts[ "alignement" ] ) ){
-				Message::Fatale( "Invalid alignment ID.", func_get_args() );
-				return FALSE;
-			}
-			if( !array_key_exists( "faction", $opts ) || $opts[ "faction" ] != "" && !is_numeric( $opts[ "faction" ] ) ){
-				Message::Fatale( "Invalid faction ID.", func_get_args() );
+		public function Create( array $opts = array() ){
+			if( !array_key_exists( "cite_etat", $opts ) || $opts[ "cite_etat" ] != "" && !is_numeric( $opts[ "cite_etat" ] ) ){
+				Message::Fatale( "Cité-état invalide.", func_get_args() );
 				return FALSE;
 			}
 			if( !array_key_exists( "name", $opts ) || $opts[ "name" ] == "" ){
-				Message::Fatale( "Invalid name ID.", func_get_args() );
+				Message::Fatale( "Nom invalide.", func_get_args() );
 				return FALSE;
 			}
 			if( !array_key_exists( "player", $opts ) || !is_numeric( $opts[ "player" ] ) ){
-				Message::Fatale( "Invalid player ID.", func_get_args() );
+				Message::Fatale( "Joueur invalide.", func_get_args() );
 				return FALSE;
 			}
-			if( !array_key_exists( "religion", $opts ) || !is_numeric( $opts[ "religion" ] ) ){
-				Message::Fatale( "Invalid religion ID.", func_get_args() );
+			if( !array_key_exists( "croyance", $opts ) || !is_numeric( $opts[ "croyance" ] ) ){
+				Message::Fatale( "Croyance invalide.", func_get_args() );
 				return FALSE;
 			}
 			
 			// Insertion
-			$sql = "INSERT INTO personnage ( nom, alignement, faction, religion, joueur, point_capacite_raciale, point_experience, total_experience, commentaire, notes )
+			$sql = "INSERT INTO personnage ( joueur, nom, race_id, cite_etat_id, croyance_id, point_capacite_raciale, point_experience, total_experience, commentaire, notes )
 						VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 			$params = array(
+					$opts[ "player_id" ],
 					$opts[ "name" ],
-					$opts[ "alignement" ],
-					$opts[ "faction" ],
-					$opts[ "religion" ],
-					$opts[ "player" ],
+					$opts[ "race_id" ],
+					$opts[ "cite_etat_id" ],
+					$opts[ "croyance_id" ],
 					CHARACTER_BASE_PCR,
 					CHARACTER_BASE_XP,
 					CHARACTER_BASE_XP,
-					"",
-					""
+					CHARACTER_DEFAULT_COMMENTS,
+					CHARACTER_DEFAULT_NOTES
 			);
 			
 			$this->_db->Query( $sql, $params );
 			$insert_id = $this->_db->GetInsertId();
 			
 			$character = $this->FindComplete( $insert_id );
-			
-			$error_occured = FALSE;
-			if( $character ){
-				// Ajout des bases obtenus automatiquement par tous les personnages
-				$automatics = json_decode( CHARACTER_BASE_AUTOMATICS, true );
-				if( array_key_exists( "voies", $automatics ) ){
-					foreach( $automatics[ "voies" ] as $id_voie ){
-						if( $this->AddVoie( $character, $id_voie ) == FALSE ){
-							Message::Erreur( "CREATION : Une erreur s'est produite lors de l'ajout de la voie #" . $id_voie );
-							$error_occured = TRUE;
-						}
-					}
-				}
-				if( array_key_exists( "capacites", $automatics ) ){
-					foreach( $automatics[ "capacites" ] as $id_capacite ){
-						if( $this->AddCapacite( $character, $id_capacite, 1 ) == FALSE ){
-							Message::Erreur( "CREATION : Une erreur s'est produite lors de l'ajout de la capacité #" . $id_capacite );
-							$error_occured = TRUE;
-						}
-					}
-				}
-				if( array_key_exists( "connaissances", $automatics ) ){
-					foreach( $automatics[ "connaissances" ] as $id_connaissance ){
-						if( $this->AddConnaissance( $character, $id_connaissance ) == FALSE ){
-							Message::Erreur( "CREATION : Une erreur s'est produite lors de l'ajout de la connaissance #" . $id_connaissance );
-							$error_occured = TRUE;
-						}
-					}
-				}
-				if( array_key_exists( "pouvoirs", $automatics ) ){
-					foreach( $automatics[ "pouvoirs" ] as $id_pouvoir ){
-						if( $this->AddPouvoir( $character, $id_pouvoir ) == FALSE ){
-							Message::Erreur( "CREATION : Une erreur s'est produite lors de l'ajout du pouvoir #" . $id_pouvoir );
-							$error_occured = TRUE;
-						}
-					}
-				}
-			}
-			
-			if( !$character || $error_occured ){
+			if( !$character ){
 				$this->Delete( $insert_id );
 				return FALSE;
 			}
@@ -181,16 +138,14 @@
 			return $character;
 		}
 		
-		public function Save( $personnage ){
+		public function Save( GenericEntity $personnage ){
 			if( !$personnage->est_complet ){
 				$sql = "UPDATE personnage SET
 						joueur = ?,
 						nom = ?,
-						race = ?,
-						religion = ?,
-						alignement = ?,
-						faction = ?,
-						prestige = ?,
+						race_id = ?,
+						croyance_id = ?,
+						cite_etat_id = ?,
 						point_capacite_raciale = ?,
 						point_experience = ?,
 						total_experience = ?,
@@ -203,10 +158,8 @@
 						$personnage->joueur_id,
 						$personnage->nom,
 						$personnage->race_id,
-						$personnage->religion_id,
-						$personnage->alignement_id,
-						$personnage->faction_id,
-						$personnage->prestige_id,
+						$personnage->croyance_id,
+						$personnage->cite_etat_id,
 						$personnage->pc_raciales,
 						$personnage->px_restants,
 						$personnage->px_totaux,
@@ -220,17 +173,9 @@
 				$sql = "UPDATE personnage SET
 						joueur = ?,
 						nom = ?,
-						race = ?,
-						religion = ?,
-						alignement = ?,
-						faction = ?,
-						prestige = ?,
-						st_alerte = ?,
-						st_constitution = ?,
-						st_intelligence = ?,
-						st_spiritisme = ?,
-						st_vigueur = ?,
-						st_volonte = ?,
+						race_id = ?,
+						croyance_id = ?,
+						cite_etat_id = ?,
 						point_capacite_raciale = ?,
 						point_experience = ?,
 						total_experience = ?,
@@ -243,16 +188,8 @@
 						$personnage->joueur_id,
 						$personnage->nom,
 						$personnage->race_id,
-						$personnage->religion_id,
-						$personnage->alignement_id,
-						$personnage->faction_id,
-						$personnage->prestige_id,
-						$personnage->alerte,
-						$personnage->constitution,
-						$personnage->intelligence,
-						$personnage->spiritisme,
-						$personnage->vigueur,
-						$personnage->volonte,
+						$personnage->croyance_id,
+						$personnage->cite_etat_id,
 						$personnage->pc_raciales,
 						$personnage->px_restants,
 						$personnage->px_totaux,
@@ -270,7 +207,7 @@
 			return $personnage != FALSE;
 		}
 		
-		public function Activate( Personnage &$personnage ){
+		public function Activate( PersonnagePartiel &$personnage ){
 			if( $personnage->est_cree == FALSE ){
 				$personnage->est_cree = TRUE;
 				
@@ -280,7 +217,7 @@
 			return FALSE;
 		}
 		
-		public function Deactivate( Personnage &$personnage ){
+		public function Deactivate( PersonnagePartiel &$personnage ){
 			if( $personnage->est_vivant == TRUE ){
 				$personnage->est_vivant = FALSE;
 				
@@ -290,7 +227,7 @@
 			return FALSE;
 		}
 		
-		public function Delete( $id ){
+		public function Delete( int $id ){
 			if( is_numeric( $id ) ){
 				$sql = "UPDATE personnage SET est_detruit = '1' WHERE id = ?";
 				$this->_db->Query( $sql, array( $id ) );
@@ -304,40 +241,21 @@
 		public function AddRace( Personnage &$personnage, $race_id ){
 			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
 				if( !empty( $personnage->race_id ) && $personnage->race_id != -1 ){
-					Message::Fatale( "Can't already have a race", func_get_args() );
+					Message::Fatale( "Une race a déjà été attribuée à ce personnage.", func_get_args() );
 					return FALSE;
 				}
 				
 				$rr = new RaceRepository();
 				$race = $rr->Find( $race_id );
 				if( $race == FALSE ){
-					Message::Fatale( "Bad race ID", func_get_args() );
+					Message::Fatale( "Race à ajouter invalide.", func_get_args() );
 					return FALSE;
 				}
 				
 				if( $race->active ){
 					$personnage->race_id = $race_id;
-					$personnage->alerte += $race->base_alerte;
-					$personnage->constitution += $race->base_constitution;
-					$personnage->intelligence += $race->base_intelligence;
-					$personnage->spiritisme += $race->base_spiritisme;
-					$personnage->vigueur += $race->base_vigueur;
-					$personnage->volonte += $race->base_volonte;
-					$this->Save( $personnage );
-					
-					foreach( $race->list_capacites_raciales as $cr_id => $cr_infos ){
-						
-						if( $cr_infos[ 1 ] == 0 ){
-							if( $this->AddPouvoir( $personnage, $cr_id ) == FALSE ){
-								Message::Erreur( "Une erreur s'est produite lors de l'ajout de la capacité raciale #" . $cr_id );
-							
-								break;
-							}
-						}
-					}
-					
-					$personnage = $this->FindComplete( $personnage->id );
-					return $personnage != FALSE;
+
+					return $this->Save( $personnage );
 				}
 			}
 			
@@ -347,37 +265,19 @@
 		public function RemoveRace( Personnage &$personnage ){
 			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
 				if( empty( $personnage->race_id ) || $personnage->race_id == -1 ){
-					Message::Fatale( "Can't have no race to remove", func_get_args() );
+					Message::Fatale( "Ce personnage n'a pas de race à retirer.", func_get_args() );
 					return FALSE;
 				}
 				
 				$rr = new RaceRepository();
 				$race = $rr->Find( $personnage->race_id );
 				if( $race == FALSE ){
-					Message::Fatale( "Bad race ID", func_get_args() );
+					Message::Fatale( "Race à retirer invalide.", func_get_args() );
 					return FALSE;
 				}
 				
-				foreach( $race->list_capacites_raciales as $cr_id => $cr_infos ){
-					if( $cr_infos[ 1 ] == 0
-							&& $this->RemovePouvoir( $personnage, $cr_id ) == FALSE ){
-						Message::Erreur( "Une erreur s'est produite lors de l'ajout de la capacité raciale #" . $cr_id );
-						
-						break;
-					}
-				}
-				
 				$personnage->race_id = -1;
-				$personnage->alerte -= $race->base_alerte;
-				$personnage->constitution -= $race->base_constitution;
-				$personnage->intelligence -= $race->base_intelligence;
-				$personnage->spiritisme -= $race->base_spiritisme;
-				$personnage->vigueur -= $race->base_vigueur;
-				$personnage->volonte -= $race->base_volonte;
-				$this->Save( $personnage );
-				
-				$personnage = $this->FindComplete( $personnage->id );
-				return $personnage != FALSE;
+				return $this->Save( $personnage );
 			}
 			
 			return FALSE;
@@ -577,42 +477,6 @@
 			return FALSE;
 		}
 		
-		public function AddSort( Personnage &$personnage, $id_sort ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetSorts( $id_sort ) ) == 0 ){
-					Message::Fatale( "Bad sort ID", func_get_args() );
-					return FALSE;
-				}
-				
-				$sql = "INSERT INTO personnage_sort ( id_personnage, id_sort )
-						VALUES ( ?, ? )";
-				$this->_db->Query( $sql, array( $personnage->id, $id_sort ) );
-					
-				$personnage = $this->FindComplete( $personnage->id );
-				return $personnage != FALSE;
-			}
-			
-			return FALSE;
-		}
-		
-		public function RemoveSort( Personnage &$personnage, $id_sort ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetSorts( $id_sort ) ) == 0 ){
-					Message::Fatale( "Bad sort ID", func_get_args() );
-					return FALSE;
-				}
-				
-				$sql = "DELETE FROM personnage_sort
-						WHERE id_personnage = ? AND id_sort = ?";
-				$this->_db->Query( $sql, array( $personnage->id, $id_sort ) );
-				
-				$personnage = $this->FindComplete( $personnage->id );
-				return $personnage != FALSE;
-			}
-			
-			return FALSE;
-		}
-		
 		private function AddChoixCapacite( Personnage &$personnage, $id_choix_capacite ){
 			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
 				if( count( Dictionary::GetChoixCapacites( $id_choix_capacite ) ) == 0 ){
@@ -725,404 +589,7 @@
 			
 			return FALSE;
 		}
-		
-		private function AddChoixConnaissance( Personnage &$personnage, $id_choix_connaissance ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetChoixConnaissances( $id_choix_connaissance ) ) == 0 ){
-					Message::Fatale( "Bad choix connaissance ID", func_get_args() );
-					return FALSE;
-				}
 				
-				if( !array_key_exists( $id_choix_connaissance, $personnage->choix_connaissances ) ){
-					$sql = "INSERT INTO personnage_connaissance_categorie ( id_personnage, id_connaissance_categorie, nombre )
-							VALUES ( ?, ?, '1' )";
-				} else {
-					$sql = "UPDATE personnage_connaissance_categorie
-							SET nombre = ( nombre * 1 ) + 1
-							WHERE id_personnage = ? AND id_connaissance_categorie = ?";
-				}
-				$this->_db->Query( $sql, array( $personnage->id, $id_choix_connaissance ) );
-				
-				$personnage = $this->FindComplete( $personnage->id );
-				return $personnage != FALSE;
-			}
-			
-			return FALSE;
-		}
-		
-		public function BuyChoixConnaissance( Personnage &$personnage, $list_choix_id, $choix_id ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetChoixConnaissances( $list_choix_id ) ) == 0 ){
-					Message::Fatale( "Bad buy choix connaissance ID", func_get_args() );
-					return FALSE;
-				}
-				
-				if( array_key_exists( $list_choix_id, $personnage->choix_connaissances ) && $personnage->choix_connaissances[ $list_choix_id ] > 0 ){
-					$ccr = new ChoixConnaissanceRepository();
-					$choix_connaissance = $ccr->Find( $list_choix_id );
-					if( $choix_connaissance && $choix_connaissance->active ){
-						$liste_connaissances = $ccr->GetConnaissances( $choix_connaissance );
-						if( array_key_exists( $choix_id, $liste_connaissances ) ){
-							if( $this->AddConnaissance( $personnage, $choix_id ) ){
-								if( $this->RemoveChoixConnaissance( $personnage, $list_choix_id ) == FALSE ){
-									$this->RemoveConnaissance( $personnage, $choix_id );
-									return FALSE;
-								}
-								
-								$personnage = $this->FindComplete( $personnage->id );
-								return $personnage != FALSE;
-							}
-						}
-					}
-				}	
-			}
-			
-			return FALSE;
-		}
-		
-		private function RemoveChoixConnaissance( Personnage &$personnage, $id_choix_connaissance ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetChoixConnaissances( $id_choix_connaissance ) ) == 0 ){
-					Message::Fatale( "Bad choix connaissance ID", func_get_args() );
-					return FALSE;
-				}
-				
-				if( !array_key_exists( $id_choix_connaissance, $personnage->choix_connaissances ) || $personnage->choix_connaissances[ $id_choix_connaissance ] == 0 ){
-					Message::Fatale( "Character must have choix_connaissance to remove", func_get_args() );
-					return FALSE;
-				}
-				
-				if( $personnage->choix_connaissances[ $id_choix_connaissance ] == 1 ){
-					$sql = "DELETE FROM personnage_connaissance_categorie
-							WHERE id_personnage = ? AND  id_connaissance_categorie = ?";
-				} else {
-					$sql = "UPDATE personnage_connaissance_categorie
-							SET nombre = ( nombre * 1 ) - 1
-							WHERE id_personnage = ? AND id_connaissance_categorie = ?";
-				}
-				$this->_db->Query( $sql, array( $personnage->id, $id_choix_connaissance ) );
-				
-				$personnage = $this->FindComplete( $personnage->id );
-				return $personnage != FALSE;
-			}
-			
-			return FALSE;
-		}
-		
-		public function RefundChoixConnaissance( Personnage &$personnage, $list_choix_id, $choix_id ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetChoixConnaissances( $list_choix_id ) ) == 0 ){
-					Message::Fatale( "Bad refund choix connaissance ID", func_get_args() );
-					return FALSE;
-				}
-				
-				if( in_array( $choix_id, $personnage->connaissances ) ){
-					$ccr = new ChoixConnaissanceRepository();
-					$choix_connaissance = $ccr->Find( $list_choix_id );
-					if( $choix_connaissance ){
-						$liste_connaissances = $ccr->GetConnaissances( $choix_connaissance );
-						if( array_key_exists( $choix_id, $liste_connaissances ) ){
-							if( $this->RemoveConnaissance( $personnage, $choix_id ) ){
-								if( $this->AddChoixConnaissance( $personnage, $list_choix_id ) == FALSE ){
-									$this->AddConnaissance( $personnage, $choix_id );
-									return FALSE;
-								}
-								
-								$personnage = $this->FindComplete( $personnage->id );
-								return $personnage != FALSE;
-							}
-						}
-					}
-				}	
-			}
-			
-			return FALSE;
-		}
-		
-		private function AddChoixPouvoir( Personnage &$personnage, $id_choix_pouvoir ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetChoixPouvoirs( $id_choix_pouvoir ) ) == 0 ){
-					Message::Fatale( "Bad choix pouvoir ID", func_get_args() );
-					return FALSE;
-				}
-				
-				if( !array_key_exists( $id_choix_pouvoir, $personnage->choix_pouvoirs ) ){
-					$sql = "INSERT INTO personnage_pouvoir_categorie ( id_personnage, id_pouvoir_categorie, nombre )
-							VALUES ( ?, ?, '1' )";
-				} else {
-					$sql = "UPDATE personnage_pouvoir_categorie
-							SET nombre = ( nombre * 1 ) + 1
-							WHERE id_personnage = ? AND id_pouvoir_categorie = ?";
-				}
-				$this->_db->Query( $sql, array( $personnage->id, $id_choix_pouvoir ) );
-				
-				$personnage = $this->FindComplete( $personnage->id );
-				return $personnage != FALSE;
-			}
-			
-			return FALSE;
-		}
-		
-		public function RefundChoixPouvoir( Personnage &$personnage, $list_choix_id, $choix_id ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetChoixPouvoirs( $list_choix_id ) ) == 0 ){
-					Message::Fatale( "Bad refund choix pouvoir ID", func_get_args() );
-					return FALSE;
-				}
-				
-				if( array_key_exists( $choix_id, $personnage->pouvoirs ) ){
-					$cpr = new ChoixPouvoirRepository();
-					$choix_pouvoir = $cpr->Find( $list_choix_id );
-					if( $choix_pouvoir ){
-						$liste_pouvoirs = $cpr->GetPouvoirs( $choix_pouvoir );
-						if( array_key_exists( $choix_id, $liste_pouvoirs ) ){
-							if( $this->RemovePouvoir( $personnage, $choix_id ) ){
-								if( $this->AddChoixPouvoir( $personnage, $list_choix_id ) == FALSE ){
-									$this->AddPouvoir( $personnage, $choix_id );
-									return FALSE;
-								}
-								
-								$personnage = $this->FindComplete( $personnage->id );
-								return $personnage != FALSE;
-							}
-						}
-					}
-				}	
-			}
-			
-			return FALSE;
-		}
-		
-		public function BuyChoixPouvoir( Personnage &$personnage, $list_choix_id, $choix_id ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetChoixPouvoirs( $list_choix_id ) ) == 0 ){
-					Message::Fatale( "Bad buy choix pouvoir ID", func_get_args() );
-					return FALSE;
-				}
-				
-				if( array_key_exists( $list_choix_id, $personnage->choix_pouvoirs ) && $personnage->choix_pouvoirs[ $list_choix_id ] > 0 ){
-					$ccr = new ChoixPouvoirRepository();
-					$choix_pouvoir = $ccr->Find( $list_choix_id );
-					if( $choix_pouvoir && $choix_pouvoir->active ){
-						$liste_pouvoirs = $ccr->GetPouvoirs( $choix_pouvoir );
-						if( array_key_exists( $choix_id, $liste_pouvoirs ) ){
-							if( $this->AddPouvoir( $personnage, $choix_id ) ){
-								if( $this->RemoveChoixPouvoir( $personnage, $list_choix_id ) == FALSE ){
-									$this->RemovePouvoir( $personnage, $choix_id );
-									return FALSE;
-								}
-								
-								$personnage = $this->FindComplete( $personnage->id );
-								return $personnage != FALSE;
-							}
-						}
-					}
-				}	
-			}
-			
-			return FALSE;
-		}
-		
-		private function RemoveChoixPouvoir( Personnage &$personnage, $id_choix_pouvoir ){
-			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				if( count( Dictionary::GetChoixPouvoirs( $id_choix_pouvoir ) ) == 0 ){
-					Message::Fatale( "Bad choix pouvoir ID", func_get_args() );
-					return FALSE;
-				}
-				
-				if( !array_key_exists( $id_choix_pouvoir, $personnage->choix_pouvoirs ) || $personnage->choix_pouvoirs[ $id_choix_pouvoir ] == 0 ){
-					Message::Fatale( "Character must have choix_pouvoir to remove", func_get_args() );
-					return FALSE;
-				}
-				
-				if( $personnage->choix_pouvoirs[ $id_choix_pouvoir ] == 1 ){
-					$sql = "DELETE FROM personnage_pouvoir_categorie
-							WHERE id_personnage = ? AND id_pouvoir_categorie = ?";
-				} else {
-					$sql = "UPDATE personnage_pouvoir_categorie
-							SET nombre = ( nombre * 1 ) - 1
-							WHERE id_personnage = ? AND id_pouvoir_categorie = ?";
-				}
-				$this->_db->Query( $sql, array( $personnage->id, $id_choix_pouvoir ) );
-				
-				$personnage = $this->FindComplete( $personnage->id );
-				return $personnage != FALSE;
-			}
-			
-			return FALSE;
-		}
-		
-		private function AddPouvoir( Personnage &$personnage, $id_pouvoir ){
-			if( $personnage && $personnage->est_vivant ){
-				if( count( Dictionary::GetPouvoirs( $id_pouvoir ) ) == 0 ){
-					Message::Fatale( "Bad pouvoir ID", func_get_args() );
-					return FALSE;
-				}
-				
-				if( $personnage->est_complet ){
-					$pr = new PouvoirRepository();
-					$pouvoir = $pr->Find( $id_pouvoir );
-					
-					if( $pouvoir->bonus_constitution > 0 || $pouvoir->bonus_spiritisme > 0 || $pouvoir->bonus_intelligence > 0
-							|| $pouvoir->bonus_alerte > 0 || $pouvoir->bonus_vigueur > 0 || $pouvoir->bonus_volonte > 0 ){
-						$personnage->alerte += $pouvoir->bonus_alerte;
-						$personnage->constitution += $pouvoir->bonus_constitution;
-						$personnage->intelligence += $pouvoir->bonus_intelligence;
-						$personnage->spiritisme += $pouvoir->bonus_spiritisme;
-						$personnage->vigueur += $pouvoir->bonus_vigueur;
-						$personnage->volonte += $pouvoir->bonus_volonte;
-						$this->Save( $personnage );
-					}
-					
-					if( array_key_exists( $id_pouvoir, $personnage->pouvoirs ) ){
-						// Incremente le nombre de pouvoir de ce type obtenu
-						$sql = "UPDATE personnage_pouvoir
-								SET nombre = ( nombre * 1 ) + 1
-								WHERE id_personnage = ? AND id_pouvoir = ?";
-					} else {
-						// Insere le pouvoir dans la liste de ceux du personnage
-						$sql = "INSERT INTO personnage_pouvoir( id_personnage, id_pouvoir, nombre )
-								VALUES ( ?, ?, '1' )";
-					}
-					$this->_db->Query( $sql, array( $personnage->id, $id_pouvoir ) );
-					
-					foreach( $pouvoir->list_bonus_voie as $voie ){
-						if( $this->AddVoie( $personnage, $voie->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la voie #" . $id_voie );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_bonus_capacite as $capacite ){
-						if( $this->AddCapacite( $personnage, $capacite->id, 1 ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la capacite #" . $capacite->id );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_bonus_connaissance as $connaissance ){
-						if( $this->AddConnaissance( $personnage, $connaissance->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la connaissance #" . $connaissance->id );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_choix_capacite as $choix_capacite ){
-						if( $this->AddChoixCapacite( $personnage, $choix_capacite->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la choix_capacite #" . $choix_capacite->id );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_choix_connaissance as $choix_connaissance ){
-						if( $this->AddChoixConnaissance( $personnage, $choix_connaissance->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la choix_connaissance #" . $choix_connaissance->id );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_choix_pouvoir as $choix_pouvoir ){
-						if( $this->AddChoixPouvoir( $personnage, $choix_pouvoir->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la choix_pouvoir #" . $choix_pouvoir->id );
-							return FALSE;
-						}
-					}
-				
-					$personnage = $this->FindComplete( $personnage->id );
-					return $personnage != FALSE;
-				}
-			}
-			return FALSE;
-		}
-		
-		private function RemovePouvoir( Personnage &$personnage, $id_pouvoir ){
-			if( $personnage && $personnage->est_vivant ){
-				if( count( Dictionary::GetPouvoirs( $id_pouvoir ) ) == 0 ){
-					Message::Fatale( "Bad pouvoir ID", func_get_args() );
-					return FALSE;
-				}
-				
-				if( !array_key_exists( $id_pouvoir, $personnage->pouvoirs ) ){
-					Message::Fatale( "Character must have power to remove", func_get_args() );
-					return FALSE;
-				}
-				
-				if( $personnage->est_complet ){
-					$pr = new PouvoirRepository();
-					$pouvoir = $pr->Find( $id_pouvoir );
-					
-					foreach( $pouvoir->list_choix_pouvoir as $choix_pouvoir ){
-						if( $this->RemoveChoixPouvoir( $personnage, $choix_pouvoir->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la choix_pouvoir #" . $choix_pouvoir->id );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_choix_connaissance as $choix_connaissance ){
-						if( $this->RemoveChoixConnaissance( $personnage, $choix_connaissance->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la choix_connaissance #" . $choix_connaissance->id );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_choix_capacite as $choix_capacite ){
-						if( $this->RemoveChoixCapacite( $personnage, $choix_capacite->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la choix_capacite #" . $choix_capacite->id );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_bonus_connaissance as $connaissance ){
-						if( $this->RemoveConnaissance( $personnage, $connaissance->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la connaissance #" . $connaissance->id );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_bonus_capacite as $capacite ){
-						if( $this->RemoveCapacite( $personnage, $capacite->id, 1 ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la capacite #" . $capacite->id );
-							return FALSE;
-						}
-					}
-					
-					foreach( $pouvoir->list_bonus_voie as $voie ){
-						if( $this->RemoveVoie( $personnage, $voie->id ) == FALSE ){
-							Message::Erreur( "POUVOIR : Une erreur s'est produite lors de l'ajout de la voie #" . $id_voie );
-							return FALSE;
-						}
-					}
-					
-					if( $personnage->pouvoirs[ $id_pouvoir ] > 1 ){
-						// Incremente le nombre de pouvoir de ce type obtenu
-						$sql = "UPDATE personnage_pouvoir
-								SET nombre = ( nombre * 1 ) - 1
-								WHERE id_personnage = ? AND id_pouvoir = ?";
-					} else {
-						// Insere le pouvoir dans la liste de ceux du personnage
-						$sql = "DELETE FROM personnage_pouvoir
-								WHERE id_personnage = ? AND id_pouvoir = ?";
-					}
-					$this->_db->Query( $sql, array( $personnage->id, $id_pouvoir ) );
-					
-					if( $pouvoir->bonus_constitution > 0 || $pouvoir->bonus_spiritisme > 0 || $pouvoir->bonus_intelligence > 0
-							|| $pouvoir->bonus_alerte > 0 || $pouvoir->bonus_vigueur > 0 || $pouvoir->bonus_volonte > 0 ){
-						$personnage->alerte -= $pouvoir->bonus_alerte;
-						$personnage->constitution -= $pouvoir->bonus_constitution;
-						$personnage->intelligence -= $pouvoir->bonus_intelligence;
-						$personnage->spiritisme -= $pouvoir->bonus_spiritisme;
-						$personnage->vigueur -= $pouvoir->bonus_vigueur;
-						$personnage->volonte -= $pouvoir->bonus_volonte;
-						$this->Save( $personnage );
-					}
-				
-					$personnage = $this->FindComplete( $personnage->id );
-					return $personnage != FALSE;
-				}
-			}
-			return FALSE;
-		}
-		
 		private function HasPrerequisCapacite( Personnage &$personnage, $id_capacite ){
 			if( $personnage ){
 				$cr = new CapaciteRepository();
@@ -1130,17 +597,6 @@
 				
 				return $capacite !== FALSE && $capacite->active
 						&& in_array( $capacite->voie_id, $personnage->voies );
-			}
-			return FALSE;
-		}
-		
-		private function HasPrerequisConnaissance( Personnage &$personnage, $id_connaissance ){
-			if( $personnage ){
-				$cr = new ConnaissanceRepository();
-				$connaissance = $cr->Find( $id_connaissance );
-				
-				return $connaissance !== FALSE && $connaissance->active
-						&& in_array( $id_connaissance, $personnage->connaissances_accessibles );
 			}
 			return FALSE;
 		}
@@ -1154,26 +610,20 @@
 						CONCAT( u.prenom, ' ', u.nom ) AS user_update,
 						j.id AS player_id,
 						CONCAT( j.prenom, ' ', j.nom ) AS player_name,
-						a.id AS alignement_id,
-						a.nom AS alignement_nom,
-						f.id AS faction_id,
-						f.nom AS faction_nom,
+						ce.id AS cite_etat_id,
+						ce.nom AS cite_etat_nom,
 						ra.id AS race_id,
 						ra.nom AS race_nom,
-						re.id AS religion_id,
-						re.nom AS religion_nom,
-						pr.id AS prestige_id,
-						pr.nom AS prestige_nom,
+						cr.id AS croyance_id,
+						cr.nom AS croyance_nom,
 						p.notes, p.commentaire
 					FROM personnage AS p
-						LEFT JOIN personnage_journal pj ON pj.id = ( SELECT id FROM personnage_journal WHERE active = '1' AND id_personnage = p.id ORDER BY quand DESC LIMIT 1 )
+						LEFT JOIN personnage_journal pj ON pj.id = ( SELECT id FROM personnage_journal WHERE active = '1' AND personnage_id = p.id ORDER BY quand DESC LIMIT 1 )
 						LEFT JOIN joueur u ON pj.joueur_id = u.id
 						LEFT JOIN joueur j ON p.joueur = j.id
-						LEFT JOIN alignement a ON p.alignement = a.id
-						LEFT JOIN faction f ON p.faction = f.id
-						LEFT JOIN race ra ON p.race = ra.id
-						LEFT JOIN divinite re ON p.religion = re.id
-						LEFT JOIN prestige pr ON p.prestige = pr.id
+						LEFT JOIN cite_etat ce ON p.cite_etat_id = ce.id
+						LEFT JOIN race ra ON p.race_id = ra.id
+						LEFT JOIN croyance cr ON p.croyance_id = cr.id
 					WHERE p.est_detruit = '0'";
 			
 			if( $where != "" ){
@@ -1207,16 +657,12 @@
 				$entity->dernier_changement_date = $result[ "last_update" ];
 				$entity->dernier_changement_par = $result[ "user_update" ];
 				
-				$entity->alignement_id = $result[ "alignement_id" ];
-				$entity->alignement_nom = $result[ "alignement_nom" ];
-				$entity->faction_id = $result[ "faction_id" ];
-				$entity->faction_nom = $result[ "faction_nom" ];
+				$entity->cite_etat_id = $result[ "cite_etat_id" ];
+				$entity->cite_etat_nom = $result[ "cite_etat_nom" ];
 				$entity->race_id = $result[ "race_id" ];
 				$entity->race_nom = $result[ "race_nom" ];
-				$entity->religion_id = $result[ "religion_id" ];
-				$entity->religion_nom = $result[ "religion_nom" ];
-				$entity->prestige_id = $result[ "prestige_id" ];
-				$entity->prestige_nom = $result[ "prestige_nom" ];
+				$entity->croyance_id = $result[ "croyance_id" ];
+				$entity->croyance_nom = $result[ "croyance_nom" ];
 				
 				$entity->notes = $result[ "notes" ];
 				$entity->commentaire = $result[ "commentaire" ];
@@ -1228,47 +674,28 @@
 		}
 		
 		private function Complete( Personnage &$personnage, $force = FALSE ){
-			if( $force || !$personnage->est_complet ){
-				$sql = "SELECT p.st_constitution, p.st_spiritisme, p.st_vigueur,
-								p.st_volonte, p.st_intelligence, p.st_alerte
-						FROM personnage p
-								LEFT JOIN joueur j ON p.joueur = j.id
-						WHERE p.id = ?";
-				$this->_db->Query( $sql, array( $personnage->id ) );
-				if( $result = $this->_db->GetResult() ){
-					$personnage->constitution = $result[ "st_constitution" ];
-					$personnage->spiritisme = $result[ "st_spiritisme" ];
-					$personnage->vigueur = $result[ "st_vigueur" ];
-					$personnage->volonte = $result[ "st_volonte" ];
-					$personnage->intelligence = $result[ "st_intelligence" ];
-					$personnage->alerte = $result[ "st_alerte" ];
-					
-					// Chaine les appels de construction
-					if(	$this->FetchCapacites( $personnage )
-							&& $this->FetchCapacitesRaciales( $personnage )
-							&& $this->FetchChoixCapacites( $personnage )
-							&& $this->FetchChoixConnaissances( $personnage )
-							&& $this->FetchChoixPouvoirs( $personnage )
-							&& $this->FetchConnaissances( $personnage )
-							&& $this->FetchConnaissancesAccessibles( $personnage )
-							&& $this->FetchPouvoirs( $personnage )
-							&& $this->FetchSorts( $personnage )
-							&& $this->FetchVoies( $personnage ) ){
-						$personnage->est_complet = TRUE;
-						return TRUE;
-					}
-				}
-				return FALSE;
-			} else {
+			if( $personnage->est_complet && !$force ){
+				// Le personnage a déjà été complété
+				return true;
+			}
+			// Chaine les appels de construction
+			if(	$this->FetchCapacites( $personnage )
+					&& $this->FetchCapacitesRaciales( $personnage )
+					&& $this->FetchChoixCapacites( $personnage )
+					&& $this->FetchConnaissances( $personnage )
+					&& $this->FetchConnaissancesAccessibles( $personnage )
+					&& $this->FetchVoies( $personnage ) ){
+				$personnage->est_complet = TRUE;
 				return TRUE;
 			}
+			return FALSE;
 		}
 		
 		private function FetchCapacitesRaciales( Personnage &$personnage ){
 			if( $personnage ){
 				$sql = "SELECT po.id, po.nom
 						FROM personnage p
-							LEFT JOIN personnage_pouvoir pp ON pp.id_personnage = p.id AND pp.id_pouvoir IN ( SELECT id_pouvoir FROM race_pouvoir /*WHERE id_race = p.race*/ )
+							LEFT JOIN personnage_pouvoir pp ON pp.id_personnage = p.id AND pp.id_pouvoir IN ( SELECT id_pouvoir FROM race_pouvoir )
 							LEFT JOIN pouvoir po ON po.id = pp.id_pouvoir
 						WHERE p.id = ?
 						ORDER BY po.nom";
@@ -1307,38 +734,6 @@
 				$this->_db->Query( $sql, array( $personnage->id ) );
 				while( $result = $this->_db->GetResult() ){
 					$personnage->choix_capacites[ $result[ "id" ] ] = $result[ "nombre" ];
-				}
-				return TRUE;
-			}
-			return FALSE;
-		}
-		
-		private function FetchChoixConnaissances( Personnage &$personnage ){
-			if( $personnage ){
-				$sql = "SELECT c.id, x.nombre
-						FROM connaissance_categorie AS c
-							LEFT JOIN personnage_connaissance_categorie AS x ON c.id = x.id_connaissance_categorie
-						WHERE x.id_personnage = ? And c.active = '1' And c.supprime = '0'
-						ORDER BY c.nom";
-				$this->_db->Query( $sql, array( $personnage->id ) );
-				while( $result = $this->_db->GetResult() ){
-					$personnage->choix_connaissances[ $result[ "id" ] ] = $result[ "nombre" ];
-				}
-				return TRUE;
-			}
-			return FALSE;
-		}
-		
-		private function FetchChoixPouvoirs( Personnage &$personnage ){
-			if( $personnage ){
-				$sql = "SELECT c.id, x.nombre
-						FROM pouvoir_categorie AS c
-							LEFT JOIN personnage_pouvoir_categorie AS x ON c.id = x.id_pouvoir_categorie
-						WHERE x.id_personnage = ? And c.active = '1' And c.supprime = '0'
-						ORDER BY c.nom";
-				$this->_db->Query( $sql, array( $personnage->id ) );
-				while( $result = $this->_db->GetResult() ){
-					$personnage->choix_pouvoirs[ $result[ "id" ] ] = $result[ "nombre" ];
 				}
 				return TRUE;
 			}
@@ -1411,7 +806,7 @@
 								AND ( c.connaissance_sec = 0 OR c.connaissance_sec IN
 										( SELECT id_connaissance FROM personnage_connaissance WHERE id_personnage = p.id )
 								)
-								AND ( c.divinite = 0 OR c.divinite = p.religion )
+								AND ( c.divinite = 0 OR c.divinite = p.croyance )
 								AND ( c.statistique = 0
 									 OR ( c.statistique = 1 AND statistique_niveau <= p.st_constitution )
 									 OR ( c.statistique = 2 AND statistique_niveau <= p.st_intelligence )
@@ -1432,41 +827,6 @@
 				$this->_db->Query( $sql, array( $personnage->id ) );
 				while( $result = $this->_db->GetResult() ){
 					$personnage->connaissances_accessibles[] = $result[ "id" ];
-				}
-				return TRUE;
-			}
-			return FALSE;
-		}
-		
-		private function FetchPouvoirs( Personnage &$personnage ){
-			if( $personnage ){
-				$sql = "SELECT pp.id_pouvoir, pp.nombre
-						FROM personnage_pouvoir pp
-							LEFT JOIN pouvoir p ON p.id = pp.id_pouvoir
-						WHERE pp.id_personnage = ? AND p.supprime = '0'";
-				$this->_db->Query( $sql, array( $personnage->id ) );
-				while( $result = $this->_db->GetResult() ){
-					$personnage->pouvoirs[ $result[ "id_pouvoir" ] ] = $result[ "nombre" ];
-				}
-				return TRUE;
-			}
-			return FALSE;
-		}
-		
-		private function FetchSorts( Personnage &$personnage ){
-			if( $personnage ){
-				$sql = "SELECT ps.id_sort, s.id_sphere
-						FROM personnage_sort AS ps
-							LEFT JOIN sort AS s ON ps.id_sort = s.id
-							LEFT JOIN capacite AS c ON s.id_sphere = c.id
-						WHERE ps.id_personnage = ?
-						ORDER BY c.nom, s.niveau, s.nom";
-				$this->_db->Query( $sql, array( $personnage->id ) );
-				while( $result = $this->_db->GetResult() ){
-					if( !array_key_exists( $result[ "id_sphere" ], $personnage->sorts ) ){
-						$personnage->sorts[ $result[ "id_sphere" ] ] = array();
-					}
-					$personnage->sorts[ $result[ "id_sphere" ] ][] = $result[ "id_sort" ];
 				}
 				return TRUE;
 			}

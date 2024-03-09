@@ -25,7 +25,6 @@
 			} else {
 ?>
 			<li><a href="?s=user&a=profile">Voir mon profil</a></li>
-			<li><a href="/quete/">Parchemin dont vous êtes le héros</a></li>
 <?php
 			}
 		}

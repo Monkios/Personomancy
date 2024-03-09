@@ -60,7 +60,7 @@
 		</div>
 <?php
 	}
-	if( $joueur->IsAdmin ){
+	if( $joueur->IsAdministrateur ){
 ?>
 		<div>
 			<h2>Administrateurs</h2>
@@ -88,78 +88,6 @@
 				</ul>
 				<li><a href="?s=admin&a=listSorts">Gestion des sorts / de l'alchimie</a></li>
 			</ul>
-		</div>
-		
-		<div>
-			<h2>TODOs</h2>
-			<ul>
-				<li class="done">V 0.0</li>
-				<ul>
-					<li class="done">Objets d'infra de base</li>
-					<li class="done">Gestion la sécurité</li>
-					<li class="done">Authentification d'un utilisateur</li>
-				</ul>
-				<li class="done">V 0.1</li>
-				<ul>
-					<li class="done">Création/Gestion de compte</li>
-					<li class="done">Administration de compte</li>
-					<li class="done">BUG - UTF8 decode à l'écriture</li>
-					<li class="done">BUG - UTF8 encode à la lecture</li>
-				</ul>
-				<li class="done">V 0.2</li>
-				<ul>
-					<li class="done">Diviser Utils en Domains et Services</li>
-					<li class="done">CastDomain retourne des persos partiels</li>
-					<li class="done">Diviser CommunityDomain et IdentityDomain</li>
-					<li class="done">Standardiser la capitalisation des paramètres</li>
-				</ul>
-				<li>V 1.0 Alpha</li>
-				<ul>
-					<li class="done">Nouveau format de fiche de persos</li>
-					<li class="done">Transfert massif de personnage</li>
-					<li class="done">Destruction massif des morts</li>
-					<li class="done">Gestion massive de l'XP</li>
-					<li class="done">Journal des modifications</li>
-				</ul>
-				<li>V 1.0 Beta</li>
-				<ul>
-					<li class="done">Création d'un nouveau personnage</li>
-					<li class="done">Modification d'un personnage</li>
-					<li class="done">Ajouts automatiques à la création</li>
-					<li class="done">Affichage complet du journal d'un personnage</li>
-				</ul>
-				<li>V 1.0 RC</li>
-				<ul>
-					<li>Affichage des gains d'XP d'un personnage</li>
-					<li>Feuille de style de base</li>
-					<li>Correction des bogues découverts</li>
-				</ul>
-				<li>V 1.1</li>
-				<ul>
-					<li>Impression du spellbook d'un personnage</li>
-					<li>Nettoyage du code</li>
-					<li>...</li>
-				</ul>
-				<li>V 1.2</li>
-				<ul>
-					<li>Gestion des alignements</li>
-					<li>Gestion des dieux</li>
-					<li>Gestion des capacités</li>
-					<li>Gestion des connaissances</li>
-					<li>Gestion des sorts/potions</li>
-					<li>Gestion des pouvoirs</li>
-					<li>Gestion des races</li>
-					<li>Déresponsabilisation de la couche Dépôt du Personnage</li>
-				</ul>
-				<li>V 2.0</li>
-				<ul>
-					<li>Transférer la possession d'XP au joueur (faisabilité ?)</li>
-					<li>Identification des NPCs</li>
-				</ul
-			</ul>
-			<style type="text/css">
-				.done { text-decoration: line-through;
-			</style>
 		</div>
 <?php
 	}

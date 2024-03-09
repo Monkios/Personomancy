@@ -4,14 +4,10 @@
 		public $est_cree = FALSE;
 		public $est_complet = FALSE;
 		
-		public $alignement_id = -1;
-		public $alignement_nom = "n.d.";
-		public $faction_id = -1;
-		public $faction_nom = "n.d.";
-		public $prestige_id = -1;
-		public $prestige_nom = "n.d.";
-		public $religion_id = -1;
-		public $religion_nom = "n.d.";
+		public $cite_etat_id = -1;
+		public $cite_etat_nom = "n.d.";
+		public $croyance_id = -1;
+		public $croyance_nom = "n.d.";
 		public $race_id = -1;
 		public $race_nom = "n.d.";
 		
@@ -28,38 +24,23 @@
 		public $dernier_changement_date;
 		public $dernier_changement_par;
 		
+		// Retourne le nombre d'XP qui dépassent la limite de ce qui peut
+		// être investi sur un personnage
 		public function GetExceedingXP(){
-			$exc = 0;
-			if( $this->px_totaux > CHARACTER_MAX_XP_INVESTED ){
-				$exc = $this->px_totaux - CHARACTER_MAX_XP_INVESTED;
-			}
-			return $exc;
+			return max( 0, $this->px_totaux - CHARACTER_MAX_XP_INVESTED );
 		}
 		
-		public function GetRealCurrentXP(){
-			$exc = $this->GetExceedingXP();
-			$real_xp = $this->px_restants;
-			if( $exc > 0 ){
-				$real_xp = $real_xp - $exc;
-			}
-			return $real_xp;
+		// Retourne le nombre d'XP restants, en-dehors de ceux qui dépassent la
+		// limite de ce qui peut être investi sur un personnage
+		public function GetRealCurrentXP() : int {
+			return $this->px_restants - $this->GetExceedingXP();
 		}
 		
-		public function GetPerteXP(){
-			$invested = $this->px_totaux - $this->px_restants;
-			
-			if( $invested < CHARACTER_BASE_XP ){
-				return $this->px_totaux;
-			}
-			
-			return ceil( ( $invested - CHARACTER_BASE_XP ) * CHARACTER_REBUILD_PERTE_TAUX / 5 ) * 5 + CHARACTER_BASE_XP + $this->px_restants;
-		}
-		
-		public function CanAfford( $xp_cost ){
+		public function CanAfford( $xp_cost ) : bool {
 			return $xp_cost <= $this->GetRealCurrentXP();
 		}
 		
-		public function GetStatus(){
+		public function GetStatus() : string {
 			if( $this->est_vivant ){
 				if( $this->est_cree ){
 					$character_status = "Actif";

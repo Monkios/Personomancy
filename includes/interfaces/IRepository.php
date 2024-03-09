@@ -1,8 +1,8 @@
 <?php
 	interface IRepository {
-		public function Create( $opts = array() );
-		public function Find( $id );
-		public function Save( $obj );
-		public function Delete( $id );
+		public function Create( array $opts = array() );
+		public function Find( int $id );
+		public function Save( GenericEntity $obj );
+		public function Delete( int $id );
 	}
 ?>
