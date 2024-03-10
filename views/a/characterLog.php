@@ -44,7 +44,7 @@
 	} else {
 		foreach( $list as $log_message ){
 			$character_link = $log_message->CharacterName;
-			if( $user_identity->HasAccess( Identity::IS_ANIM ) ){
+			if( $user_identity->HasAccess( Identity::IS_ANIMATEUR ) ){
 				$character_link = "<a href='?s=player&a=characterUpdate&c=" . $log_message->CharacterId . "'>" . $character_link . "</a>";
 			}
 ?>

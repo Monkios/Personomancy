@@ -10,6 +10,7 @@
 		public $IsActive = FALSE;
 		public $DateInsert;
 		public $DateModify;
+		public $NbCharacters = 0;
 		
 		public function getFullName(){
 			return $this->FirstName . " " . $this->LastName;

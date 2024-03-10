@@ -21,10 +21,10 @@
 			
 			if( isset( $_GET['anim'] ) ){
 				if( $_GET['anim'] == "f" && $p->IsAnimateur ){
-					$identity->SetPlayerAccess( Identity::IS_ANIM, FALSE );
+					$identity->SetPlayerAccess( Identity::IS_ANIMATEUR, FALSE );
 					Message::Notice( "Joueur '" . $p->getFullName() . "' n'est plus animateur." );
 				} else if( $_GET['anim'] == "t" && !$p->IsAnimateur ){
-					$identity->SetPlayerAccess( Identity::IS_ANIM, TRUE );
+					$identity->SetPlayerAccess( Identity::IS_ANIMATEUR, TRUE );
 					Message::Notice( "Joueur '" . $p->getFullName() . "' est maintenant animateur." );
 				} else {
 					Message::Erreur( "Impossible de compléter la demande en lien avec le statut 'Est animateur' de ce joueur." );
@@ -32,11 +32,11 @@
 			}
 			
 			if( isset( $_GET['admin'] ) ){
-				if( $_GET['admin'] == "f" && $p->IsAdmin ){
-					$identity->SetPlayerAccess( Identity::IS_ADMIN, FALSE );
+				if( $_GET['admin'] == "f" && $p->IsAdministrateur ){
+					$identity->SetPlayerAccess( Identity::IS_ADMINISTRATEUR, FALSE );
 					Message::Notice( "Joueur '" . $p->getFullName() . "' n'est plus admin." );
-				} else if( $_GET['admin'] == "t" && !$p->IsAdmin ){
-					$identity->SetPlayerAccess( Identity::IS_ADMIN, TRUE );
+				} else if( $_GET['admin'] == "t" && !$p->IsAdministrateur ){
+					$identity->SetPlayerAccess( Identity::IS_ADMINISTRATEUR, TRUE );
 					Message::Notice( "Joueur '" . $p->getFullName() . "' est maintenant admin." );
 				} else {
 					Message::Erreur( "Impossible de compléter la demande en lien avec le statut 'Est admin' de ce joueur." );

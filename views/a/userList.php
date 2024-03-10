@@ -5,8 +5,6 @@
 				<th>Nom</th>
 				<th>Courriel</th>
 				<th>Nb. persos.</th>
-				<th>XP Total</th>
-				<th>Passe saison</th>
 				<th>Activé</th>
 				<th>Animateur</th>
 				<th>Administrateur</th>
@@ -30,8 +28,6 @@
 				<td><?php echo $player->LastName; ?></td>
 				<td><?php echo $player->Email; ?></td>
 				<td><?php echo $player->NbCharacters; ?></td>
-				<td><?php echo $player->TotalExperience; ?></td>
-				<td><?php echo $player->PasseSaison ? "Oui" : ""; ?></td>
 				<td>
 					<a href="?<?php echo $url_opts; ?>&active=<?php echo $player->IsActive ? "f" : "t"; ?>" class="<?php echo $player->IsActive ? "is_yes" : "is_no"; ?>"><?php echo $player->IsActive ? "Oui" : "-"; ?></a>
 				</td>
@@ -39,7 +35,7 @@
 					<a href="?<?php echo $url_opts; ?>&anim=<?php echo $player->IsAnimateur ? "f" : "t"; ?>" class="<?php echo $player->IsAnimateur ? "is_yes" : "is_no"; ?>"><?php echo $player->IsAnimateur ? "Oui" : "-"; ?></a>
 				</td>
 				<td>
-					<a href="?<?php echo $url_opts; ?>&admin=<?php echo $player->IsAdmin ? "f" : "t"; ?>" class="<?php echo $player->IsAdmin ? "is_yes" : "is_no"; ?>"><?php echo $player->IsAdmin ? "Oui" : "-"; ?></a>
+					<a href="?<?php echo $url_opts; ?>&admin=<?php echo $player->IsAdministrateur ? "f" : "t"; ?>" class="<?php echo $player->IsAdministrateur ? "is_yes" : "is_no"; ?>"><?php echo $player->IsAdministrateur ? "Oui" : "-"; ?></a>
 				</td>
 				<td><?php echo Date::FormatSQLDate( $player->DateInsert ); ?></td>
 				<td><?php echo Date::FormatSQLDate( $player->DateModify ); ?></td>

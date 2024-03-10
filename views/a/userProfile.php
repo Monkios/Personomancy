@@ -20,7 +20,7 @@
 				</div>
 				<div>
 					<label>Est administrateur :</label>
-					<span><?php echo ( $player->IsAdmin ) ? "Oui" : "Non"; ?></span>
+					<span><?php echo ( $player->IsAdministrateur ) ? "Oui" : "Non"; ?></span>
 				</div>
 				<div>
 					<label for="email">Courriel :</label>

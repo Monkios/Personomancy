@@ -1,8 +1,8 @@
 <?php
 	class Identity {
 		const IS_ACTIVE = "active";
-		const IS_ANIM = "est_animateur";
-		const IS_ADMIN = "est_administrateur";
+		const IS_ANIMATEUR = "est_animateur";
+		const IS_ADMINISTRATEUR = "est_administrateur";
 		
 		private $player = FALSE;
 		

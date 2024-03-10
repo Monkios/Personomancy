@@ -50,7 +50,7 @@
 	// Test if user has access
 	if( $logged_in ){
 		// GM access to GM page
-		if( $control_section == "gm" && !$user_identity->HasAccess( Identity::IS_ANIM ) ){
+		if( $control_section == "gm" && !$user_identity->HasAccess( Identity::IS_ANIMATEUR ) ){
 			$control_section = $default_section;
 			$control_action = $default_action;
 		}

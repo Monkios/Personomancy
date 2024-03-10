@@ -32,7 +32,12 @@
 		
 		public static function GetPlayerList( $active_only = FALSE ){
 			$sql = "SELECT j.id, j.prenom, j.nom, j.courriel, j.salt,
-						j.est_animateur, j.est_administrateur, j.active, j.date_insert, j.date_modify
+						j.est_animateur, j.est_administrateur, j.active, j.date_insert, j.date_modify,
+						(
+							SELECT COUNT( p.id )
+							FROM personnage p
+							WHERE p.est_vivant = '1' AND p.est_cree = '1' AND p.est_detruit = '0' AND p.joueur = j.id
+						)  AS nb_characters
 					FROM joueur j ";
 			if( $active_only != FALSE ){
 				$sql .= "WHERE j.active = '1' ";
