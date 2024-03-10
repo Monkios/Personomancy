@@ -2,7 +2,7 @@
 	if( isset( $_POST['send'] ) ){
 		if( isset( $_POST['email'] ) && $_POST['email'] != "" &&
 				isset( $_POST['password'] ) && $_POST['password'] != "" ){
-			$player = Identity::GetConnectingPlayer( mb_convert_encoding( Security::FilterEmail( $_POST['email'] ), 'ISO-8859-1', 'UTF-8'), mb_convert_encoding( Security::FilterInput( $_POST['password'] ), 'ISO-8859-1', 'UTF-8') );
+			$player = Identity::GetConnectingPlayer( Security::FilterEmail( $_POST['email'] ), Security::FilterInput( $_POST['password'] ) );
 			
 			if( $player ){
 				if( $player->IsActive ){

@@ -39,10 +39,11 @@
 					$identity->ChangePasswordTo( $password );
 					
 					if( $identity->player->IsActive ){
+						// Count the number of months since the last change on account
 						$diff = date_diff( new DateTime( date( "Y-m-d", strtotime( $identity->player->DateModify ) ) ), new DateTime( "today" ) );
 						$diff = $diff->m + ( $diff->y * 12 );					
 					
-						if( $diff > IDENTITY_TRIGGER_ACTIVATION ){
+						if( $diff > ACCOUNT_FORCE_ACTIVATION ){
 							$identity->SetPlayerAccess( Identity::IS_ACTIVE, FALSE );
 							$identity->player->IsActive = FALSE;
 						}

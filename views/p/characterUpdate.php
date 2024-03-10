@@ -550,7 +550,7 @@
 	foreach( $list_journal as $journal_id => $journal_desc ){
 ?>
 					<li>
-						<span><?php echo date( "Y-m-d H:i", strtotime( $journal_desc->Date ) ) . " : " . utf8_encode( $journal_desc->Text ); ?></span>
+						<span><?php echo Date::FormatSQLDate( $journal_desc->Date ) . " : " . utf8_encode( $journal_desc->Text ); ?></span>
 <?php
 		if( $last_modification ){
 			$last_modification = FALSE;

@@ -23,7 +23,7 @@
 						<td><input type="checkbox" name="character_id[]" value="<?php echo $char_id; ?>" /></td>
 						<td><?php echo utf8_encode( $character->nom ); ?></td>
 						<td><?php echo utf8_encode( $character->joueur_nom ); ?></td>
-						<td><?php echo strftime( "%e %b %Y", strtotime( $character->dernier_changement_date ) ); ?></td>
+						<td><?php echo Date::FormatSQLDate( $character->dernier_changement_date ); ?></td>
 					</tr>
 <?php
 		}

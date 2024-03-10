@@ -27,7 +27,7 @@
 					<td><?php echo utf8_encode( $character->nom ); ?></td>
 					<td><?php echo $character->GetStatus(); ?></td>
 					<td><?php echo $character->px_restants; ?> / <?php echo $character->px_totaux; ?></td>
-					<td><?php echo strftime( "%e %b %Y", strtotime( $character->dernier_changement_date ) ); ?> par <?php echo utf8_encode( $character->dernier_changement_par ); ?></td>
+					<td><?php echo Date::FormatSQLDate( $character->dernier_changement_date ); ?> par <?php echo utf8_encode( $character->dernier_changement_par ); ?></td>
 					<td><a href="./?s=player&a=characterUpdate&c=<?php echo $character->id; ?>"><?php echo ( $character->est_vivant ) ? "Modifier" : "Voir"; ?></a></td>
 					<td><a target="_blank" href="?s=player&a=sheet&c=<?php echo $character->id; ?>">Fiche</a></td>
 				</tr>

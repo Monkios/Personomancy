@@ -42,7 +42,7 @@
 				<td><?php echo utf8_encode( $character->joueur_nom ); ?></td>
 				<td><?php echo $character->GetStatus(); ?></td>
 				<td><?php echo $character->px_restants; ?> / <?php echo $character->px_totaux; ?></td>
-				<td><?php echo strftime( "%e %b %Y", strtotime( $character->dernier_changement_date ) ); ?> par <?php echo utf8_encode( $character->dernier_changement_par ); ?></td>
+				<td><?php echo Date::FormatSQLDate( $character->dernier_changement_date ); ?> par <?php echo utf8_encode( $character->dernier_changement_par ); ?></td>
 				<td><a href="?s=player&a=characterUpdate&c=<?php echo $character->id; ?>">Modifier</a></td>
 				<td><a href="?s=player&a=sheet&c=<?php echo $character->id; ?>" target="_blank">Fiche</a></td>
 			</tr>

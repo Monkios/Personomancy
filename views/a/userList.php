@@ -41,8 +41,8 @@
 				<td>
 					<a href="?<?php echo $url_opts; ?>&admin=<?php echo $player->IsAdmin ? "f" : "t"; ?>" class="<?php echo $player->IsAdmin ? "is_yes" : "is_no"; ?>"><?php echo $player->IsAdmin ? "Oui" : "-"; ?></a>
 				</td>
-				<td><?php echo strftime( "%e %b %Y", strtotime( $player->DateInsert ) ); ?></td>
-				<td><?php echo strftime( "%e %b %Y", strtotime( $player->DateModify ) ); ?></td>
+				<td><?php echo Date::FormatSQLDate( $player->DateInsert ); ?></td>
+				<td><?php echo Date::FormatSQLDate( $player->DateModify ); ?></td>
 				<td><a href="?s=admin&a=userProfile&u=<?php echo $player->Id; ?>">Modifier</a></td>
 			</tr>
 <?php

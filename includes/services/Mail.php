@@ -12,19 +12,19 @@
 			$mail->SMTPDebug = SMTP::DEBUG_OFF; #SMTP::DEBUG_SERVER;
 
 
-			$mail->Host = SMTP_HOSTNAME;
-			$mail->Port = SMTP_PORT;
+			$mail->Host = MAIL_SMTP_HOSTNAME;
+			$mail->Port = MAIL_SMTP_PORT;
 			$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 			$mail->SMTPAuth = true;
 
-			$mail->Username = SMTP_USERNAME;
-			$mail->Password = SMTP_PASSWORD;
+			$mail->Username = MAIL_SMTP_USERNAME;
+			$mail->Password = MAIL_SMTP_PASSWORD;
 			
 			$mail->setLanguage( "fr", PHPMAILER_LANG );
 			$mail->CharSet = "UTF-8";
 			
-			$mail->SetFrom( SMTP_USERNAME, LARP_NAME );
-			$mail->addReplyTo( SMTP_USERNAME, LARP_NAME );
+			$mail->SetFrom( MAIL_SMTP_USERNAME, LARP_NAME );
+			$mail->addReplyTo( MAIL_SMTP_USERNAME, LARP_NAME );
 			
 			$mail->addAddress( $dest );
 			#$mail->addBCC( SMTP_USERNAME, LARP_NAME );
@@ -33,7 +33,7 @@
 			
 			$body .= "<br />\n";
 			$body .= "<b><u>Informations sur la demande</u></b><br />\n";
-			$body .= "<b>Date & heure :</b> " . date( "Y-m-d h:i" ) . "<br />\n";
+			$body .= "<b>Date & heure :</b> " . Date::FormatNow() . "<br />\n";
 			$body .= "<b>IP du demandeur :</b> " . $_SERVER[ "REMOTE_ADDR" ] . "<br />\n";
 			if( isset( $_SESSION[ SESSION_KEY ][ "User" ] ) && $_SESSION[ SESSION_KEY ][ "User" ]->getFullName() != "" ){
 				$body .= "<b>Nom du demandeur :</b> " . $_SESSION[ SESSION_KEY ][ "User" ]->getFullName() . "<br />\n";
@@ -60,8 +60,8 @@
 		private static function SaveMail($mail)
 		{
 			//You can change 'Sent Mail' to any other folder or tag
-			$path = '{imap.gmail.com:993/imap/ssl}[Gmail]/Sent Mail';
-		
+			$path = imap_utf8_to_mutf7( MAIL_IMAP_SENT_MAILBOX );
+			
 			//Tell your server to open an IMAP connection using the same username and password as you used for SMTP
 			$imapStream = imap_open($path, $mail->Username, $mail->Password);
 		

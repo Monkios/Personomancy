@@ -10,12 +10,12 @@
 				$new_firstname = $new_lastname = "";
 				if( isset( $_POST['firstname'] ) && $_POST['firstname'] !== $player->FirstName ){
 					// Prepare firstname
-					$new_firstname = Security::FilterInput( mb_convert_encoding( $_POST['firstname'], 'ISO-8859-1', 'UTF-8') );
+					$new_firstname = Security::FilterInput( $_POST['firstname'] );
 				}
 				
 				if( isset( $_POST['lastname'] ) && $_POST['lastname'] !== $player->LastName ){
 					// Prepare lastname
-					$new_lastname = Security::FilterInput( mb_convert_encoding( $_POST['lastname'], 'ISO-8859-1', 'UTF-8') );
+					$new_lastname = Security::FilterInput( $_POST['lastname'] );
 				}
 				
 				if( $new_firstname != "" || $new_lastname != "" ){
@@ -47,20 +47,6 @@
 				if( $identity->SendForgotEmail() ){
 					Message::Notice( "Un mot de passe temporaire a été envoyé à ce joueur." );
 					$reload = TRUE;
-				}
-			} else if( isset( $_POST['add_passe_saison'] ) && !$player->PasseSaison ){
-				if( $identity->ChangePasseSaison( true ) ){
-					Message::Notice( "La passe de saison a été ajoutée à ce joueur." );
-					$reload = TRUE;
-				} else {
-					Message::Erreur( "Une erreur s'est produite lors de l'ajout de la passe saison." );
-				}
-			} else if( isset( $_POST['remove_passe_saison'] ) && $player->PasseSaison ){
-				if( $identity->ChangePasseSaison( false ) ){
-					Message::Notice( "La passe de saison a été retirée de ce joueur." );
-					$reload = TRUE;
-				} else {
-					Message::Erreur( "Une erreur s'est produite lors du retrait de la passe saison." );
 				}
 			}
 			

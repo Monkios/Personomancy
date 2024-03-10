@@ -4,11 +4,11 @@
 				<h3>Renseignements</h3>
 				<div>
 					<label for="lastname">Date d'inscription :</label>
-					<span><?php echo strftime( "%e %b %Y", strtotime( $player->DateInsert ) ); ?></span>
+					<span><?php echo Date::FormatSQLDate( $player->DateInsert ); ?></span>
 				</div>
 				<div>
 					<label for="lastname">Dernière modification :</label>
-					<span><?php echo strftime( "%e %b %Y %H:%M", strtotime( $player->DateModify ) ); ?></span>
+					<span><?php echo Date::FormatSQLDate( $player->DateModify ); ?></span>
 				</div>
 				<div>
 					<label>Est actif :</label>
@@ -25,17 +25,6 @@
 				<div>
 					<label>Passe saison :</label>
 					<span><?php echo ( $player->PasseSaison ) ? "Oui" : "Non"; ?></span>
-<?php
-	if( !$player->PasseSaison ){
-?>
-					<input type="submit" name="add_passe_saison" id="add_passe_saison" value="Ajouter la passe saison" />
-<?php
-	} else {
-?>
-					<input type="submit" name="remove_passe_saison" id="remove_passe_saison" value="Retirer la passe saison" />
-<?php
-	}
-?>
 				</div>
 				<div>
 					<label for="email">Courriel :</label>

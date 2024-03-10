@@ -5,24 +5,24 @@
 				<p>Voici les renseignements fournis lors de la dernière mise-à-jour de votre compte :</p>
 				<div>
 					<label for="lastname">Date d'inscription :</label>
-					<span><?php echo strftime( "%e %b %Y", strtotime( $joueur->DateInsert ) ); ?></span>
+					<span><?php echo Date::FormatSQLDate( $joueur->DateInsert ); ?></span>
 				</div>
 				<div>
 					<label for="lastname">Dernière modification :</label>
-					<span><?php echo strftime( "%e %b %Y %H:%M", strtotime( $joueur->DateModify ) ); ?></span>
+					<span><?php echo Date::FormatSQLDate( $joueur->DateModify ); ?></span>
 				</div>
 			
 				<div>
 					<label for="email">Courriel :</label>
-					<input type="email" name="email" id="email" value="<?php echo utf8_encode( $joueur->Email ); ?>" />
+					<input type="email" name="email" id="email" value="<?php echo $joueur->Email; ?>" />
 				</div>
 				<div>
 					<label for="firstname">Prénom :</label>
-					<input type="text" name="firstname" id="firstname" value="<?php echo utf8_encode( $joueur->FirstName ); ?>" />
+					<input type="text" name="firstname" id="firstname" value="<?php echo $joueur->FirstName; ?>" />
 				</div>
 				<div>
 					<label for="lastname">Nom de famille :</label>
-					<input type="text" name="lastname" id="lastname" value="<?php echo utf8_encode( $joueur->LastName ); ?>" />
+					<input type="text" name="lastname" id="lastname" value="<?php echo $joueur->LastName; ?>" />
 				</div>
 				<h2>Changer mon mot de passe</h2>
 				<div>

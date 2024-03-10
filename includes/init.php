@@ -43,6 +43,7 @@
 	require_once "./includes/domains/Community.php";
 	
 	require_once "./includes/services/Database.php";
+	require_once "./includes/services/Date.php";
 	require_once "./includes/services/Dictionary.php";
 	require_once "./includes/services/Mail.php";
 	require_once "./includes/services/Message.php";
