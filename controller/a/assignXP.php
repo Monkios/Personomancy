@@ -33,7 +33,7 @@
 						$character = $char->Load( $char_id );
 						
 						$reload_page = TRUE;
-						Message::Notice( "Le personnage " . utf8_encode( $character->nom ) . " a reçu " . $_POST[ "quantity_xp" ] . " XP." );
+						Message::Notice( "Le personnage " . $character->nom . " a reçu " . $_POST[ "quantity_xp" ] . " XP." );
 					}
 				} else {
 					Message::Erreur( "Identifiant de personnage invalide." );

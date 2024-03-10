@@ -3,7 +3,7 @@
 			<form method="post" action="?s=admin&a=updateCapacite&i=<?php echo $capacite->id; ?>">
 				<div>
 					<label for="capacite_nom">Nom :</label>
-					<input type="text" name="capacite_nom" id="capacite_nom" value="<?php echo utf8_encode( $capacite->nom ); ?>" />
+					<input type="text" name="capacite_nom" id="capacite_nom" value="<?php echo $capacite->nom; ?>" />
 				</div>
 				<div>
 					<label for="capacite_active">Est activée</label>
@@ -15,7 +15,7 @@
 <?php
 	foreach( $list_voies as $id => $nom ){
 ?>
-						<option value="<?php echo $id; ?>"<?php if( $id == $capacite->voie_id ) echo " selected='selected'"; ?>><?php echo utf8_encode( $nom ); ?></option>
+						<option value="<?php echo $id; ?>"<?php if( $id == $capacite->voie_id ) echo " selected='selected'"; ?>><?php echo $nom; ?></option>
 <?php
 	}
 ?>

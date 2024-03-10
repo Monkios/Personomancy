@@ -496,7 +496,7 @@
 							$c->px_restants -= $xp_cost;
 						
 							if( $pr->Save( $c ) ){
-								$this->RecordAction( $c->id, CharacterSheet::RECORD_CAPACITE, $capacite_id, $nb_selections, mb_convert_encoding( "Augmentation de la capacité " . utf8_encode( $capacite->nom ) . " à " . ( $curr_score + $nb_selections ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
+								$this->RecordAction( $c->id, CharacterSheet::RECORD_CAPACITE, $capacite_id, $nb_selections, mb_convert_encoding( "Augmentation de la capacité " . $capacite->nom . " à " . ( $curr_score + $nb_selections ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
 							
 								return $c;
 							}
@@ -545,7 +545,7 @@
 							$c->px_restants -= $xp_cost;
 						
 							if( $pr->Save( $c ) ){
-								$this->RecordAction( $c->id, CharacterSheet::RECORD_VOIE, $voie_id, 1, mb_convert_encoding( "Ajout de la voie " . utf8_encode( $voie->nom ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
+								$this->RecordAction( $c->id, CharacterSheet::RECORD_VOIE, $voie_id, 1, "Ajout de la voie " . $voie->nom . " (-" . $xp_cost . " XP)", TRUE );
 							
 								return $c;
 							}
@@ -592,7 +592,7 @@
 							$c->px_restants -= $xp_cost;
 						
 							if( $pr->Save( $c ) ){
-								$this->RecordAction( $c->id, CharacterSheet::RECORD_CONNAISSANCE, $connaissance_id, 1, mb_convert_encoding( "Ajout de la connaissance " . utf8_encode( $connaissance->nom ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
+								$this->RecordAction( $c->id, CharacterSheet::RECORD_CONNAISSANCE, $connaissance_id, 1, "Ajout de la connaissance " . $connaissance->nom . " (-" . $xp_cost . " XP)", TRUE );
 							
 								return $c;
 							}
@@ -616,103 +616,6 @@
 						if( $pr->Save( $character ) ){
 							return $character;
 						}
-					}
-				}
-			}
-			
-			return FALSE;
-		}
-		
-		public function BuySort( $character_id, $sort_id ){
-			$pr = new PersonnageRepository();
-			$c = $pr->FindComplete( $character_id );
-			
-			if( $c != FALSE && $c->est_vivant && $c->est_complet ){
-				$sr = new SortRepository();
-				$sort = $sr->Find( $sort_id );
-				$nb_sphere_sort = 0;
-				if( array_key_exists( $sort->sphere_id, $c->sorts ) ){
-					$nb_sphere_sort = count( $c->sorts[ $sort->sphere_id ] );
-				}
-				
-				if( $sort && $sort->active
-						&& array_key_exists( $sort->sphere_id, $c->capacites )
-						&& ( !array_key_exists( $sort->sphere_id, $c->sorts )
-							|| !in_array( $sort->id, $c->sorts[ $sort->sphere_id ] ) )
-						&& $sort->cercle <= $nb_sphere_sort + 1
-						&& $c->capacites[ $sort->sphere_id ] > $nb_sphere_sort
-				){
-					if( $pr->AddSort( $c, $sort->id ) ){
-						$nom_sort = $sort->nom . " (" . substr( $sort->sphere_nom, 0, 4 ) . ". " . $sort->cercle . ")";
-						$this->RecordAction( $c->id, CharacterSheet::RECORD_SORT, $sort->id, 1, mb_convert_encoding( "Ajout du sort " . utf8_encode( $nom_sort ), 'ISO-8859-1', 'UTF-8'), TRUE );
-							
-						return $c;
-					}
-				}
-			}
-			
-			return FALSE;
-		}
-		
-		public function RefundSort( Personnage $character, $sort_id ){
-			if( $character->est_vivant && $character->est_complet ){
-				$sr = new SortRepository();
-				$sort = $sr->Find( $sort_id );
-				
-				if( $sort
-						&& array_key_exists( $sort->sphere_id, $character->sorts )
-						&& in_array( $sort->id, $character->sorts[ $sort->sphere_id ] )
-				){
-					$pr = new PersonnageRepository();
-					if( $pr->RemoveSort( $character, $sort->id ) ){
-						return $character;
-					}
-				}
-			}
-			
-			return FALSE;
-		}
-		
-		public function BuyPrestige( $character_id, $prestige_id ){
-			$pr = new PersonnageRepository();
-			$c = $pr->FindComplete( $character_id );
-			
-			if( $c != FALSE && $c->est_vivant && $c->est_complet ){
-				$prr = new PrestigeRepository();
-				$prestige = $prr->Find( $prestige_id );
-				
-				if( $prestige && $prestige->active
-						&& in_array( $prestige->voie_id, $c->voies )
-				){
-					$xp_cost = self::GetPrestigeCost();
-					if( $c->CanAfford( $xp_cost ) ){
-						$c->prestige_id = $prestige->id;
-						$c->px_restants -= $xp_cost;
-						
-						if( $pr->Save( $c ) ){
-							$this->RecordAction( $c->id, CharacterSheet::RECORD_PRESTIGE, $prestige->id, 1, mb_convert_encoding( "Ajout de la connaissance de prestige " . utf8_encode( $prestige->nom ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
-							
-							return $c;
-						}
-					}
-				}
-			}
-			
-			return FALSE;
-		}
-		
-		public function RefundPrestige( Personnage $character, $prestige_id ){
-			if( $character->est_vivant && $character->est_complet
-					&& $character->prestige_id == $prestige_id ){
-				$xp_cost = self::GetPrestigeCost();
-				if( $character->px_restants + $xp_cost <= $character->px_totaux ){
-					$pr = new PersonnageRepository();
-					
-					$character->prestige_id = 0;
-					$character->px_restants += $xp_cost;
-					
-					if( $pr->Save( $character ) ){
-						return $character;
 					}
 				}
 			}

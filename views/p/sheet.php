@@ -361,8 +361,4 @@
 		);
 		$pdf->SetFillColor( PDF_FILL_COLOR );
 	}
-	
-	function PdfEncode( $str ){
-		return html_entity_decode( utf8_encode( $str ), ENT_QUOTES, "UTF-8" );
-	}
 ?>

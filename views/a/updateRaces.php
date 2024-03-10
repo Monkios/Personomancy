@@ -3,7 +3,7 @@
 			<form method="post" action="?s=admin&a=updateRace&i=<?php echo $race->id; ?>">
 				<div>
 					<label for="race_nom">Nom :</label>
-					<input type="text" name="race_nom" id="race_nom" value="<?php echo utf8_encode( $race->nom ); ?>" />
+					<input type="text" name="race_nom" id="race_nom" value="<?php echo $race->nom; ?>" />
 				</div>
 				<div>
 					<label for="race_active">Est activée</label>
@@ -89,7 +89,7 @@
 	foreach( $race->list_capacites_raciales as $id => $capacite ){
 ?>
 						<li>
-							<label for="capacite_raciale_<?php echo $id; ?>"><?php echo utf8_encode( $capacite[ 0 ] ); ?></label>
+							<label for="capacite_raciale_<?php echo $id; ?>"><?php echo $capacite[ 0 ]; ?></label>
 							<select name="capacite_raciale[<?php echo $id; ?>]" id="capacite_raciale_<?php echo $id; ?>">
 <?php
 		for( $i = 0; $i <= 5; $i++ ){
@@ -122,7 +122,7 @@
 	foreach( $pouvoirs as $id => $nom ){
 		if( !array_key_exists( $id, $race->list_capacites_raciales ) ){
 ?>
-							<option value="<?php echo $id; ?>"><?php echo utf8_encode( $nom ); ?></option>
+							<option value="<?php echo $id; ?>"><?php echo $nom; ?></option>
 <?php
 		}
 	}

@@ -19,11 +19,11 @@
 		foreach( $list as $log_message ){
 ?>
 			<tr>
-				<td><a href="?s=player&a=characterUpdate&c=<?php echo $log_message->CharacterId; ?>"><?php echo utf8_encode( $log_message->CharacterName ); ?></a></td>
+				<td><a href="?s=player&a=characterUpdate&c=<?php echo $log_message->CharacterId; ?>"><?php echo $log_message->CharacterName; ?></a></td>
 				<td><?php echo $log_message->GetCharacterStatus(); ?></td>
-				<td><?php echo utf8_encode( $log_message->PlayerName ); ?></td>
-				<td><?php echo utf8_encode( $log_message->Date ); ?></td>
-				<td><?php echo utf8_encode( $log_message->Text ); ?></td>
+				<td><?php echo $log_message->PlayerName; ?></td>
+				<td><?php echo $log_message->Date; ?></td>
+				<td><?php echo $log_message->Text; ?></td>
 				<td><?php echo $log_message->CanBacktrack ? "Oui" : "Non"; ?></td>
 			</tr>
 <?php

@@ -3,7 +3,7 @@
 			<form method="post" action="?s=admin&a=updateCapaciteRaciale&i=<?php echo $capaciteRaciale->id; ?>">
 				<div>
 					<label for="capacite_raciale_nom">Nom :</label>
-					<input type="text" name="capacite_raciale_nom" id="capacite_raciale_nom" value="<?php echo utf8_encode( $capaciteRaciale->nom ); ?>" />
+					<input type="text" name="capacite_raciale_nom" id="capacite_raciale_nom" value="<?php echo $capaciteRaciale->nom; ?>" />
 				</div>
 				<div>
 					<label for="capacite_raciale_active">Est activée</label>
@@ -95,7 +95,7 @@
 	foreach( $capaciteRaciale->list_bonus_capacite as $id => $capacite ){
 ?>
 						<li>
-							<?php echo utf8_encode( $capacite->nom ); ?>
+							<?php echo $capacite->nom; ?>
 							<button type="submit" name="delete_capacite" value="<?php echo $id; ?>" onclick="return confirm('Voulez-vous vraiment retirer cette capacité de cette capacité raciale ?');">X</button>
 						</li>
 <?php
@@ -110,7 +110,7 @@
 	foreach( $capaciteRaciale->list_bonus_connaissance as $id => $connaissance ){
 ?>
 						<li>
-							<?php echo utf8_encode( $connaissance->nom ); ?>
+							<?php echo $connaissance->nom; ?>
 							<button type="submit" name="delete_connaissance" value="<?php echo $id; ?>" onclick="return confirm('Voulez-vous vraiment retirer cette connaissance de cette capacité raciale ?');">X</button>
 						</li>
 <?php
@@ -125,7 +125,7 @@
 	foreach( $capaciteRaciale->list_bonus_voie as $id => $voie ){
 ?>
 						<li>
-							<?php echo utf8_encode( $voie->nom ); ?>
+							<?php echo $voie->nom; ?>
 							<button type="submit" name="delete_voie" value="<?php echo $id; ?>" onclick="return confirm('Voulez-vous vraiment retirer cette voie de cette capacité raciale ?');">X</button>
 						</li>
 <?php
@@ -140,38 +140,8 @@
 	foreach( $capaciteRaciale->list_choix_capacite as $id => $capacite ){
 ?>
 						<li>
-							<?php echo utf8_encode( $capacite->nom ); ?>
+							<?php echo $capacite->nom; ?>
 							<button type="submit" name="delete_choix_capacite" value="<?php echo $id; ?>" onclick="return confirm('Voulez-vous vraiment retirer ce choix de capacité de cette capacité raciale ?');">X</button>
-						</li>
-<?php
-	}
-?>
-					</ul>
-				</div>
-				<div>
-					<h3>Choix de connaissance</h3>
-					<ul>
-<?php
-	foreach( $capaciteRaciale->list_choix_connaissance as $id => $connaissance ){
-?>
-						<li>
-							<?php echo utf8_encode( $connaissance->nom ); ?>
-							<button type="submit" name="delete_choix_connaissance" value="<?php echo $id; ?>" onclick="return confirm('Voulez-vous vraiment retirer ce choix de connaissance de cette capacité raciale ?');">X</button>
-						</li>
-<?php
-	}
-?>
-					</ul>
-				</div>
-				<div>
-					<h3>Choix de pouvoir</h3>
-					<ul>
-<?php
-	foreach( $capaciteRaciale->list_choix_pouvoir as $id => $pouvoir ){
-?>
-						<li>
-							<?php echo utf8_encode( $pouvoir->nom ); ?>
-							<button type="submit" name="delete_choix_pouvoir" value="<?php echo $id; ?>" onclick="return confirm('Voulez-vous vraiment retirer ce choix de pouvoir de cette capacité raciale ?');">X</button>
 						</li>
 <?php
 	}
@@ -194,7 +164,7 @@
 	foreach( $list_capacites as $id => $nom ){
 		if( !array_key_exists( $id, $capaciteRaciale->list_bonus_capacite ) ){
 ?>
-							<option value="<?php echo $id; ?>"><?php echo utf8_encode( $nom ); ?></option>
+							<option value="<?php echo $id; ?>"><?php echo $nom; ?></option>
 <?php
 		}
 	}
@@ -203,27 +173,6 @@
 					</div>
 					<input type="hidden" name="capacite_raciale_id" value="<?php echo $capaciteRaciale->id; ?>" />
 					<input type="submit" name="add_capacite" value="Ajouter" />
-				</form>
-			</div>
-			<div>
-				<h3>Ajouter une connaissance</h3>
-				<form method="post" action="?s=admin&a=updateCapaciteRaciale&i=<?php echo $capaciteRaciale->id; ?>">
-					<div>
-						<label for="connaissance">Connaissance :</label>
-						<select name="connaissance" id="connaissance">
-<?php
-	foreach( $list_connaissances as $id => $nom ){
-		if( !array_key_exists( $id, $capaciteRaciale->list_bonus_connaissance ) ){
-?>
-							<option value="<?php echo $id; ?>"><?php echo utf8_encode( $nom ); ?></option>
-<?php
-		}
-	}
-?>
-						</select>
-					</div>
-					<input type="hidden" name="capacite_raciale_id" value="<?php echo $capaciteRaciale->id; ?>" />
-					<input type="submit" name="add_connaissance" value="Ajouter" />
 				</form>
 			</div>
 			<div>
@@ -236,7 +185,7 @@
 	foreach( $list_voies as $id => $nom ){
 		if( !array_key_exists( $id, $capaciteRaciale->list_bonus_voie ) ){
 ?>
-							<option value="<?php echo $id; ?>"><?php echo utf8_encode( $nom ); ?></option>
+							<option value="<?php echo $id; ?>"><?php echo $nom; ?></option>
 <?php
 		}
 	}
@@ -258,7 +207,7 @@
 	foreach( $list_choix_capacites as $id => $nom ){
 		if( !array_key_exists( $id, $capaciteRaciale->list_choix_capacite ) ){
 ?>
-							<option value="<?php echo $id; ?>"><?php echo utf8_encode( $nom ); ?></option>
+							<option value="<?php echo $id; ?>"><?php echo $nom; ?></option>
 <?php
 		}
 	}
@@ -279,7 +228,7 @@
 	foreach( $list_choix_connaissances as $id => $nom ){
 		if( !array_key_exists( $id, $capaciteRaciale->list_choix_connaissance ) ){
 ?>
-							<option value="<?php echo $id; ?>"><?php echo utf8_encode( $nom ); ?></option>
+							<option value="<?php echo $id; ?>"><?php echo $nom; ?></option>
 <?php
 		}
 	}
@@ -288,27 +237,6 @@
 					</div>
 					<input type="hidden" name="capacite_raciale_id" value="<?php echo $capaciteRaciale->id; ?>" />
 					<input type="submit" name="add_choix_connaissance" value="Ajouter" />
-				</form>
-			</div>
-			<div>
-				<h3>Ajouter un choix de pouvoir</h3>
-				<form method="post" action="?s=admin&a=updateCapaciteRaciale&i=<?php echo $capaciteRaciale->id; ?>">
-					<div>
-						<label for="choix_pouvoir">Connaissance :</label>
-						<select name="choix_pouvoir" id="choix_pouvoir">
-<?php
-	foreach( $list_choix_pouvoirs as $id => $nom ){
-		if( !array_key_exists( $id, $capaciteRaciale->list_choix_pouvoir ) ){
-?>
-							<option value="<?php echo $id; ?>"><?php echo utf8_encode( $nom ); ?></option>
-<?php
-		}
-	}
-?>
-						</select>
-					</div>
-					<input type="hidden" name="capacite_raciale_id" value="<?php echo $capaciteRaciale->id; ?>" />
-					<input type="submit" name="add_choix_pouvoir" value="Ajouter" />
 				</form>
 			</div>
 		</div>

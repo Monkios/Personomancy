@@ -29,7 +29,7 @@
 				if( $personnage->joueur_id == $joueur->Id && $personnage->est_vivant && $personnage->est_cree ){
 					$pdf->Ln( $h );
 					if( $nb_persos == 0 ){
-						$pdf->Cell( $w[ 0 ], $h, html_entity_decode( utf8_encode( $joueur->getFullName() ), ENT_QUOTES ), 1 );
+						$pdf->Cell( $w[ 0 ], $h, $joueur->getFullName(), 1 );
 						$pdf->Cell( $w[ 1 ], $h, $joueur->PasseSaison ? "Oui" : "", 1 );
 						$pdf->Cell( $w[ 2 ], $h, "", 1 );
 						$pdf->Cell( $w[ 3 ], $h, "", 1 );
@@ -40,9 +40,9 @@
 						$pdf->Cell( $w[ 0 ] + $w[ 1 ] + $w[ 2 ] + $w[ 3 ] + $w[ 4 ] + $w[ 5 ] + $w[ 6 ], $h, "", 1 );
 					}
 				
-					$pdf->Cell( $w[ 7 ], $h, html_entity_decode( utf8_encode( $personnage->nom ), ENT_QUOTES ), 1 );
-					$pdf->Cell( $w[ 8 ], $h, utf8_encode( $personnage->race_nom ), 1 );
-					$pdf->Cell( $w[ 9 ], $h, utf8_encode( $personnage->faction_nom ), 1 );
+					$pdf->Cell( $w[ 7 ], $h, $personnage->nom, 1 );
+					$pdf->Cell( $w[ 8 ], $h, $personnage->race_nom, 1 );
+					$pdf->Cell( $w[ 9 ], $h, $personnage->faction_nom, 1 );
 					$pdf->Cell( $w[ 10 ], $h, "", 1 );
 					
 					$nb_persos++;

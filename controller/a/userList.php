@@ -10,10 +10,10 @@
 			if( isset( $_GET['active'] ) ){
 				if( $_GET['active'] == "f" && $p->IsActive ){
 					$identity->SetPlayerAccess( Identity::IS_ACTIVE, FALSE );
-					Message::Notice( "Joueur '" . utf8_encode( $p->getFullName() ) . "' désactivé." );
+					Message::Notice( "Joueur '" . $p->getFullName() . "' désactivé." );
 				} else if( $_GET['active'] == "t" && !$p->IsActive ){
 					$identity->SetPlayerAccess( Identity::IS_ACTIVE, TRUE );
-					Message::Notice( "Joueur '" . utf8_encode( $p->getFullName() ) . "' activé." );
+					Message::Notice( "Joueur '" . $p->getFullName() . "' activé." );
 				} else {
 					Message::Erreur( "Impossible de compléter la demande en lien le statut 'Est actif' de ce joueur." );
 				}
@@ -22,10 +22,10 @@
 			if( isset( $_GET['anim'] ) ){
 				if( $_GET['anim'] == "f" && $p->IsAnimateur ){
 					$identity->SetPlayerAccess( Identity::IS_ANIM, FALSE );
-					Message::Notice( "Joueur '" . utf8_encode( $p->getFullName() ) . "' n'est plus animateur." );
+					Message::Notice( "Joueur '" . $p->getFullName() . "' n'est plus animateur." );
 				} else if( $_GET['anim'] == "t" && !$p->IsAnimateur ){
 					$identity->SetPlayerAccess( Identity::IS_ANIM, TRUE );
-					Message::Notice( "Joueur '" . utf8_encode( $p->getFullName() ) . "' est maintenant animateur." );
+					Message::Notice( "Joueur '" . $p->getFullName() . "' est maintenant animateur." );
 				} else {
 					Message::Erreur( "Impossible de compléter la demande en lien avec le statut 'Est animateur' de ce joueur." );
 				}
@@ -34,10 +34,10 @@
 			if( isset( $_GET['admin'] ) ){
 				if( $_GET['admin'] == "f" && $p->IsAdmin ){
 					$identity->SetPlayerAccess( Identity::IS_ADMIN, FALSE );
-					Message::Notice( "Joueur '" . utf8_encode( $p->getFullName() ) . "' n'est plus admin." );
+					Message::Notice( "Joueur '" . $p->getFullName() . "' n'est plus admin." );
 				} else if( $_GET['admin'] == "t" && !$p->IsAdmin ){
 					$identity->SetPlayerAccess( Identity::IS_ADMIN, TRUE );
-					Message::Notice( "Joueur '" . utf8_encode( $p->getFullName() ) . "' est maintenant admin." );
+					Message::Notice( "Joueur '" . $p->getFullName() . "' est maintenant admin." );
 				} else {
 					Message::Erreur( "Impossible de compléter la demande en lien avec le statut 'Est admin' de ce joueur." );
 				}

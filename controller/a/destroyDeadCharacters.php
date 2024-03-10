@@ -10,7 +10,7 @@
 				if( is_numeric( $dead_id ) ){
 					$dead = $cr->Load( $dead_id );
 					if( $cr->Destroy( $dead->id ) ){
-						Message::Notice( "Le personnage " . utf8_encode( $undeads[ $dead_id ]->nom ) . " a été détruit." );
+						Message::Notice( "Le personnage " . $undeads[ $dead_id ]->nom . " a été détruit." );
 						unset( $undeads[ $dead_id ] );
 					}
 				} else {

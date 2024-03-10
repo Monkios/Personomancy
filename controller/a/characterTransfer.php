@@ -18,7 +18,7 @@
 					$chars[ $char_id ]->JoueurId = $player->Id;
 					$chars[ $char_id ]->JoueurNom = $player->GetFullName();
 					
-					Message::Notice( "Le personnage #" . $char_id . " a été transféré à " . utf8_encode( $player->GetFullName() ) . "." );
+					Message::Notice( "Le personnage #" . $char_id . " a été transféré à " . $player->GetFullName() . "." );
 				}
 			}
 		}

@@ -21,8 +21,8 @@
 ?>
 					<tr>
 						<td><input type="checkbox" name="character_id[]" value="<?php echo $char_id; ?>" /></td>
-						<td><?php echo utf8_encode( $character->nom ); ?></td>
-						<td><?php echo utf8_encode( $character->joueur_nom ); ?></td>
+						<td><?php echo $character->nom; ?></td>
+						<td><?php echo $character->joueur_nom; ?></td>
 						<td><?php echo Date::FormatSQLDate( $character->dernier_changement_date ); ?></td>
 					</tr>
 <?php

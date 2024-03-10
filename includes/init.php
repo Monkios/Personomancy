@@ -12,6 +12,7 @@
 	$default_section = "user";
 	$default_action = "index";
 	$section_types = array(
+		"admin" => "a",
 		"gm"  => "g",
 		"player" => "p",
 		"user"  => "u"

@@ -3,7 +3,7 @@
 			<form method="post" action="?s=admin&a=updateConnaissance&i=<?php echo $connaissance->id; ?>">
 				<div>
 					<label for="connaissance_nom">Nom :</label>
-					<input type="text" name="connaissance_nom" id="connaissance_nom" value="<?php echo utf8_encode( $connaissance->nom ); ?>" />
+					<input type="text" name="connaissance_nom" id="connaissance_nom" value="<?php echo $connaissance->nom; ?>" />
 				</div>
 				<div>
 					<label for="connaissance_active">Est activée</label>
@@ -12,57 +12,13 @@
 				<div>
 					<h3>Prérequis</h3>
 					<div>
-						<label for="connaissance_statistique_prim_id">Statistique primaire</label>
-						<select id="connaissance_statistique_prim_id" name="connaissance_statistique_prim_id">
-							<option>--- n.a. ---</option>
-<?php
-	foreach( $list_statistiques as $id => $nom ){
-?>
-							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_statistique_prim_id ){ echo " selected='selected'"; } ?>><?php echo utf8_encode( $nom ); ?></option>
-<?php
-	}
-?>
-						</select>
-						<select id="connaissance_statistique_prim_sel" name="connaissance_statistique_prim_sel">
-<?php
-	for( $i = 0; $i <= 15; $i++ ){
-?>
-							<option value="<?php echo $i; ?>"<?php if( $i == $connaissance->prereq_statistique_prim_sel ){ echo " selected='selected'"; } ?>><?php echo $i; ?></option>
-<?php
-	}
-?>
-						</select>
-					</div>
-					<div>
-						<label for="connaissance_statistique_sec_id">Statistique secondaire</label>
-						<select id="connaissance_statistique_sec_id" name="connaissance_statistique_sec_id">
-							<option>--- n.a. ---</option>
-<?php
-	foreach( $list_statistiques as $id => $nom ){
-?>
-							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_statistique_sec_id ){ echo " selected='selected'"; } ?>><?php echo utf8_encode( $nom ); ?></option>
-<?php
-	}
-?>
-						</select>
-						<select id="connaissance_statistique_sec_sel" name="connaissance_statistique_sec_sel">
-<?php
-	for( $i = 0; $i <= 15; $i++ ){
-?>
-							<option value="<?php echo $i; ?>"<?php if( $i == $connaissance->prereq_statistique_sec_sel ){ echo " selected='selected'"; } ?>><?php echo $i; ?></option>
-<?php
-	}
-?>
-						</select>
-					</div>
-					<div>
 						<label for="connaissance_capacite_prim_id">Capacité primaire</label>
 						<select id="connaissance_capacite_prim_id" name="connaissance_capacite_prim_id">
 							<option>--- n.a. ---</option>
 <?php
 	foreach( $list_capacites as $id => $nom ){
 ?>
-							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_capacite_prim_id ){ echo " selected='selected'"; } ?>><?php echo utf8_encode( $nom ); ?></option>
+							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_capacite_prim_id ){ echo " selected='selected'"; } ?>><?php echo $nom; ?></option>
 <?php
 	}
 ?>
@@ -84,7 +40,7 @@
 <?php
 	foreach( $list_capacites as $id => $nom ){
 ?>
-							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_capacite_sec_id ){ echo " selected='selected'"; } ?>><?php echo utf8_encode( $nom ); ?></option>
+							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_capacite_sec_id ){ echo " selected='selected'"; } ?>><?php echo $nom; ?></option>
 <?php
 	}
 ?>
@@ -106,7 +62,7 @@
 <?php
 	foreach( $list_connaissances as $id => $nom ){
 ?>
-							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_connaissance_prim_id ){ echo " selected='selected'"; } ?>><?php echo utf8_encode( $nom ); ?></option>
+							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_connaissance_prim_id ){ echo " selected='selected'"; } ?>><?php echo $nom; ?></option>
 <?php
 	}
 ?>
@@ -119,7 +75,7 @@
 <?php
 	foreach( $list_connaissances as $id => $nom ){
 ?>
-							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_connaissance_sec_id ){ echo " selected='selected'"; } ?>><?php echo utf8_encode( $nom ); ?></option>
+							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_connaissance_sec_id ){ echo " selected='selected'"; } ?>><?php echo $nom; ?></option>
 <?php
 	}
 ?>
@@ -132,20 +88,7 @@
 <?php
 	foreach( $list_voies as $id => $nom ){
 ?>
-							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_voie_id ){ echo " selected='selected'"; } ?>><?php echo utf8_encode( $nom ); ?></option>
-<?php
-	}
-?>
-						</select>
-					</div>
-					<div>
-						<label for="connaissance_divin_id">Religion</label>
-						<select id="connaissance_divin_id" name="connaissance_divin_id">
-							<option>--- n.a. ---</option>
-<?php
-	foreach( $list_religions as $id => $infos ){
-?>
-							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_divin_id ){ echo " selected='selected'"; } ?>><?php echo utf8_encode( $infos[ "nom" ] ); ?></option>
+							<option value="<?php echo $id; ?>"<?php if( $id == $connaissance->prereq_voie_id ){ echo " selected='selected'"; } ?>><?php echo $nom; ?></option>
 <?php
 	}
 ?>

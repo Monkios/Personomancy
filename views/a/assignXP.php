@@ -15,7 +15,7 @@
 		if( $player->IsActive && count( $character_list[ $player_id ] ) > 0 ){
 ?>
 						<tr>
-							<td colspan="6"><?php echo utf8_encode( $player->GetFullName() ); ?></td>
+							<td colspan="6"><?php echo $player->GetFullName(); ?></td>
 						</tr>
 <?php
 			if( count( $character_list[ $player_id ] ) == 0 ){
@@ -30,10 +30,10 @@
 ?>
 					<tr>
 						<td><input type="checkbox" name="character_id[]" value="<?php echo $character->id; ?>"<?php echo ( !$character->est_vivant ) ? " disabled='disabled'" : ""; ?> /></td>
-						<td><?php echo utf8_encode( $character->nom ); ?></td>
+						<td><?php echo $character->nom; ?></td>
 						<td><?php echo $character->GetStatus(); ?></td>
 						<td><?php echo $character->px_restants; ?> / <?php echo $character->px_totaux; ?></td>
-						<td><?php echo Date::FormatSQLDate( $character->dernier_changement_date ); ?> par <?php echo utf8_encode( $character->dernier_changement_par ); ?></td>
+						<td><?php echo Date::FormatSQLDate( $character->dernier_changement_date ); ?> par <?php echo $character->dernier_changement_par; ?></td>
 					</tr>
 <?php
 				}
@@ -54,12 +54,12 @@
 <?php
 	foreach( $reasons_list as $reason_id => $reason_text ){
 ?>
-					<option value="<?php echo $reason_id; ?>"><?php echo utf8_encode( $reason_text ); ?></option>
+					<option value="<?php echo $reason_id; ?>"><?php echo $reason_text; ?></option>
 <?php
 	}
 ?>
 				</select>
-				<input type="text" name="raison_xp" value="<?php echo utf8_encode( $raison_xp ); ?>" />
+				<input type="text" name="raison_xp" value="<?php echo $raison_xp; ?>" />
 			</div>
 			<input type="submit" name="change_xp" value="Appliquer" /><br />
 		</form>

@@ -16,7 +16,7 @@
 		foreach( $choixCapacites as $choixCapacite ){
 ?>
 			<tr>
-				<td><?php echo utf8_encode( $choixCapacite->nom ); ?></td>
+				<td><?php echo $choixCapacite->nom; ?></td>
 				<td><?php echo ( $choixCapacite->active ? "Oui" : "Non" ); ?></td>
 				<td><a href="?s=admin&a=updateChoixCapacite&i=<?php echo $choixCapacite->id; ?>">Modifier</a></td>
 			</tr>

@@ -43,7 +43,7 @@
 <?php
 	} else {
 		foreach( $list as $log_message ){
-			$character_link = utf8_encode( $log_message->CharacterName );
+			$character_link = $log_message->CharacterName;
 			if( $user_identity->HasAccess( Identity::IS_ANIM ) ){
 				$character_link = "<a href='?s=player&a=characterUpdate&c=" . $log_message->CharacterId . "'>" . $character_link . "</a>";
 			}
@@ -52,9 +52,9 @@
 				<td><?php echo $character_link; ?></td>
 				<td><?php echo $log_message->GetCharacterStatus(); ?></td>
 				<td><?php echo $log_message->Active ? "Valide" : "Annulée"; ?></td>
-				<td><?php echo utf8_encode( $log_message->PlayerName ); ?></td>
-				<td><?php echo utf8_encode( $log_message->Date ); ?></td>
-				<td><?php echo utf8_encode( $log_message->Text ); ?></td>
+				<td><?php echo $log_message->PlayerName; ?></td>
+				<td><?php echo $log_message->Date; ?></td>
+				<td><?php echo $log_message->Text; ?></td>
 				<td><?php echo $log_message->CanBacktrack ? "Oui" : "Non"; ?></td>
 			</tr>
 <?php

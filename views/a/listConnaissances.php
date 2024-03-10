@@ -16,7 +16,7 @@
 		foreach( $connaissances as $connaissance ){
 ?>
 			<tr>
-				<td><?php echo utf8_encode( $connaissance->nom ); ?></td>
+				<td><?php echo $connaissance->nom; ?></td>
 				<td><?php echo ( $connaissance->active ? "Oui" : "Non" ); ?></td>
 				<td><a href="?s=admin&a=updateConnaissance&i=<?php echo $connaissance->id; ?>">Modifier</a></td>
 			</tr>

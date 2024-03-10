@@ -12,7 +12,7 @@
 <?php
 	foreach( $list_alignements as $id => $nom ){
 ?>
-					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_alignment ) ? " selected='selected'" : ""; ?>><?php echo utf8_encode( $nom ); ?></option>
+					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_alignment ) ? " selected='selected'" : ""; ?>><?php echo $nom; ?></option>
 <?php
 	}
 ?>
@@ -26,7 +26,7 @@
 	foreach( $list_factions as $id => $nom ){
 		if($id != 1 ){
 ?>
-					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_faction ) ? " selected='selected'" : ""; ?>><?php echo utf8_encode( $nom ); ?></option>
+					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_faction ) ? " selected='selected'" : ""; ?>><?php echo $nom; ?></option>
 <?php
 		}
 	}
@@ -47,12 +47,12 @@
 <?php
 			}
 ?>
-						<optgroup label="<?php echo utf8_encode( $religion[ "pantheon" ] ); ?>">
+						<optgroup label="<?php echo $religion[ "pantheon" ]; ?>">
 <?php
 			$pantheon = $religion[ "pantheon" ];
 		}
 ?>
-					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_religion ) ? " selected='selected'" : ""; ?>><?php echo utf8_encode( $religion[ "nom" ] ); ?></option>
+					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_religion ) ? " selected='selected'" : ""; ?>><?php echo $religion[ "nom" ]; ?></option>
 <?php
 	}
 ?>
@@ -65,7 +65,7 @@
 <?php
 	foreach( $list_races as $id => $nom ){
 ?>
-					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_race ) ? " selected='selected'" : ""; ?>><?php echo utf8_encode( $nom ); ?></option>
+					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_race ) ? " selected='selected'" : ""; ?>><?php echo $nom; ?></option>
 <?php
 	}
 ?>

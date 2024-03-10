@@ -23,9 +23,9 @@
 					<tr>
 						<td><input type="checkbox" name="character_id[]" value="<?php echo $char_id; ?>" /></td>
 						<td><?php echo $char_id; ?></td>
-						<td><?php echo utf8_encode( $character->nom ); ?></td>
+						<td><?php echo $character->nom; ?></td>
 						<td><?php echo $character->GetStatus(); ?></td>
-						<td><?php echo utf8_encode( $character->joueur_nom ); ?></td>
+						<td><?php echo $character->joueur_nom; ?></td>
 					</tr>
 <?php
 		}
@@ -39,7 +39,7 @@
 <?php
 	foreach( $players as $player_id => $player ){
 ?>
-					<option value="<?php echo $player_id; ?>"><?php echo utf8_encode( $player->getFullName() ); ?></option>
+					<option value="<?php echo $player_id; ?>"><?php echo $player->getFullName(); ?></option>
 <?php
 	}
 ?>

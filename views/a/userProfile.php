@@ -23,20 +23,16 @@
 					<span><?php echo ( $player->IsAdmin ) ? "Oui" : "Non"; ?></span>
 				</div>
 				<div>
-					<label>Passe saison :</label>
-					<span><?php echo ( $player->PasseSaison ) ? "Oui" : "Non"; ?></span>
-				</div>
-				<div>
 					<label for="email">Courriel :</label>
-					<input type="email" name="email" id="email" value="<?php echo utf8_encode( $player->Email ); ?>" />
+					<input type="email" name="email" id="email" value="<?php echo $player->Email; ?>" />
 				</div>
 				<div>
 					<label for="firstname">Prénom :</label>
-					<input type="text" name="firstname" id="firstname" value="<?php echo utf8_encode( $player->FirstName ); ?>" />
+					<input type="text" name="firstname" id="firstname" value="<?php echo $player->FirstName; ?>" />
 				</div>
 				<div>
 					<label for="lastname">Nom de famille :</label>
-					<input type="text" name="lastname" id="lastname" value="<?php echo utf8_encode( $player->LastName ); ?>" />
+					<input type="text" name="lastname" id="lastname" value="<?php echo $player->LastName; ?>" />
 				</div>
 				<div>
 					<input type="submit" name="send" value="Envoyer" />

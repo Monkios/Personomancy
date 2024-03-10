@@ -16,7 +16,7 @@
 		foreach( $races as $race ){
 ?>
 			<tr>
-				<td><?php echo utf8_encode( $race->nom ); ?></td>
+				<td><?php echo $race->nom; ?></td>
 				<td><?php echo ( $race->active ? "Oui" : "Non" ); ?></td>
 				<td><a href="?s=admin&a=updateRace&i=<?php echo $race->id; ?>">Modifier</a></td>
 			</tr>

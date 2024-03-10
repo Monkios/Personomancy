@@ -26,9 +26,9 @@
 			$url_opts = "s=admin&a=userList&u=" . $player->Id;
 ?>
 			<tr id="player_<?php echo $player->Id; ?>">
-				<td><?php echo utf8_encode( $player->FirstName ); ?></td>
-				<td><?php echo utf8_encode( $player->LastName ); ?></td>
-				<td><?php echo utf8_encode( $player->Email ); ?></td>
+				<td><?php echo $player->FirstName; ?></td>
+				<td><?php echo $player->LastName; ?></td>
+				<td><?php echo $player->Email; ?></td>
 				<td><?php echo $player->NbCharacters; ?></td>
 				<td><?php echo $player->TotalExperience; ?></td>
 				<td><?php echo $player->PasseSaison ? "Oui" : ""; ?></td>

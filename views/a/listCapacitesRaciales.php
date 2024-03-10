@@ -16,7 +16,7 @@
 		foreach( $capacitesRaciales as $capaciteRaciale ){
 ?>
 			<tr>
-				<td><?php echo utf8_encode( $capaciteRaciale->nom ); ?></td>
+				<td><?php echo $capaciteRaciale->nom; ?></td>
 				<td><?php echo ( $capaciteRaciale->active ? "Oui" : "Non" ); ?></td>
 				<td><a href="?s=admin&a=updateCapaciteRaciale&i=<?php echo $capaciteRaciale->id; ?>">Modifier</a></td>
 			</tr>

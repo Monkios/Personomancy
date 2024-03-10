@@ -7,18 +7,18 @@
 				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=bases">
 					<div class="fiche_element">
 						<label for="perso_joueur">Nom du joueur :</label>
-						<span id="perso_joueur" class="as_input"><?php echo utf8_encode( $personnage->joueur_nom ); ?></span>
+						<span id="perso_joueur" class="as_input"><?php echo $personnage->joueur_nom; ?></span>
 					</div>
 					<div class="fiche_element">
 						<label for="perso_nom">Nom du personnage :</label>
 <?php
 	if( $can_change_bases && $personnage->est_vivant ){
 ?>
-						<input type="text" name="perso_nom" id="perso_nom" value="<?php echo utf8_encode( $perso_nom ); ?>" />
+						<input type="text" name="perso_nom" id="perso_nom" value="<?php echo $perso_nom; ?>" />
 <?php
 	} else {
 ?>
-						<span id="perso_nom" class="as_input"><?php echo utf8_encode( $personnage->nom ); ?></span>
+						<span id="perso_nom" class="as_input"><?php echo $personnage->nom; ?></span>
 <?php
 	}
 ?>
@@ -32,7 +32,7 @@
 <?php
 		foreach( $list_alignements as $alignement_id => $alignement_nom ){
 ?>
-							<option value="<?php echo $alignement_id; ?>"<?php echo ( $alignement_id == $perso_alignement ) ? " selected='selected'" : ""; ?>><?php echo utf8_encode( $alignement_nom ); ?></option>
+							<option value="<?php echo $alignement_id; ?>"<?php echo ( $alignement_id == $perso_alignement ) ? " selected='selected'" : ""; ?>><?php echo $alignement_nom; ?></option>
 <?php
 		}
 ?>
@@ -40,7 +40,7 @@
 <?php
 	} else {
 ?>
-						<span id="perso_alignement" class="as_input"><?php echo utf8_encode( $personnage->alignement_nom ); ?></span>
+						<span id="perso_alignement" class="as_input"><?php echo $personnage->alignement_nom; ?></span>
 <?php
 	}
 ?>
@@ -54,7 +54,7 @@
 <?php
 		foreach( $list_religions as $religion_id => $religion_infos ){
 ?>
-							<option value="<?php echo $religion_id; ?>"<?php echo ( $religion_id == $perso_religion ) ? " selected='selected'" : ""; ?>><?php echo utf8_encode( $religion_infos[ "nom" ] ); ?></option>
+							<option value="<?php echo $religion_id; ?>"<?php echo ( $religion_id == $perso_religion ) ? " selected='selected'" : ""; ?>><?php echo $religion_infos[ "nom" ]; ?></option>
 <?php
 		}
 ?>
@@ -62,7 +62,7 @@
 <?php
 	} else {
 ?>
-						<span id="perso_religion" class="as_input"><?php echo utf8_encode( $personnage->religion_nom ); ?></span>
+						<span id="perso_religion" class="as_input"><?php echo $personnage->religion_nom; ?></span>
 <?php
 	}
 ?>
@@ -77,7 +77,7 @@
 <?php
 		foreach( $list_races as $race_id => $race_nom ){
 ?>
-							<option value="<?php echo $race_id; ?>"<?php echo ( $race_id == $perso_race ) ? " selected='selected'" : ""; ?>><?php echo utf8_encode( $race_nom ); ?></option>
+							<option value="<?php echo $race_id; ?>"<?php echo ( $race_id == $perso_race ) ? " selected='selected'" : ""; ?>><?php echo $race_nom; ?></option>
 <?php
 		}
 ?>
@@ -85,7 +85,7 @@
 <?php
 	} else {
 ?>
-						<span id="perso_race" class="as_input"><?php echo utf8_encode( $personnage->race_nom ); ?></span>
+						<span id="perso_race" class="as_input"><?php echo $personnage->race_nom; ?></span>
 <?php
 	}
 ?>
@@ -100,7 +100,7 @@
 		foreach( $list_factions as $faction_id => $faction_nom ){
 			if( $faction_id != 1 ){
 ?>
-							<option value="<?php echo $faction_id; ?>"<?php echo ( $faction_id == $perso_faction ) ? " selected='selected'" : ""; ?>><?php echo utf8_encode( $faction_nom ); ?></option>
+							<option value="<?php echo $faction_id; ?>"<?php echo ( $faction_id == $perso_faction ) ? " selected='selected'" : ""; ?>><?php echo $faction_nom; ?></option>
 <?php
 			}
 		}
@@ -109,7 +109,7 @@
 <?php
 	} else {
 ?>
-						<span id="perso_faction" class="as_input"><?php echo utf8_encode( $personnage->faction_nom ); ?></span>
+						<span id="perso_faction" class="as_input"><?php echo $personnage->faction_nom; ?></span>
 <?php
 	}
 ?>
@@ -171,7 +171,7 @@
 <?php
 			foreach( $list_capacites_raciales as $cr_id => $cr_desc ){
 ?>
-							<option value="<?php echo $cr_id; ?>"><?php echo utf8_encode( $cr_desc ); ?></option>
+							<option value="<?php echo $cr_id; ?>"><?php echo $cr_desc; ?></option>
 <?php
 			}
 ?>
@@ -188,68 +188,14 @@
 			foreach( $personnage->choix_capacites as $choix_id => $choix_nombre ){
 ?>
 					<div class="fiche_element">
-						<label for="perso_choix_capacites_<?php echo $choix_id; ?>">Choix de capacités "<?php echo utf8_encode( $list_choix_capacites[ $choix_id ] ); ?>" (x<?php echo $choix_nombre; ?>) :</label>
+						<label for="perso_choix_capacites_<?php echo $choix_id; ?>">Choix de capacités "<?php echo $list_choix_capacites[ $choix_id ]; ?>" (x<?php echo $choix_nombre; ?>) :</label>
 						<select name="perso_choix_capacites[<?php echo $choix_id; ?>]" id="perso_choix_capacites_<?php echo $choix_id; ?>" onchange="this.form.submit();">
 							<option value="">-- Choix nécessaire --</option>
 <?php
 				foreach( $list_choix_capacites_capacites[ $choix_id ] as $capacite_id => $capacite_infos ){
 					if( $capacite_infos->active && in_array( $capacite_infos->voie_id, $personnage->voies ) ){
 ?>
-							<option value="<?php echo $capacite_id; ?>"<?php echo ( $personnage->pc_raciales > 0 ) ? " disabled='disabled'" : ""; ?>><?php echo utf8_encode( $capacite_infos->nom ); ?></option>
-<?php
-					}
-				}
-?>
-						</select>
-					</div>
-<?php
-			}
-?>
-				</form>
-<?php
-		}
-		if( count( $personnage->choix_connaissances ) > 0 ){
-?>
-				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=choix_connaissances">
-<?php
-			foreach( $personnage->choix_connaissances as $choix_id => $choix_nombre ){
-?>
-					<div class="fiche_element">
-						<label for="perso_choix_connaissances_<?php echo $choix_id; ?>">Choix de connaissances "<?php echo utf8_encode( $list_choix_connaissances[ $choix_id ] ); ?>" (x<?php echo $choix_nombre; ?>) :</label>
-						<select name="perso_choix_connaissances[<?php echo $choix_id; ?>]" id="perso_choix_connaissances_<?php echo $choix_id; ?>" onchange="this.form.submit();">
-							<option value="">-- Choix nécessaire --</option>
-<?php
-				foreach( $list_choix_connaissances_connaissances[ $choix_id ] as $connaissance_id => $connaissance_infos ){
-					if( $connaissance_infos->active && !in_array( $connaissance_id, $personnage->connaissances ) && in_array( $connaissance_id, $personnage->connaissances_accessibles ) ){
-?>
-							<option value="<?php echo $connaissance_id; ?>"<?php echo ( $personnage->pc_raciales > 0 ) ? " disabled='disabled'" : ""; ?>><?php echo utf8_encode( $connaissance_infos->nom ); ?></option>
-<?php
-					}
-				}
-?>
-						</select>
-					</div>
-<?php
-			}
-?>
-				</form>
-<?php
-		}
-		if( count( $personnage->choix_pouvoirs ) > 0 ){
-?>
-				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=choix_pouvoirs">
-<?php
-			foreach( $personnage->choix_pouvoirs as $choix_id => $choix_nombre ){
-?>
-					<div class="fiche_element">
-						<label for="perso_choix_pouvoirs_<?php echo $choix_id; ?>">Choix de pouvoirs "<?php echo utf8_encode( $list_choix_pouvoirs[ $choix_id ] ); ?>" (x<?php echo $choix_nombre; ?>) :</label>
-						<select name="perso_choix_pouvoirs[<?php echo $choix_id; ?>]" id="perso_choix_pouvoirs_<?php echo $choix_id; ?>" onchange="this.form.submit();">
-							<option value="">-- Choix nécessaire --</option>
-<?php
-				foreach( $list_choix_pouvoirs_pouvoirs[ $choix_id ] as $pouvoir_id => $pouvoir_infos ){
-					if( $pouvoir_infos->active ){
-?>
-							<option value="<?php echo $pouvoir_id; ?>"<?php echo ( $personnage->pc_raciales > 0 ) ? " disabled='disabled'" : ""; ?>><?php echo utf8_encode( $pouvoir_infos->nom ); ?></option>
+							<option value="<?php echo $capacite_id; ?>"<?php echo ( $personnage->pc_raciales > 0 ) ? " disabled='disabled'" : ""; ?>><?php echo $capacite_infos->nom; ?></option>
 <?php
 					}
 				}
@@ -278,78 +224,6 @@
 <?php
 	}
 ?>
-			<div class="fiche_regroupement fiche_regroupement_statistiques">
-				<h3>Statistiques</h3>
-				<div class="fiche_element">
-					<label for="perso_hp">Points de Vie :</label>
-					<span id="perso_hp" class="as_input"><?php echo $personnage->GetPointsVieStr(); ?></span>
-				</div>
-				<div class="fiche_element">
-					<label for="perso_mp">Points de Magie :</label>
-					<span id="perso_mp" class="as_input"><?php echo $personnage->GetPointsMagieStr(); ?></span>
-				</div>
-				<div class="fiche_element">
-					<label for="perso_fm">Force Magique :</label>
-					<span id="perso_fm" class="as_input"><?php echo $personnage->GetForceMagique(); ?></span>
-				</div>
-				<div class="fiche_element">
-					<label for="perso_s_alerte">Sauvegarde Alerte :</label>
-					<span id="perso_s_alerte" class="as_input"><?php echo $personnage->GetSauvegardeAlerte(); ?></span>
-				</div>
-				<div class="fiche_element">
-					<label for="perso_s_vigueur">Sauvegarde Vigueur :</label>
-					<span id="perso_s_vigueur" class="as_input"><?php echo $personnage->GetSauvegardeVigueurStr(); ?></span>
-				</div>
-				<div class="fiche_element">
-					<label for="perso_s_volonte">Sauvegarde Volonté :</label>
-					<span id="perso_s_volonte" class="as_input"><?php echo $personnage->GetSauvegardeVolonteStr(); ?></span>
-				</div>
-			</div>
-			<div class="fiche_regroupement fiche_regroupement_attributs">
-				<h3>Attributs</h3>
-				<div class="fiche_element">
-					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_attribute">
-<?php
-	AddSelectionsPips( "Constitution", "perso_constitution", $personnage->constitution, $personnage->est_vivant && $personnage->est_cree ? $personnage->GetRealCurrentXP() : 0 );
-?>
-					</form>
-				</div>
-				<div class="fiche_element">
-					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_attribute">
-<?php
-	AddSelectionsPips( "Spiritisme", "perso_spiritisme", $personnage->spiritisme, $personnage->est_vivant && $personnage->est_cree ? $personnage->GetRealCurrentXP() : 0 );
-?>
-					</form>
-				</div>
-				<div class="fiche_element">
-					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_attribute">
-<?php
-	AddSelectionsPips( "Intelligence", "perso_intelligence", $personnage->intelligence, $personnage->est_vivant && $personnage->est_cree ? $personnage->GetRealCurrentXP() : 0 );
-?>
-					</form>
-				</div>
-				<div class="fiche_element">
-					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_attribute">
-<?php
-	AddSelectionsPips( "Alerte", "perso_alerte", $personnage->alerte, $personnage->est_vivant && $personnage->est_cree ? $personnage->GetRealCurrentXP() : 0 );
-?>
-					</form>
-				</div>
-				<div class="fiche_element">
-					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_attribute">
-<?php
-	AddSelectionsPips( "Vigueur", "perso_vigueur", $personnage->vigueur, $personnage->est_vivant && $personnage->est_cree ? $personnage->GetRealCurrentXP() : 0 );
-?>
-					</form>
-				</div>
-				<div class="fiche_element">
-					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_attribute">
-<?php
-	AddSelectionsPips( "Volonté", "perso_volonte", $personnage->volonte, $personnage->est_vivant && $personnage->est_cree ? $personnage->GetRealCurrentXP() : 0 );
-?>
-					</form>
-				</div>
-			</div>
 			<div class="fiche_regroupement fiche_regroupement_cr">
 				<h3>Capacités raciales</h3>
 <?php
@@ -358,7 +232,7 @@
 ?>
 				<div class="fiche_element">
 					<label for="perso_cr_<?php echo $cr_id; ?>">CR <?php echo ++$nb_cr; ?> :</label>
-					<span id="perso_cr_<?php echo $cr_id; ?>" class="as_input"><?php echo utf8_encode( $cr_desc ); ?></span>
+					<span id="perso_cr_<?php echo $cr_id; ?>" class="as_input"><?php echo $cr_desc; ?></span>
 				</div>
 <?php
 	}
@@ -381,42 +255,9 @@
 				<div>
 					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_capacite">
 						<h3>
-							<span><?php echo utf8_encode( $voie_desc ); ?></span>
+							<span><?php echo $voie_desc; ?></span>
 							<input type="checkbox" name="perso_voie" value="<?php echo $voie_id; ?>"<?php echo $voie_status; ?> />
 						</h3>
-<?php
-		if( $has_voie
-				&& ( $personnage->prestige_id == 0 
-						|| $perso_prestige_sphere == $voie_id )
-		){
-?>
-						<div class="fiche_element_prestige">
-<?php
-			foreach( $list_prestiges as $prestige_id => $prestige_infos ){
-				if( $prestige_infos[ "voie_id" ] == $voie_id
-						&& ( $personnage->prestige_id == 0 || $personnage->prestige_id == $prestige_id )
-				){
-					$prestige_status = "";
-					if( $personnage->prestige_id == $prestige_id ){
-						$prestige_status = " checked='checked' disabled='disabled'";
-					} elseif( $personnage->GetRealCurrentXP() >= CharacterSheet::GetPrestigeCost() && $personnage->est_vivant && $personnage->est_cree ){
-						$prestige_status = " onchange='this.form.submit()'";
-					} else {
-						$prestige_status = " disabled='disabled'";
-					}
-?>
-							<div class="fiche_element">
-								<label for="perso_prestige_<?php echo $prestige_id; ?>"><?php echo utf8_encode( $prestige_infos[ "nom" ] ); ?></label>
-								<input type="checkbox" name="perso_prestige" id="perso_prestige_<?php echo $prestige_id; ?>" value="<?php echo $prestige_id; ?>"<?php echo $prestige_status; ?> />
-							</div>
-<?php
-				}
-			}
-?>
-						</div>
-<?php
-		}
-?>
 <?php
 		foreach( $list_capacites[ $voie_id ] as $capacite_id => $capacite_desc ){
 			$nb_selections = 0;
@@ -430,7 +271,7 @@
 ?>
 						<div class="fiche_element">
 <?php
-			AddSelectionsPips( utf8_encode( $capacite_desc ), "perso_capacite[" . $capacite_id . "]", $nb_selections, $px_restants );
+			AddSelectionsPips( $capacite_desc, "perso_capacite[" . $capacite_id . "]", $nb_selections, $px_restants );
 ?>
 						</div>
 <?php
@@ -457,7 +298,7 @@
 		}
 ?>
 					<div class="fiche_element">
-						<label for="perso_connaissance_<?php echo $connaissance_id; ?>" title="<?php echo htmlentities( utf8_encode( $list_connaissances[ $connaissance_id ] ) ); ?>"><?php echo utf8_encode( $list_connaissances[ $connaissance_id ] ); ?></label>
+						<label for="perso_connaissance_<?php echo $connaissance_id; ?>" title="<?php echo htmlentities( $list_connaissances[ $connaissance_id ] ); ?>"><?php echo $list_connaissances[ $connaissance_id ]; ?></label>
 						<input type="checkbox" name="perso_connaissance" id="perso_connaissance_<?php echo $connaissance_id; ?>" value="<?php echo $connaissance_id; ?>"<?php echo $connaissance_status; ?> />
 					</div>
 <?php
@@ -465,50 +306,6 @@
 ?>
 				</form>
 			</div>
-<?php
-	if( $can_choose_spells ){
-?>
-			<div class="fiche_regroupement fiche_regroupement_sorts">
-				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_sort">
-					<h3>Sortilèges et Recettes</h3>
-<?php
-		foreach( $list_sorts as $sphere_id => $sphere_sorts ){
-			if( count( $sphere_sorts ) > 0 ){
-				$sphere_sorts_acquis = 0;
-				if( array_key_exists( $sphere_id, $personnage->sorts ) ){
-					$sphere_sorts_acquis = count( $personnage->sorts[ $sphere_id ] );
-				}
-?>
-					<h4><?php echo utf8_encode( $list_spheres[ $sphere_id ] ); ?></h4>
-<?php
-				foreach( $list_sorts[ $sphere_id ] as $sort_id => $sort_infos ){
-					if( $sort_infos->active && $sort_infos->cercle <= $personnage->capacites[ $sphere_id ] ){
-						$sort_status = "";
-						if( $sphere_sorts_acquis > 0 && in_array( $sort_id, $personnage->sorts[ $sphere_id ] ) ){
-							$sort_status = " checked='checked' disabled='disabled'";
-						} elseif( $sphere_sorts_acquis + 1 >= $sort_infos->cercle && $personnage->capacites[ $sphere_id ] > $sphere_sorts_acquis && $personnage->est_vivant && $personnage->est_cree ) {
-							$sort_status = " onchange='this.form.submit()'";
-						} else {
-							$sort_status = " disabled='disabled'";
-						}
-?>
-					<div class="fiche_element">
-						<label for="perso_sort_<?php echo $sort_id; ?>"><?php echo utf8_encode( $sort_infos->GetCompleteName() ); ?></label>
-						<input type="checkbox" name="perso_sort" id="perso_sort_<?php echo $sort_id; ?>" value="<?php echo $sort_id; ?>"<?php echo $sort_status; ?> />
-					</div>
-<?php
-					}
-				}
-?>
-<?php
-			}
-		}
-?>
-				</form>
-			</div>
-<?php
-	}
-?>
 		</div>
 		<div id="perso_options">
 			<h3>Gestion du personnage</h3>
@@ -517,13 +314,13 @@
 	if( $can_add_comment ){
 ?>
 			<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=comment">
-				<textarea name="perso_comment"><?php echo utf8_encode( $personnage->commentaire ); ?></textarea>
+				<textarea name="perso_comment"><?php echo $personnage->commentaire; ?></textarea>
 				<input type="submit" name="perso_save_comment" value="Enregistrer le commentaire" />
 			</form>
 <?php
 	} else {
 ?>
-			<textarea readonly="readonly"><?php echo utf8_encode( $personnage->commentaire ); ?></textarea>
+			<textarea readonly="readonly"><?php echo $personnage->commentaire; ?></textarea>
 <?php
 	}
 ?>
@@ -532,13 +329,13 @@
 	if( $can_add_notes ){
 ?>
 			<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=notes">
-				<textarea name="perso_notes"><?php echo utf8_encode( $personnage->notes ); ?></textarea>
+				<textarea name="perso_notes"><?php echo $personnage->notes; ?></textarea>
 				<input type="submit" name="perso_save_notes" value="Enregistrer les notes" />
 			</form>
 <?php
 	} else {
 ?>
-			<textarea readonly="readonly"><?php echo utf8_encode( $personnage->notes ); ?></textarea>
+			<textarea readonly="readonly"><?php echo $personnage->notes; ?></textarea>
 <?php
 	}
 ?>
@@ -550,7 +347,7 @@
 	foreach( $list_journal as $journal_id => $journal_desc ){
 ?>
 					<li>
-						<span><?php echo Date::FormatSQLDate( $journal_desc->Date ) . " : " . utf8_encode( $journal_desc->Text ); ?></span>
+						<span><?php echo Date::FormatSQLDate( $journal_desc->Date ) . " : " . $journal_desc->Text; ?></span>
 <?php
 		if( $last_modification ){
 			$last_modification = FALSE;

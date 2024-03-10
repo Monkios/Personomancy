@@ -4,7 +4,7 @@
 			<form method="post" action="?s=admin&a=updateChoixCapacite&i=<?php echo $choixCapacite->id; ?>">
 				<div>
 					<label for="choix_capacite_nom">Nom :</label>
-					<input type="text" name="choix_capacite_nom" id="choix_capacite_nom" value="<?php echo utf8_encode( $choixCapacite->nom ); ?>" />
+					<input type="text" name="choix_capacite_nom" id="choix_capacite_nom" value="<?php echo $choixCapacite->nom; ?>" />
 				</div>
 				<div>
 					<label for="choix_capacite_active">Est activée</label>
@@ -17,7 +17,7 @@
 	foreach( $capacites as $id => $capacite ){
 ?>
 						<li>
-							<?php echo utf8_encode( $capacite->nom ); ?>
+							<?php echo $capacite->nom; ?>
 							<button type="submit" name="delete_capacite" value="<?php echo $id; ?>" onclick="return confirm('Voulez-vous vraiment retirer cette capacité de ce choix de capacités ?');">X</button>
 						</li>
 <?php
@@ -40,7 +40,7 @@
 	foreach( $list_capacites as $id => $nom ){
 		if( !array_key_exists( $id, $capacites ) ){
 ?>
-						<option value="<?php echo $id; ?>"><?php echo utf8_encode( $nom ); ?></option>
+						<option value="<?php echo $id; ?>"><?php echo $nom; ?></option>
 <?php
 		}
 	}

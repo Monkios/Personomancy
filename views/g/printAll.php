@@ -84,18 +84,18 @@
 		
 		/* --- INFORMATIONS DE BASE --- */
 		$pdf->Cell( 25, 0, "Nom du joueur : " );
-		$pdf->Cell( $width_half - 25, 0, utf8_encode( $character_infos->joueur_nom ), "B" );
+		$pdf->Cell( $width_half - 25, 0, $character_infos->joueur_nom, "B" );
 		$pdf->Cell( $width_buffer, 0, "" );
 		$pdf->Cell( 32, 0, "Nom du personnage : " );
-		$pdf->Cell( $width_half - 32, 0, utf8_encode( html_entity_decode( $character_infos->nom, ENT_QUOTES ) ), "B" );
+		$pdf->Cell( $width_half - 32, 0, $character_infos->nom, "B" );
 		$pdf->Ln();
 		
 		$pdf->SetFont( "", "", 9 );
 		$pdf->Cell( 25, 0, "Alignement : " );
-		$pdf->Cell( $width_half - 25, 0, utf8_encode( $character_infos->alignement_nom ), "B" );
+		$pdf->Cell( $width_half - 25, 0, "-=ALIGNEMENT=-", "B" );
 		$pdf->Cell( $width_buffer, 0, "" );
 		$pdf->Cell( 32, 0, "Religion : " );
-		$pdf->Cell( $width_half - 32, 0, utf8_encode( $character_infos->religion_nom ), "B" );
+		$pdf->Cell( $width_half - 32, 0, $character_infos->religion_nom, "B" );
 		$pdf->Ln();
 		$pdf->Ln();
 		
@@ -108,7 +108,7 @@
 		$pdf->Cell( $width_buffer, 0, "" );
 		$pdf->Cell( $width_third, 0, "Attributs", "", 0, "", TRUE );
 		$pdf->Cell( $width_buffer, 0, "" );
-		$pdf->Cell( $width_third, 0, "Race : " . utf8_encode( $character_infos->race_nom ), "", 0, "", TRUE );
+		$pdf->Cell( $width_third, 0, "Race : " . $character_infos->race_nom, "", 0, "", TRUE );
 		$pdf->Ln();
 		
 		$pdf->Cell( 25, 0, "P. de Vie : " );
@@ -119,7 +119,7 @@
 		$pdf->Cell( $width_third + $width_buffer - 25, 0, "");
 		if( count( $character_infos->capacites_raciales ) >= 1 ){
 			$pdf->Cell( 12, 0, "CR 1 : " );
-			$pdf->Cell( $width_third - 12, 0, utf8_encode( current( $character_infos->capacites_raciales ) ), "B" );
+			$pdf->Cell( $width_third - 12, 0, current( $character_infos->capacites_raciales ), "B" );
 		}
 		$pdf->Ln();
 		
@@ -131,7 +131,7 @@
 		$pdf->Cell( $width_third + $width_buffer - 25, 0, "");
 		if( count( $character_infos->capacites_raciales ) >= 2 ){
 			$pdf->Cell( 12, 0, "CR 2 : " );
-			$pdf->Cell( $width_third - 12, 0, utf8_encode( next( $character_infos->capacites_raciales ) ), "B" );
+			$pdf->Cell( $width_third - 12, 0, next( $character_infos->capacites_raciales ), "B" );
 		}
 		$pdf->Ln();
 		
@@ -143,7 +143,7 @@
 		$pdf->Cell( $width_third + $width_buffer - 25, 0, "");
 		if( count( $character_infos->capacites_raciales ) >= 3 ){
 			$pdf->Cell( 12, 0, "CR 3 : " );
-			$pdf->Cell( $width_third - 12, 0, utf8_encode( next( $character_infos->capacites_raciales ) ), "B" );
+			$pdf->Cell( $width_third - 12, 0, next( $character_infos->capacites_raciales ), "B" );
 		}
 		$pdf->Ln();
 		
@@ -155,7 +155,7 @@
 		$pdf->Cell( $width_third + $width_buffer - 25, 0, "");
 		if( count( $character_infos->capacites_raciales ) >= 4 ){
 			$pdf->Cell( 12, 0, "CR 4 : " );
-			$pdf->Cell( $width_third - 12, 0, utf8_encode( next( $character_infos->capacites_raciales ) ), "B" );
+			$pdf->Cell( $width_third - 12, 0, next( $character_infos->capacites_raciales ), "B" );
 		}
 		$pdf->Ln();
 		
@@ -165,7 +165,7 @@
 		$pdf->Cell( $width_third + $width_buffer, 0, "" );
 		if( count( $character_infos->capacites_raciales ) >= 5 ){
 			$pdf->Cell( 12, 0, "CR 5 : " );
-			$pdf->Cell( $width_third - 12, 0, utf8_encode( next( $character_infos->capacites_raciales ) ), "B" );
+			$pdf->Cell( $width_third - 12, 0, next( $character_infos->capacites_raciales ), "B" );
 		}
 		$pdf->Ln();
 		
@@ -177,7 +177,7 @@
 		$pdf->Cell( $width_third + $width_buffer - 25, 0, "");
 		if( count( $character_infos->capacites_raciales ) >= 6 ){
 			$pdf->Cell( 12, 0, "CR 6 : " );
-			$pdf->Cell( $width_third - 12, 0, utf8_encode( next( $character_infos->capacites_raciales ) ), "B" );
+			$pdf->Cell( $width_third - 12, 0, next( $character_infos->capacites_raciales ), "B" );
 		}
 		$pdf->Ln();
 		
@@ -197,7 +197,7 @@
 		
 		/* --- COLONNE 1 - LISTE DES CAPACITÉS PAR VOIE --- */
 		foreach( $list_voies as $voie_id => $voie_desc ){
-			$voie_desc = utf8_encode( $voie_desc );
+			$voie_desc = $voie_desc;
 			$pdf->Cell( 25, 0, $voie_desc, "", 0, "", TRUE );
 			if( $voie_id == $prestige_voie ){
 				$pdf->Cell( $width_third - 25, 0, $prestige_desc, "", 0, "", TRUE );
@@ -210,7 +210,7 @@
 			$nb_capacites = 0;
 			foreach( $list_capacites[ $voie_id ] as $capacite_id => $capacite_desc ){
 				$nb_capacites++;
-				$capacite_desc = utf8_encode( $capacite_desc );
+				$capacite_desc = $capacite_desc;
 				$nb_selections = 0;
 				if( array_key_exists( $capacite_id, $character_infos->capacites ) ){
 					$nb_selections = $character_infos->capacites[ $capacite_id ];
@@ -347,7 +347,7 @@
 			// Find element's name
 			$element_id = array_shift( $current_elements_list );
 			if( array_key_exists( $element_id, $current_desc_list ) ){
-				$element_desc = utf8_encode( $current_desc_list[ $element_id ] );
+				$element_desc = $current_desc_list[ $element_id ];
 				
 				$pdf->Cell( $width_third, 0, $element_desc, "B" );
 				$pdf->Ln( $pdf->GetCellHeight( $pdf->GetFontSize() ) );
