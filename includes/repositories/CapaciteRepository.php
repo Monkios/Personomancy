@@ -40,7 +40,7 @@
 			$db = new Database();
 			$sql = "UPDATE capacite SET
 					nom = ?,
-					active = ?,
+					active = b?,
 					voie = ?
 				WHERE supprime = '0' AND id = ?";
 			$params = array(

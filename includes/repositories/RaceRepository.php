@@ -52,7 +52,7 @@
 			$db = new Database();
 			$sql = "UPDATE race SET
 					nom = ?,
-					active = ?,
+					active = b?,
 					base_alerte = ?,
 					base_constitution = ?,
 					base_intelligence = ?,

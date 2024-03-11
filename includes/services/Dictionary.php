@@ -24,19 +24,6 @@
 			return $result;
 		}
 		
-		public static function GetAlignements( $id = FALSE ){
-			$params = array();
-			$sql = "SELECT id, nom
-					FROM alignement
-					WHERE active = '1' AND supprime = '0'";
-			if( $id !== FALSE ){
-				$sql .= " AND id = ?";
-				$params[] = $id;
-			}
-			$sql .= " ORDER BY nom";
-			return self::GetResultByName( $sql, $params );
-		}
-		
 		public static function GetCapacites( $id = FALSE, $activeOnly = TRUE ){
 			$params = array();
 			$sql = "SELECT id, nom
@@ -47,8 +34,7 @@
 				$params[] = $id;
 			}
 			if( $activeOnly ){
-				$sql .= " AND active = ?";
-				$params[] = 1;
+				$sql .= " AND active = '1'";
 			}
 			$sql .= " ORDER BY nom";
 			return self::GetResultByName( $sql, $params );
@@ -57,7 +43,7 @@
 		public static function GetCapacitesByVoie( $id ){
 			$sql = "SELECT id, nom
 					FROM capacite
-					WHERE voie = ? AND active = '1' AND supprime = '0'
+					WHERE voie = ? AND active = '1' AND supprime = 0
 					ORDER BY nom";
 			return self::GetResultByName( $sql, array( $id ) );
 		}
@@ -72,42 +58,23 @@
 				$params[] = $id;
 			}
 			if( $activeOnly ){
-				$sql .= " AND active = ?";
-				$params[] = 1;
+				$sql .= " AND active = '1'";
 			}
 			$sql .= " ORDER BY nom";
 			return self::GetResultByName( $sql, $params );
 		}
 		
-		public static function GetChoixConnaissances( $id = FALSE, $activeOnly = TRUE ){
+		public static function GetCiteEtatss( $id = FALSE, $activeOnly = TRUE ){
 			$params = array();
 			$sql = "SELECT id, nom
-					FROM connaissance_categorie
+					FROM cite_etat
 					WHERE supprime = '0'";
 			if( $id !== FALSE ){
 				$sql .= " AND id = ?";
 				$params[] = $id;
 			}
 			if( $activeOnly ){
-				$sql .= " AND active = ?";
-				$params[] = 1;
-			}
-			$sql .= " ORDER BY nom";
-			return self::GetResultByName( $sql, $params );
-		}
-		
-		public static function GetChoixPouvoirs( $id = FALSE, $activeOnly = TRUE ){
-			$params = array();
-			$sql = "SELECT id, nom
-					FROM pouvoir_categorie
-					WHERE supprime = '0'";
-			if( $id !== FALSE ){
-				$sql .= " AND id = ?";
-				$params[] = $id;
-			}
-			if( $activeOnly ){
-				$sql .= " AND active = ?";
-				$params[] = 1;
+				$sql .= " AND active = '1'";
 			}
 			$sql .= " ORDER BY nom";
 			return self::GetResultByName( $sql, $params );
@@ -123,55 +90,23 @@
 				$params[] = $id;
 			}
 			if( $activeOnly ){
-				$sql .= " AND active = ?";
-				$params[] = 1;
+				$sql .= " AND active = '1'";
 			}
 			$sql .= " ORDER BY nom";
 			return self::GetResultByName( $sql, $params );
 		}
 		
-		public static function GetFactions( $id = FALSE, $activeOnly = TRUE ){
+		public static function GetCroyances( $id = FALSE, $activeOnly = TRUE ){
 			$params = array();
 			$sql = "SELECT id, nom
-					FROM faction
+					FROM croyance
 					WHERE supprime = '0'";
 			if( $id !== FALSE ){
 				$sql .= " AND id = ?";
 				$params[] = $id;
 			}
 			if( $activeOnly ){
-				$sql .= " AND active = ?";
-				$params[] = 1;
-			}
-			$sql .= " ORDER BY nom";
-			return self::GetResultByName( $sql, $params );
-		}
-		
-		public static function GetPouvoirs( $id = FALSE, $activeOnly = TRUE ){
-			$params = array();
-			$sql = "SELECT id, nom
-					FROM pouvoir
-					WHERE supprime = '0'";
-			if( $id !== FALSE ){
-				$sql .= " AND id = ?";
-				$params[] = $id;
-			}
-			if( $activeOnly ){
-				$sql .= " AND active = ?";
-				$params[] = 1;
-			}
-			$sql .= " ORDER BY nom";
-			return self::GetResultByName( $sql, $params );
-		}
-		
-		public static function GetPrestiges( $id = FALSE ){
-			$params = array();
-			$sql = "SELECT id, nom, voie_id
-					FROM prestige
-					WHERE active = '1' AND supprime = '0'";
-			if( $id !== FALSE ){
-				$sql .= " AND id = ?";
-				$params[] = $id;
+				$sql .= " AND active = '1'";
 			}
 			$sql .= " ORDER BY nom";
 			return self::GetResult( $sql, $params );
@@ -187,64 +122,10 @@
 				$params[] = $id;
 			}
 			if( $activeOnly ){
-				$sql .= " AND active = ?";
-				$params[] = 1;
+				$sql .= " AND active = '1'";
 			}
 			$sql .= " ORDER BY nom";
 			return self::GetResultByName( $sql, $params );
-		}
-		
-		public static function GetReligions( $id = FALSE ){
-			$params = array();
-			$sql = "SELECT d.id, d.nom, p.nom as pantheon
-					FROM divinite d
-						INNER JOIN pantheon p ON p.id = d.pantheon
-					WHERE d.active = '1' AND d.supprime = '0' AND p.active = '1' AND p.supprime = '0'";
-			if( $id !== FALSE ){
-				$sql .= " AND d.id = ?";
-				$params[] = $id;
-			}
-			$sql .= " ORDER BY p.nom, d.nom";
-			return self::GetResult( $sql, $params );
-		}
-		
-		public static function GetSorts( $id = FALSE, $activeOnly = TRUE ){
-			$params = array();
-			$sql = "SELECT id, nom
-					FROM sort
-					WHERE supprime = '0'";
-			if( $id !== FALSE ){
-				$sql .= " AND id = ?";
-				$params[] = $id;
-			}
-			if( $activeOnly ){
-				$sql .= " AND active = ?";
-				$params[] = 1;
-			}
-			$sql .= " ORDER BY nom";
-			return self::GetResultByName( $sql, $params );
-		}
-		
-		public static function GetSortsWithCercles(){
-			$sql = "SELECT id, nom, niveau AS cercle
-					FROM sort
-					WHERE active = '1' AND supprime = '0'
-					ORDER BY nom";
-			return self::GetResult( $sql );
-		}
-		
-		public static function GetStatistiques(){
-			$statistiques = array(
-				1 => mb_convert_encoding( "Constitution", 'ISO-8859-1', 'UTF-8'),
-				2 => mb_convert_encoding( "Intelligence", 'ISO-8859-1', 'UTF-8'),
-				3 => mb_convert_encoding( "Alerte", 'ISO-8859-1', 'UTF-8'),
-				4 => mb_convert_encoding( "Spiritisme", 'ISO-8859-1', 'UTF-8'),
-				5 => mb_convert_encoding( "Vigueur", 'ISO-8859-1', 'UTF-8'),
-				6 => mb_convert_encoding( "Volonté", 'ISO-8859-1', 'UTF-8')
-			);
-			asort( $statistiques );
-			
-			return $statistiques;
 		}
 		
 		public static function GetVoies( $id = FALSE ){

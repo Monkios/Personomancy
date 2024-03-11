@@ -71,8 +71,9 @@
 				<li><a href="?s=admin&a=characterTransfer">Transfert de personnage</a>TODO</li>
 				<li><a href="?s=admin&a=destroyDeadCharacters">Destruction des personnages désactivés</a>TODO</li>
 			</ul>
-			<h3>Gestion du système</h3>
+			<h3>Configurations du système</h3>
 			<ul>
+				<li><a href="?s=admin&a=listCroyances">Gestion des croyances</a></li>
 				<li><a href="?s=admin&a=listRaces">Gestion des races</a>TODO</li>
 				<li><a href="?s=admin&a=listCapacitesRaciales">Gestion des capacités raciales</a>TODO</li>
 				<li><a href="?s=admin&a=listCapacites">Gestion des capacités</a>TODO</li>

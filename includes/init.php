@@ -33,6 +33,7 @@
 	require_once "./includes/entities/Capacite.php";
 	require_once "./includes/entities/ChoixCapacite.php";
 	require_once "./includes/entities/Connaissance.php";
+	require_once "./includes/entities/Croyance.php";
 	require_once "./includes/entities/PersonnagePartiel.php";
 	require_once "./includes/entities/Personnage.php";
 	require_once "./includes/entities/Race.php";
@@ -53,6 +54,7 @@
 	require_once "./includes/repositories/CapaciteRepository.php";
 	require_once "./includes/repositories/ChoixCapaciteRepository.php";
 	require_once "./includes/repositories/ConnaissanceRepository.php";
+	require_once "./includes/repositories/CroyanceRepository.php";
 	require_once "./includes/repositories/PersonnageRepository.php";
 	require_once "./includes/repositories/RaceRepository.php";
 	require_once "./includes/repositories/VoieRepository.php";

@@ -2,7 +2,7 @@
 	class ChoixCapaciteRepository implements IRepository {
 		public function Find( $id ){
 			if( !is_numeric( $id ) ){
-				Message::Fatale( "Bad choix capacité entity ID." );
+				Message::Fatale( "Bad choix capacitï¿½ entity ID." );
 			}
 			
 			$db = new Database();
@@ -38,7 +38,7 @@
 			$db = new Database();
 			$sql = "UPDATE capacite_categorie SET
 					nom = ?,
-					active = ?
+					active = b?
 				WHERE supprime = '0' AND id = ?";
 			$params = array(
 					$choix_capacite->nom,
