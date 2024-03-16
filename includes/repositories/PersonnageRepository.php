@@ -245,8 +245,8 @@
 					return FALSE;
 				}
 				
-				$rr = new RaceRepository();
-				$race = $rr->Find( $race_id );
+				$race_repository = new RaceRepository();
+				$race = $race_repository->Find( $race_id );
 				if( $race == FALSE ){
 					Message::Fatale( "Race à ajouter invalide.", func_get_args() );
 					return FALSE;
@@ -269,8 +269,8 @@
 					return FALSE;
 				}
 				
-				$rr = new RaceRepository();
-				$race = $rr->Find( $personnage->race_id );
+				$race_repository = new RaceRepository();
+				$race = $race_repository->Find( $personnage->race_id );
 				if( $race == FALSE ){
 					Message::Fatale( "Race à retirer invalide.", func_get_args() );
 					return FALSE;
@@ -285,8 +285,8 @@
 		
 		public function BuyCapaciteRaciale( Personnage &$personnage, $id_capacite_raciale ){
 			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
-				$rr = new RaceRepository();
-				$race = $rr->Find( $personnage->race_id );
+				$race_repository = new RaceRepository();
+				$race = $race_repository->Find( $personnage->race_id );
 				if( $race->active
 						&& array_key_exists( $id_capacite_raciale, $race->list_capacites_raciales )
 						&& $race->list_capacites_raciales[ $id_capacite_raciale ][ 1 ] <= $personnage->pc_raciales
@@ -313,8 +313,8 @@
 					$personnage->pc_raciales += $cout;
 				// Sinon, on prend celui de la race
 				} else {
-					$rr = new RaceRepository();
-					$race = $rr->Find( $personnage->race_id );
+					$race_repository = new RaceRepository();
+					$race = $race_repository->Find( $personnage->race_id );
 					$personnage->pc_raciales -= $race->list_capacites_raciales[ $id_capacite_raciale ][ 1 ];
 				}
 				$this->Save( $personnage );
@@ -509,10 +509,10 @@
 				}
 				
 				if( array_key_exists( $list_choix_id, $personnage->choix_capacites ) && $personnage->choix_capacites[ $list_choix_id ] > 0 ){
-					$ccr = new ChoixCapaciteRepository();
-					$choix_capacite = $ccr->Find( $list_choix_id );
+					$choix_capacite_repository = new ChoixCapaciteRepository();
+					$choix_capacite = $choix_capacite_repository->Find( $list_choix_id );
 					if( $choix_capacite && $choix_capacite->active ){
-						$liste_capacites = $ccr->GetCapacites( $choix_capacite );
+						$liste_capacites = $choix_capacite_repository->GetCapacites( $choix_capacite );
 						if( array_key_exists( $choix_id, $liste_capacites ) ){
 							if( $this->AddCapacite( $personnage, $choix_id, 1 ) ){
 								if( $this->RemoveChoixCapacite( $personnage, $list_choix_id ) == FALSE ){
@@ -568,10 +568,10 @@
 				}
 				
 				if( array_key_exists( $choix_id, $personnage->capacites ) && $personnage->capacites[ $choix_id ] > 0 ){
-					$ccr = new ChoixCapaciteRepository();
-					$choix_capacite = $ccr->Find( $list_choix_id );
+					$choix_capacite_repository = new ChoixCapaciteRepository();
+					$choix_capacite = $choix_capacite_repository->Find( $list_choix_id );
 					if( $choix_capacite ){
-						$liste_capacites = $ccr->GetCapacites( $choix_capacite );
+						$liste_capacites = $choix_capacite_repository->GetCapacites( $choix_capacite );
 						if( array_key_exists( $choix_id, $liste_capacites ) ){
 							if( $this->RemoveCapacite( $personnage, $choix_id, 1 ) ){
 								if( $this->AddChoixCapacite( $personnage, $list_choix_id ) == FALSE ){
@@ -592,8 +592,8 @@
 				
 		private function HasPrerequisCapacite( Personnage &$personnage, $id_capacite ){
 			if( $personnage ){
-				$cr = new CapaciteRepository();
-				$capacite = $cr->Find( $id_capacite );
+				$capacite_repository = new CapaciteRepository();
+				$capacite = $capacite_repository->Find( $id_capacite );
 				
 				return $capacite !== FALSE && $capacite->active
 						&& in_array( $capacite->voie_id, $personnage->voies );

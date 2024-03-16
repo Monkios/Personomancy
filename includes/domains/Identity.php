@@ -199,8 +199,8 @@
 		}
 		
 		public function AssignCharacter( $character_id ){
-			$pr = new PersonnageRepository();
-			if( $this->player && $pr->Find( $character_id ) !== FALSE ){
+			$personnage_repository = new PersonnageRepository();
+			if( $this->player && $personnage_repository->Find( $character_id ) !== FALSE ){
 				$sql = "UPDATE personnage SET joueur = ? WHERE id = ?";
 				Database::Manipulation( $sql, array( $this->player->Id, $character_id ) );
 				

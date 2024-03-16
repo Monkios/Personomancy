@@ -1,8 +1,8 @@
 <?php
-	$pr = new PersonnageRepository();
+	$personnage_repository = new PersonnageRepository();
 	
 	$joueur = $_SESSION[ SESSION_KEY ][ "User" ];
-	if( !$joueur->IsAnimateur && $pr->GetAliveCountByPlayerId( $joueur->Id ) > 0  ){
+	if( !$joueur->IsAnimateur && $personnage_repository->GetAliveCountByPlayerId( $joueur->Id ) > 0  ){
 		Message::Erreur( "Vous ne pouvez pas créer un personnage car vous en possédez déjà un." );
 		header( "Location: index.php" );
 		die();

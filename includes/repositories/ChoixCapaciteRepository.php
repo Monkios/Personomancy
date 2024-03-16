@@ -56,7 +56,7 @@
 		
 		public function GetCapacites( ChoixCapacite $choix_capacite ){
 			$capacites = array();
-			$cr = new CapaciteRepository();
+			$capacite_repository = new CapaciteRepository();
 			
 			$db = new Database();
 			$sql = "SELECT ccc.id_capacite
@@ -66,7 +66,7 @@
 					ORDER BY c.nom";
 			$db->Query( $sql, array( $choix_capacite->id ) );
 			while( $result = $db->GetResult() ){
-				$capacites[ $result[ "id_capacite" ] ] = $cr->Find( $result[ "id_capacite" ] );
+				$capacites[ $result[ "id_capacite" ] ] = $capacite_repository->Find( $result[ "id_capacite" ] );
 			}
 			
 			return $capacites;

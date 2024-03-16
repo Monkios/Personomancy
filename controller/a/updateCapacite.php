@@ -1,8 +1,8 @@
 <?php
 	if( is_numeric( $_GET["i"] ) ){
-		$capaciteRepository = new CapaciteRepository();
+		$capacite_repository = new CapaciteRepository();
 		
-		$capacite = $capaciteRepository->Find( $_GET["i"] );
+		$capacite = $capacite_repository->Find( $_GET["i"] );
 		
 		$list_voies = Dictionary::GetVoies();
 		
@@ -15,7 +15,7 @@
 				
 				// ...
 				
-				if( !$capaciteRepository->Save( $capacite ) ){
+				if( !$capacite_repository->Save( $capacite ) ){
 					Message::Erreur( "Une erreur s'est produite en mettant à jour les informations de la capacité." );
 				} else {
 					Message::Notice( "Les informations de la capacité ont été mises à jour." );

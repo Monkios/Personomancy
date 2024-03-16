@@ -1,12 +1,12 @@
 <?php
-	$pr = new PersonnageRepository();
-	$chars = $pr->FindAll();
+	$personnage_repository = new PersonnageRepository();
+	$chars = $personnage_repository->FindAll();
 	$players = Community::GetPlayerList();
 	
 	// Transfert des personnages
 	if( isset( $_POST['transfer_character'] ) &&
 			isset( $_POST['player_id'] ) && is_numeric( $_POST['player_id'] ) ){
-		$players_chars = $pr->FindAllByPlayerId( $_POST['player_id'] );
+		$players_chars = $personnage_repository->FindAllByPlayerId( $_POST['player_id'] );
 		$identity = new Identity( $_POST['player_id'] );
 		if( $identity ){
 			foreach( $_POST['character_id'] as $char_id ){

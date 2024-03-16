@@ -1,8 +1,8 @@
 <?php
 	if( is_numeric( $_GET["i"] ) ){
-		$raceRepository = new RaceRepository();
+		$race_repository = new RaceRepository();
 		
-		$race = $raceRepository->Find( $_GET["i"] );
+		$race = $race_repository->Find( $_GET["i"] );
 		$pouvoirs = Dictionary::GetPouvoirs();
 		
 		if( isset( $_POST["race_id"] ) && $_GET["i"] == $_POST["race_id"] ){
@@ -21,13 +21,13 @@
 					$race->list_capacites_raciales[ $id ][ 1 ] = $cout;
 				}
 				
-				if( !$raceRepository->Save( $race ) ){
+				if( !$race_repository->Save( $race ) ){
 					Message::Erreur( "Une erreur s'est produite en mettant à jour les informations de la race." );
 				} else {
 					Message::Notice( "Les informations de la race ont été mises à jour." );
 				}
 			} elseif( isset( $_POST["delete_capacite_raciale"] ) ){
-				if( !$raceRepository->RemoveCapaciteRaciale( $race, $_POST["delete_capacite_raciale"] ) ){
+				if( !$race_repository->RemoveCapaciteRaciale( $race, $_POST["delete_capacite_raciale"] ) ){
 					Message::Erreur( "Une erreur s'est produite en retirant la capacité raciale de la race." );
 				} else {
 					Message::Notice( "La capacité raciale a été retirée." );
@@ -35,7 +35,7 @@
 			} elseif( isset( $_POST["add_capacite_raciale"] ) ){
 				if( is_numeric( $_POST["capacite_raciale_pouvoir"] ) &&
 							is_numeric( $_POST["capacite_raciale_cout"] ) &&
-							!$raceRepository->AddCapaciteRaciale( $race, $_POST["capacite_raciale_pouvoir"], $_POST["capacite_raciale_cout"] ) ){
+							!$race_repository->AddCapaciteRaciale( $race, $_POST["capacite_raciale_pouvoir"], $_POST["capacite_raciale_cout"] ) ){
 					Message::Erreur( "Une erreur s'est produite en ajoutant la capacité raciale de la race." );
 				} else {
 					Message::Notice( "La capacité raciale a été ajoutée." );

@@ -1,8 +1,8 @@
 <?php
 	$joueurs = Community::GetPlayerList();
 	
-	$pr = new PersonnageRepository();
-	$personnages = $pr->FindAllAlives( "player" );
+	$personnage_repository = new PersonnageRepository();
+	$personnages = $personnage_repository->FindAllAlives( "player" );
 	
 	define( "PDF_FILL_COLOR", 191 );
 	

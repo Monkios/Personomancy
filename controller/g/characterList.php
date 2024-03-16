@@ -5,12 +5,12 @@
 		$sort_by = "player";
 	}
 	
-	$pr = new PersonnageRepository();
+	$personnage_repository = new PersonnageRepository();
 	if( !isset( $_GET[ "alive" ] ) || $_GET[ "alive" ] == "y" ){
 		$only_alives = TRUE;
-		$chars = $pr->FindAllAlives( $sort_by );
+		$chars = $personnage_repository->FindAllAlives( $sort_by );
 	} else {
-		$chars = $pr->FindAll( $sort_by );
+		$chars = $personnage_repository->FindAll( $sort_by );
 	}
 	
 	include "./views/top.php";

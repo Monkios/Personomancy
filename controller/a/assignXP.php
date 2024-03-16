@@ -6,10 +6,10 @@
 	$reload_page = FALSE;
 	$raison_xp = "";
 	
-	$pr = new PersonnageRepository();
+	$personnage_repository = new PersonnageRepository();
 	foreach( $player_list as $player ){
 		if( $player->IsActive && $player->NbCharacters > 0 ){
-			$character_list[ $player->Id ] = $pr->FindAllByPlayerId( $player->Id, TRUE );
+			$character_list[ $player->Id ] = $personnage_repository->FindAllByPlayerId( $player->Id, TRUE );
 		} else {
 			$character_list[ $player->Id ] = array();
 		}

@@ -1,6 +1,6 @@
 <?php
 	if( is_numeric( $_GET["i"] ) ){
-		$connaissanceRepository = new ConnaissanceRepository();
+		$connaissance_repository = new ConnaissanceRepository();
 		
 		$list_capacites = Dictionary::GetCapacites();
 		$list_connaissances = Dictionary::GetConnaissances();
@@ -8,7 +8,7 @@
 		$list_statistiques = Dictionary::GetStatistiques();
 		$list_voies = Dictionary::GetVoies();
 		
-		$connaissance = $connaissanceRepository->Find( $_GET["i"] );
+		$connaissance = $connaissance_repository->Find( $_GET["i"] );
 		
 		if( isset( $_POST["connaissance_id"] ) && $_GET["i"] == $_POST["connaissance_id"] ){
 			if( isset( $_POST["save_connaissance"] ) ){
@@ -34,7 +34,7 @@
 				
 				// ...
 				
-				if( !$connaissanceRepository->Save( $connaissance ) ){
+				if( !$connaissance_repository->Save( $connaissance ) ){
 					Message::Erreur( "Une erreur s'est produite en mettant à jour les informations de la connaissance." );
 				} else {
 					Message::Notice( "Les informations de la connaissance ont été mises à jour." );

@@ -1,7 +1,7 @@
 <?php
 	if( is_numeric( $_GET["i"] ) ){
-		$croyanceRepository = new CroyanceRepository();
-		$croyance = $croyanceRepository->Find( $_GET["i"] );
+		$croyance_repository = new CroyanceRepository();
+		$croyance = $croyance_repository->Find( $_GET["i"] );
 		
 		if( isset( $_POST["croyance_id"] ) && $_GET["i"] == $_POST["croyance_id"] ){
 			if( isset( $_POST["save_croyance"] ) ){
@@ -9,7 +9,7 @@
 				$croyance->description = Security::FilterInput( $_POST["croyance_description"] );
 				$croyance->active = isset( $_POST["croyance_active"] );
 				
-				if( !$croyanceRepository->Save( $croyance ) ){
+				if( !$croyance_repository->Save( $croyance ) ){
 					Message::Erreur( "Une erreur s'est produite en mettant à jour les informations de la croyance." );
 				} else {
 					Message::Notice( "Les informations de la croyance ont été mises à jour." );

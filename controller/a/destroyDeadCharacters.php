@@ -1,6 +1,6 @@
 <?php
-	$pr = new PersonnageRepository();
-	$undeads = $pr->FindAllDeads();
+	$personnage_repository = new PersonnageRepository();
+	$undeads = $personnage_repository->FindAllDeads();
 	
 	$cr = new CharacterSheet();
 	

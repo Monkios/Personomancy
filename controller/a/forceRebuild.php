@@ -3,8 +3,8 @@
 	
 	header("Content-type: text/html; charset=utf-8");
 	
-	$pr = new PersonnageRepository();
-	$characters = $pr->FindAll();
+	$personnage_repository = new PersonnageRepository();
+	$characters = $personnage_repository->FindAll();
 	
 	$cs = new CharacterSheet();
 	

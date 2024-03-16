@@ -57,26 +57,5 @@
 		}
 		
 		public function Delete( $id ){ die( "Not implemented exception." ); }
-		
-		public static function GetSorts( $capacite_id ){
-			if( !is_numeric( $capacite_id ) ){
-				Message::Fatale( "Bad capacite entity ID." );
-			}
-			
-			$sorts = array();
-			$db = new Database();
-			$sql = "SELECT id
-					FROM sort
-					WHERE id_sphere = ? AND supprime = '0'
-					ORDER BY niveau, nom";
-			
-			$sr = new SortRepository();
-			$db->Query( $sql, array( $capacite_id ) );
-			while( $result = $db->GetResult() ){
-				$sorts[ $result[ "id" ] ] = $sr->Find( $result[ "id" ] );
-			}
-			
-			return $sorts;
-		}
 	}
 ?>

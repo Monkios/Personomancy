@@ -1,14 +1,14 @@
 <?php
-	$capaciteRacialeNoms = Dictionary::GetPouvoirs( FALSE, FALSE );
+	$list_capacites_raciales = Dictionary::GetPouvoirs( FALSE, FALSE );
 	
-	$capaciteRacialeRepository = new PouvoirRepository();
+	$capacite_raciale_repository = new PouvoirRepository();
 	$capacitesRaciales = array();
-	foreach( $capaciteRacialeNoms as $id => $nom ){
-		$capacitesRaciales[] = $capaciteRacialeRepository->Find( $id );
+	foreach( $list_capacites_raciales as $id => $nom ){
+		$capacitesRaciales[] = $capacite_raciale_repository->Find( $id );
 	}
 	
 	if( isset( $_POST["add_capacite_raciale"] ) ){
-		$capaciteRaciale = $capaciteRacialeRepository->Create( array( "nom" => mb_convert_encoding( Security::FilterInput( $_POST["capacite_raciale_nom"] ), 'ISO-8859-1', 'UTF-8') ) );
+		$capaciteRaciale = $capacite_raciale_repository->Create( array( "nom" => mb_convert_encoding( Security::FilterInput( $_POST["capacite_raciale_nom"] ), 'ISO-8859-1', 'UTF-8') ) );
 		
 		header( "Location: ?s=admin&a=updateCapaciteRaciale&i=" . $capaciteRaciale->id );
 		die();

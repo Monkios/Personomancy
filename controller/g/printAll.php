@@ -19,13 +19,13 @@
 	$list_prestiges = Dictionary::GetPrestiges();
 	$list_sorts_cercles = Dictionary::GetSortsWithCercles();
 	
-	$pr = new PersonnageRepository();
+	$personnage_repository = new PersonnageRepository();
 	$partials = $pr->FindAllAlives();
 	
 	$chars = array();
 	foreach( $partials as $id => $c ){
 		if( $c->est_cree ){
-			$chars[ $id ] = $pr->FindComplete( $c->id );
+			$chars[ $id ] = $personnage_repository->FindComplete( $c->id );
 		}
 	}
 	
