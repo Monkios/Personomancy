@@ -64,7 +64,7 @@
 			return self::GetResultByName( $sql, $params );
 		}
 		
-		public static function GetCiteEtatss( $id = FALSE, $activeOnly = TRUE ){
+		public static function GetCitesEtats( $id = FALSE, $activeOnly = TRUE ){
 			$params = array();
 			$sql = "SELECT id, nom
 					FROM cite_etat
