@@ -1,0 +1,9 @@
+RewriteEngine ON
+
+RewriteCond HTTPS off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+
+RewriteEngine ON
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /mancy/index.php?path=$1 [NC,L,QSA]

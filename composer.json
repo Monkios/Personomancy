@@ -1,0 +1,9 @@
+{
+    "name": "monkios/personomancy",
+    "type": "project",
+    "require": {
+        "phpmailer/phpmailer": "6.9.*",
+        "tecnickcom/tcpdf": "6.6.*"
+    },
+    "license": "GNU General Public License v3.0"
+}
