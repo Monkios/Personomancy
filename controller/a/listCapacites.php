@@ -3,9 +3,8 @@
 	$list_voies = Dictionary::GetVoies();
 	
 	$capacite_repository = new CapaciteRepository();
-	$capacites = array();
 	foreach( $list_capacites as $id => $nom ){
-		$capacites[] = $capacite_repository->Find( $id );
+		$list_capacites[ $id ] = $capacite_repository->Find( $id );
 	}
 	
 	if( isset( $_POST["add_capacite"] ) ){

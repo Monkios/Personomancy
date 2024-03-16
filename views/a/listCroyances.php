@@ -7,14 +7,14 @@
 				<th></th>
 			</tr>
 <?php
-	if( count( $croyances ) == 0 ){
+	if( count( $list_croyances ) == 0 ){
 ?>
 			<tr>
 				<td colspan="6">Aucune croyance trouvée.</td>
 			</tr>
 <?php
 	} else {
-		foreach( $croyances as $croyance ){
+		foreach( $list_croyances as $croyance ){
 ?>
 			<tr>
 				<td><?php echo $croyance->nom; ?></td>

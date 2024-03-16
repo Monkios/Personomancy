@@ -2,9 +2,8 @@
 	$list_capacites_raciales = Dictionary::GetPouvoirs( FALSE, FALSE );
 	
 	$capacite_raciale_repository = new PouvoirRepository();
-	$capacitesRaciales = array();
 	foreach( $list_capacites_raciales as $id => $nom ){
-		$capacitesRaciales[] = $capacite_raciale_repository->Find( $id );
+		$list_capacites_raciales[ $id ] = $capacite_raciale_repository->Find( $id );
 	}
 	
 	if( isset( $_POST["add_capacite_raciale"] ) ){

@@ -2,9 +2,8 @@
 	$list_croyances = Dictionary::GetCroyances( FALSE, FALSE );
 	
 	$croyance_repository = new CroyanceRepository();
-	$croyances = array();
 	foreach( $list_croyances as $id => $nom ){
-		$croyances[] = $croyance_repository->Find( $id );
+		$list_croyances[ $id ] = $croyance_repository->Find( $id );
 	}
 	
 	if( isset( $_POST["add_croyance"] ) ){

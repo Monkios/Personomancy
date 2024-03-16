@@ -2,9 +2,8 @@
 	$list_choix_capacites = Dictionary::GetChoixCapacites( FALSE, FALSE );
 	
 	$choix_capacite_repository = new ChoixCapaciteRepository();
-	$choixCapacites = array();
 	foreach( $list_choix_capacites as $id => $nom ){
-		$choixCapacites[] = $choix_capacite_repository->Find( $id );
+		$list_choix_capacites[ $id ] = $choix_capacite_repository->Find( $id );
 	}
 	
 	if( isset( $_POST["add_choix_capacite"] ) ){

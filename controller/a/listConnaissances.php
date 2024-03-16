@@ -2,9 +2,8 @@
 	$list_connaissances = Dictionary::GetConnaissances( FALSE, FALSE );
 	
 	$connaissance_repository = new ConnaissanceRepository();
-	$connaissances = array();
 	foreach( $list_connaissances as $id => $nom ){
-		$connaissances[] = $connaissance_repository->Find( $id );
+		$list_connaissances[ $id ] = $connaissance_repository->Find( $id );
 	}
 	
 	if( isset( $_POST["add_connaissance"] ) ){

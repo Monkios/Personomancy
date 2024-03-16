@@ -2,9 +2,8 @@
 	$list_races = Dictionary::GetRaces( FALSE, FALSE );
 	
 	$race_repository = new RaceRepository();
-	$races = array();
 	foreach( $list_races as $id => $nom ){
-		$races[] = $race_repository->Find( $id );
+		$list_races[ $id ] = $race_repository->Find( $id );
 	}
 	
 	if( isset( $_POST["add_race"] ) ){
