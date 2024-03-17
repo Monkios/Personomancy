@@ -20,8 +20,8 @@ CREATE TABLE `capacite` (
   `nom` varchar(100) NOT NULL DEFAULT '',
   `description` text NOT NULL,
   `voie_id` int(3) NOT NULL,
-  `active` bit(1) NOT NULL DEFAULT 1,
-  `supprime` bit(1) NOT NULL DEFAULT 0
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `supprime` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `capacite`
@@ -37,8 +37,8 @@ ALTER TABLE `capacite`
 CREATE TABLE `capacite_liste` (
   `id` int(3) UNSIGNED NOT NULL,
   `nom` varchar(100) NOT NULL DEFAULT '',
-  `active` bit(1) NOT NULL DEFAULT 1,
-  `supprime` bit(1) NOT NULL DEFAULT 0
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `supprime` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `capacite_liste`
@@ -69,8 +69,8 @@ CREATE TABLE `cite_etat` (
   `id` int(3) UNSIGNED NOT NULL,
   `nom` varchar(100) NOT NULL DEFAULT '',
   `description` text NOT NULL,
-  `active` bit(1) NOT NULL DEFAULT 1,
-  `supprime` bit(1) NOT NULL DEFAULT 0
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `supprime` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `cite_etat`
@@ -94,8 +94,8 @@ CREATE TABLE `connaissance` (
   `capacite_prerequis` int(3) UNSIGNED NOT NULL DEFAULT 0,
   `voie_prerequis_prim` int(3) UNSIGNED NOT NULL DEFAULT 0,
   `voie_prerequis_sec` int(3) UNSIGNED NOT NULL DEFAULT 0,
-  `active` bit(1) NOT NULL DEFAULT 1,
-  `supprime` bit(1) NOT NULL DEFAULT 0
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `supprime` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `connaissance`
@@ -114,8 +114,8 @@ CREATE TABLE `croyance` (
   `id` int(3) UNSIGNED NOT NULL,
   `nom` varchar(100) NOT NULL DEFAULT '',
   `description` text NOT NULL,
-  `active` bit(1) NOT NULL DEFAULT 1,
-  `supprime` bit(1) NOT NULL DEFAULT 0
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `supprime` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `croyance`
@@ -137,9 +137,9 @@ CREATE TABLE `joueur` (
   `courriel` varchar(100) DEFAULT NULL,
   `salt` char(33) NOT NULL,
   `password` varchar(40) NOT NULL,
-  `est_animateur` bit(1) NOT NULL DEFAULT 0,
-  `est_administrateur` bit(1) NOT NULL DEFAULT 0,
-  `active` bit(1) NOT NULL DEFAULT 1,
+  `est_animateur` tinyint(1) NOT NULL DEFAULT 0,
+  `est_administrateur` tinyint(1) NOT NULL DEFAULT 0,
+  `active` tinyint(1) NOT NULL DEFAULT 0,
   `date_insert` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_modify` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
@@ -166,9 +166,9 @@ CREATE TABLE `personnage` (
   `point_capacite_raciale` tinyint(1) NOT NULL,
   `point_experience` smallint(4) NOT NULL DEFAULT 0,
   `total_experience` smallint(4) NOT NULL DEFAULT 0,
-  `est_vivant` bit(1) NOT NULL DEFAULT 1,
-  `est_cree` bit(1) NOT NULL DEFAULT 0,
-  `est_detruit` bit(1) NOT NULL DEFAULT 0,
+  `est_vivant` tinyint(1) NOT NULL DEFAULT 1,
+  `est_cree` tinyint(1) NOT NULL DEFAULT 0,
+  `est_detruit` tinyint(1) NOT NULL DEFAULT 0,
   `commentaire` text NOT NULL,
   `notes` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
@@ -220,8 +220,8 @@ CREATE TABLE `personnage_journal` (
   `quoi` smallint(2) NOT NULL DEFAULT 0,
   `pourquoi` int(3) UNSIGNED NOT NULL DEFAULT 0,
   `note` varchar(255) NOT NULL DEFAULT '',
-  `active` bit(1) NOT NULL DEFAULT 1,
-  `backtrack` bit(1) NOT NULL DEFAULT 1,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `backtrack` tinyint(1) NOT NULL DEFAULT 1,
   `joueur_id` smallint(8) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
@@ -255,8 +255,8 @@ CREATE TABLE `race` (
   `id` int(3) UNSIGNED NOT NULL,
   `nom` varchar(100) NOT NULL DEFAULT '',
   `description` text NOT NULL,
-  `active` bit(1) NOT NULL DEFAULT 1,
-  `supprime` bit(1) NOT NULL DEFAULT 0
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `supprime` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `race`
@@ -281,8 +281,8 @@ CREATE TABLE `race_capacite` (
   `connaissance_bonus_id` int(3) UNSIGNED NOT NULL DEFAULT 0,
   `capacite_choix_bonus_id` int(3) UNSIGNED NOT NULL DEFAULT 0,
   `voie_bonus` int(3) UNSIGNED NOT NULL DEFAULT 0,
-  `active` bit(1) NOT NULL DEFAULT 1,
-  `supprime` bit(1) NOT NULL DEFAULT 0
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `supprime` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `race_capacite`
@@ -298,8 +298,8 @@ CREATE TABLE `voie` (
   `id` int(3) UNSIGNED NOT NULL,
   `nom` varchar(100) NOT NULL DEFAULT '',
   `description` text NOT NULL,
-  `active` bit(1) NOT NULL DEFAULT 1,
-  `supprime` bit(1) NOT NULL DEFAULT 0,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `supprime` tinyint(1) NOT NULL DEFAULT 0,
   `ordre_affichage` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 

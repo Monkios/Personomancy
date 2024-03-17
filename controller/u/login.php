@@ -12,7 +12,7 @@
 					header( "Location: ./index.php?s=player" );
 					die();
 				} else {
-					header( "Location: ./index.php?s=user&a=activate&m=" . $player->Email );
+					header( "Location: ./index.php?s=user&a=activate&m=" . urlencode( $player->Email ) );
 					die();
 				}
 			} else {

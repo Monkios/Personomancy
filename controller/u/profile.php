@@ -40,7 +40,7 @@
 			// De-activate player
 			if( $identity->SetPlayerAccess( Identity::IS_ACTIVE, FALSE ) &&
 					$identity->SendValidationEmail() ){
-				Message::Notice( "Le mot de passe du joueur a été changé." );
+				Message::Notice( "Le mot de passe du joueur a été changé. Un courriel de validation a été envoyé." );
 			}
 		}
 		

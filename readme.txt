@@ -1,7 +1,7 @@
 Bonjour.
 
-Je suis Mancy v0.
+Je suis Mancy v3.
 
-Je suis l‡ pour rendre votre vie plus simple.
+Je suis l√† pour rendre votre vie plus simple.
 
-Je suis nÈe le 9 janvier 2015 ‡ 11h26.
+Je suis n√©e le 3 mars 2024 √† 23h07.
