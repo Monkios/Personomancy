@@ -128,17 +128,20 @@
 			return self::GetResultByName( $sql, $params );
 		}
 		
-		public static function GetVoies( $id = FALSE ){
+		public static function GetVoies( $id = FALSE, $activeOnly = TRUE ){
 			$params = array();
 			$sql = "SELECT id, nom
 					FROM voie
-					WHERE active = '1' AND supprime = '0'";
+					WHERE supprime = '0'";
 			if( $id !== FALSE ){
 				$sql .= " AND id = ?";
 				$params[] = $id;
 			}
-			$sql .= " ORDER BY ordre_affichage, nom";
-			return self::GetResultByName( $sql, $params );
+			if( $activeOnly ){
+				$sql .= " AND active = '1'";
+			}
+			$sql .= " ORDER BY nom";
+			return self::GetResult( $sql, $params );
 		}
 		
 		public static function GetExperienceChanges(){

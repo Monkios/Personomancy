@@ -6,6 +6,10 @@
 					<input type="text" name="capacite_nom" id="capacite_nom" value="<?php echo $capacite->nom; ?>" />
 				</div>
 				<div>
+					<label for="capacite_description">Description :</label>
+					<input type="text" name="capacite_description" id="capacite_description" value="<?php echo $capacite->description; ?>" />
+				</div>
+				<div>
 					<label for="capacite_active">Est activée</label>
 					<input type="checkbox" name="capacite_active" id="capacite_active"<?php if( $capacite->active == 1 ) echo "checked='checked'"; ?> />
 				</div>
@@ -13,9 +17,9 @@
 					<label for="capacite_voie">Voie :</label>
 					<select name="capacite_voie" id="capacite_voie">
 <?php
-	foreach( $list_voies as $id => $nom ){
+	foreach( $list_voies as $id => $voie ){
 ?>
-						<option value="<?php echo $id; ?>"<?php if( $id == $capacite->voie_id ) echo " selected='selected'"; ?>><?php echo $nom; ?></option>
+						<option value="<?php echo $id; ?>"<?php if( $id == $capacite->voie_id ) echo " selected='selected'"; ?>><?php echo $voie[ "nom" ]; ?></option>
 <?php
 	}
 ?>

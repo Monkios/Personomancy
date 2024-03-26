@@ -7,18 +7,18 @@
 				<th></th>
 			</tr>
 <?php
-	if( count( $capacites ) == 0 ){
+	if( count( $list_capacites ) == 0 ){
 ?>
 			<tr>
 				<td colspan="6">Aucune capacité trouvée.</td>
 			</tr>
 <?php
 	} else {
-		foreach( $capacites as $capacite ){
+		foreach( $list_capacites as $capacite ){
 ?>
 			<tr>
 				<td><?php echo $capacite->nom; ?></td>
-				<td><?php echo $list_voies[ $capacite->voie_id ]; ?></td>
+				<td><?php echo $list_voies[ $capacite->voie_id ][ "nom" ]; ?></td>
 				<td><?php echo ( $capacite->active ? "Oui" : "Non" ); ?></td>
 				<td><a href="?s=admin&a=updateCapacite&i=<?php echo $capacite->id; ?>">Modifier</a></td>
 			</tr>
@@ -37,9 +37,9 @@
 				<label for="capacite_voie">Voie :</label>
 				<select name="capacite_voie" id="capacite_voie">
 <?php
-	foreach( $list_voies as $id => $nom ){
+	foreach( $list_voies as $id => $voie ){
 ?>
-					<option value="<?php echo $id; ?>"><?php echo $nom; ?></option>
+					<option value="<?php echo $id; ?>"><?php echo $voie[ "nom" ]; ?></option>
 <?php
 	}
 ?>

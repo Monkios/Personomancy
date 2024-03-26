@@ -58,7 +58,7 @@
 			$db = new Database();
 			$sql = "UPDATE connaissance SET
 					nom = ?,
-					active = b?,
+					active = ?,
 					statistique = ?,
 					statistique_niveau = ?,
 					statistique_sec = ?,

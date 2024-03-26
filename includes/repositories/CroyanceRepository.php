@@ -44,7 +44,7 @@
 			$sql = "UPDATE croyance SET
 					nom = ?,
 					description = ?,
-					active = b?
+					active = ?
 				WHERE supprime = 0 AND id = ?";
 			$params = array(
 					$croyance->nom,

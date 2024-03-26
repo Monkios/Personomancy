@@ -44,7 +44,7 @@
 			$sql = "UPDATE cite_etat SET
 					nom = ?,
 					description = ?,
-					active = b?
+					active = ?
 				WHERE supprime = 0 AND id = ?";
 			$params = array(
 					$cite_etat->nom,

@@ -38,7 +38,7 @@
 			$db = new Database();
 			$sql = "UPDATE capacite_categorie SET
 					nom = ?,
-					active = b?
+					active = ?
 				WHERE supprime = '0' AND id = ?";
 			$params = array(
 					$choix_capacite->nom,

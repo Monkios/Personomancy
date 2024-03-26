@@ -6,7 +6,7 @@
 			}
 			
 			$db = new Database();
-			$sql = "SELECT nom, active, voie
+			$sql = "SELECT nom, description, active, voie_id
 					FROM capacite
 					WHERE id = ? AND supprime = '0'";
 			$db->Query( $sql, array( $id ) );
@@ -15,9 +15,11 @@
 				$entity->id = $id;
 
 				$entity->nom = $result[ "nom" ];
+				$entity->description = $result[ "description" ];
+
 				$entity->active = $result[ "active" ] == 1;
 
-				$entity->voie_id = $result[ "voie" ];
+				$entity->voie_id = $result[ "voie_id" ];
 
 				return $entity;
 			}
@@ -26,11 +28,15 @@
 		}
 		
 		public function Create( $opts = array() ){
+			if( !in_array( "description", $opts ) ){
+				$opts[ "description" ] = "";
+			}
+
 			$db = new Database();
-			$sql = "INSERT INTO capacite ( nom, voie, active, supprime )
-					VALUES ( ?, ?, '0', '0' )";
+			$sql = "INSERT INTO capacite ( nom, description, voie_id, active, supprime )
+					VALUES ( ?, ?, ?, 1, 0 )";
 			
-			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "id_voie" ] ) );
+			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "description" ], $opts[ "id_voie" ] ) );
 			
 			$insert_id = $db->GetInsertId();
 			return $this->Find( $insert_id );
@@ -40,11 +46,13 @@
 			$db = new Database();
 			$sql = "UPDATE capacite SET
 					nom = ?,
-					active = b?,
-					voie = ?
+					description = ?,
+					active = ?,
+					voie_id = ?
 				WHERE supprime = '0' AND id = ?";
 			$params = array(
 					$capacite->nom,
+					$capacite->description,
 					$capacite->active ? 1 : 0,
 					$capacite->voie_id,
 					$capacite->id
