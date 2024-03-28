@@ -18,7 +18,7 @@
 ?>
 			<tr>
 				<td><?php echo $capacite->nom; ?></td>
-				<td><?php echo $list_voies[ $capacite->voie_id ][ "nom" ]; ?></td>
+				<td><?php echo $list_voies[ $capacite->voie_id ]; ?></td>
 				<td><?php echo ( $capacite->active ? "Oui" : "Non" ); ?></td>
 				<td><a href="?s=admin&a=updateCapacite&i=<?php echo $capacite->id; ?>">Modifier</a></td>
 			</tr>
@@ -39,7 +39,7 @@
 <?php
 	foreach( $list_voies as $id => $voie ){
 ?>
-					<option value="<?php echo $id; ?>"><?php echo $voie[ "nom" ]; ?></option>
+					<option value="<?php echo $id; ?>"><?php echo $voie; ?></option>
 <?php
 	}
 ?>

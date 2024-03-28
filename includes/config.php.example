@@ -25,6 +25,11 @@
 	define( "SESSION_KEY", "Mancy_SessionKey" );
 	
 	define( "CHARACTER_BASE_XP", 250 );
+	define( "CHARACTER_COST_CONN_AVANCEE", 1);
+	define( "CHARACTER_COST_CONN_MAITRE", 2);
+	define( "CHARACTER_COST_CONN_SYNERGIQUE", 3);
+	define( "CHARACTER_COST_CONN_LEGENDAIRE", 4);
+
 	define( "CHARACTER_BASE_PCR", 4 );
 	define( "CHARACTER_BASE_HP", 15 );
 	define( "CHARACTER_BASE_MP", 10 );

@@ -141,7 +141,7 @@
 				$sql .= " AND active = '1'";
 			}
 			$sql .= " ORDER BY nom";
-			return self::GetResult( $sql, $params );
+			return self::GetResultByName( $sql, $params );
 		}
 		
 		public static function GetExperienceChanges(){

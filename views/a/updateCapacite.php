@@ -19,7 +19,7 @@
 <?php
 	foreach( $list_voies as $id => $voie ){
 ?>
-						<option value="<?php echo $id; ?>"<?php if( $id == $capacite->voie_id ) echo " selected='selected'"; ?>><?php echo $voie[ "nom" ]; ?></option>
+						<option value="<?php echo $id; ?>"<?php if( $id == $capacite->voie_id ) echo " selected='selected'"; ?>><?php echo $voie; ?></option>
 <?php
 	}
 ?>

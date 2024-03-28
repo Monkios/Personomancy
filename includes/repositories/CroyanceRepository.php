@@ -30,8 +30,8 @@
 			}
 
 			$db = new Database();
-			$sql = "INSERT INTO croyance ( nom, description, active, supprime )
-					VALUES ( ?, ?, 1, 0 )";
+			$sql = "INSERT INTO croyance ( nom, description )
+					VALUES ( ?, ? )";
 			
 			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "description" ] ) );
 			

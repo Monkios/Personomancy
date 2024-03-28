@@ -33,8 +33,8 @@
 			}
 
 			$db = new Database();
-			$sql = "INSERT INTO capacite ( nom, description, voie_id, active, supprime )
-					VALUES ( ?, ?, ?, 1, 0 )";
+			$sql = "INSERT INTO capacite ( nom, description, voie_id )
+					VALUES ( ?, ?, ? )";
 			
 			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "description" ], $opts[ "id_voie" ] ) );
 			

@@ -25,8 +25,8 @@
 		
 		public function Create( $opts = array() ){
 			$db = new Database();
-			$sql = "INSERT INTO capacite_categorie ( nom, active, supprime )
-					VALUES ( ?, '0', '0' )";
+			$sql = "INSERT INTO capacite_categorie ( nom )
+					VALUES ( ? )";
 			
 			$db->Query( $sql, array( $opts[ "nom" ] ) );
 			

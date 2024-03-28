@@ -6,10 +6,7 @@
 			}
 			
 			$db = new Database();
-			$sql = "SELECT nom, active,
-						base_constitution, base_spiritisme,
-						base_intelligence, base_alerte,
-						base_vigueur, base_volonte
+			$sql = "SELECT nom, active
 					FROM race 
 					WHERE id = ? AND supprime = '0'";
 			$db->Query( $sql, array( $id ) );
@@ -19,13 +16,6 @@
 
 				$entity->nom = $result[ "nom" ];
 				$entity->active = $result[ "active" ] == 1;
-
-				$entity->base_constitution = $result[ "base_constitution" ];
-				$entity->base_spiritisme = $result[ "base_spiritisme" ];
-				$entity->base_intelligence = $result[ "base_intelligence" ];
-				$entity->base_alerte = $result[ "base_alerte" ];
-				$entity->base_vigueur = $result[ "base_vigueur" ];
-				$entity->base_volonte = $result[ "base_volonte" ];
 
 				$entity->list_capacites_raciales = $this->FetchCapacitesRaciales( $id );
 
@@ -37,8 +27,8 @@
 		
 		public function Create( $opts = array() ){
 			$db = new Database();
-			$sql = "INSERT INTO race ( nom, active, supprime )
-					VALUES ( ?, '0', '0' )";
+			$sql = "INSERT INTO race ( nom )
+					VALUES ( ? )";
 			
 			$db->Query( $sql, array( $opts[ "nom" ] ) );
 			
@@ -52,23 +42,11 @@
 			$db = new Database();
 			$sql = "UPDATE race SET
 					nom = ?,
-					active = ?,
-					base_alerte = ?,
-					base_constitution = ?,
-					base_intelligence = ?,
-					base_spiritisme = ?,
-					base_vigueur = ?,
-					base_volonte = ?
+					active = ?
 				WHERE supprime = '0' AND id = ?";
 			$params = array(
 					$race->nom,
 					$race->active ? 1 : 0,
-					$race->base_alerte,
-					$race->base_constitution,
-					$race->base_intelligence,
-					$race->base_spiritisme,
-					$race->base_vigueur,
-					$race->base_volonte,
 					$race->id
 			);
 			

@@ -30,8 +30,8 @@
 			}
 
 			$db = new Database();
-			$sql = "INSERT INTO cite_etat ( nom, description, active, supprime )
-					VALUES ( ?, ?, 1, 0 )";
+			$sql = "INSERT INTO cite_etat ( nom, description )
+					VALUES ( ?, ? )";
 			
 			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "description" ] ) );
 			
