@@ -16,6 +16,7 @@
 				<div>
 					<label for="capacite_voie">Voie :</label>
 					<select name="capacite_voie" id="capacite_voie">
+						<option value="">Veuillez sélectionner un élément...</option>
 <?php
 	foreach( $list_voies as $id => $voie ){
 ?>

@@ -9,14 +9,13 @@
 	}
 	
 	$character_name = "";
-	$character_alignment = 0;
+	$character_cite_etat = 0;
+	$character_croyance = 0;
 	$character_race = 0;
-	$character_religion = 0;
 	
-	$list_alignements = Dictionary::GetAlignements();
-	$list_factions = Dictionary::GetFactions();
+	$list_cites_etats = Dictionary::GetCitesEtats();
+	$list_croyances = Dictionary::GetCroyances();
 	$list_races = Dictionary::GetRaces();
-	$list_religions = Dictionary::GetReligions();
 	
 	$erreur = false;
 	if( isset( $_POST ) && isset( $_POST['character_create'] ) ){
@@ -27,23 +26,17 @@
 		} else {
 			$character_name = Security::FilterInput( $_POST['character_name'] );
 		}
-		if( empty( $_POST['character_alignment'] ) || !is_numeric( $_POST['character_alignment'] ) || !array_key_exists( $_POST['character_alignment'], $list_alignements ) ){
+		if( empty( $_POST['character_cite_etat'] ) || !is_numeric( $_POST['character_cite_etat'] ) || !array_key_exists( $_POST['character_cite_etat'], $list_cites_etats ) ){
 			$erreur = true;
-			Message::Erreur( "Vous n'avez choisit aucun alignement pour ce personnage." );
+			Message::Erreur( "Vous n'avez choisit aucune cité-État pour ce personnage." );
 		} else {
-			$character_alignment = $_POST['character_alignment'];
+			$character_cite_etat = $_POST['character_cite_etat'];
 		}
-		if( empty( $_POST['character_faction'] ) || !is_numeric( $_POST['character_faction'] ) || !array_key_exists( $_POST['character_faction'], $list_factions ) ){
+		if( empty( $_POST['character_croyance'] ) || !is_numeric( $_POST['character_croyance'] ) || !array_key_exists( $_POST['character_croyance'], $list_croyances ) ){
 			$erreur = true;
-			Message::Erreur( "Vous n'avez choisit aucune faction pour ce personnage." );
+			Message::Erreur( "Vous n'avez choisit aucune croyance pour ce personnage." );
 		} else {
-			$character_faction = $_POST['character_faction'];
-		}
-		if( empty( $_POST['character_religion'] ) || !is_numeric( $_POST['character_religion'] ) || !array_key_exists( $_POST['character_religion'], $list_religions ) ){
-			$erreur = true;
-			Message::Erreur( "Vous n'avez choisit aucune religion pour ce personnage." );
-		} else {
-			$character_religion = $_POST['character_religion'];
+			$character_croyance = $_POST['character_croyance'];
 		}
 		if( empty( $_POST['character_race'] ) || !is_numeric( $_POST['character_race'] ) || !array_key_exists( $_POST['character_race'], $list_races ) ){
 			$erreur = true;
@@ -56,7 +49,7 @@
 		if( !$erreur ){
 			// Inserer le nouveau personnage
 			$sheet = new CharacterSheet();
-			$character = $sheet->Create( $joueur->Id, mb_convert_encoding( $character_name, 'ISO-8859-1', 'UTF-8'), $character_alignment, $character_faction, $character_religion, $character_race );
+			$character = $sheet->Create( $joueur->Id, $character_name, $character_cite_etat, $character_croyance, $character_race );
 			if( $character !== FALSE ){
 				Message::Notice( "Création du personnage : ". $character_name );
 				

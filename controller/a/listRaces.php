@@ -7,7 +7,7 @@
 	}
 	
 	if( isset( $_POST["add_race"] ) ){
-		$race = $race_repository->Create( array( "nom" => mb_convert_encoding( Security::FilterInput( $_POST["race_nom"] ), 'ISO-8859-1', 'UTF-8') ) );
+		$race = $race_repository->Create( array( "nom" => Security::FilterInput( $_POST["race_nom"] ) ) );
 		
 		header( "Location: ?s=admin&a=updateRace&i=" . $race->id );
 		die();

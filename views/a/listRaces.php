@@ -2,21 +2,23 @@
 		<table>
 			<tr>
 				<th>Nom</th>
+				<th>Description</th>
 				<th>Active</th>
 				<th></th>
 			</tr>
 <?php
-	if( count( $races ) == 0 ){
+	if( count( $list_races ) == 0 ){
 ?>
 			<tr>
 				<td colspan="6">Aucune race trouvée.</td>
 			</tr>
 <?php
 	} else {
-		foreach( $races as $race ){
+		foreach( $list_races as $race ){
 ?>
 			<tr>
 				<td><?php echo $race->nom; ?></td>
+				<td><?php echo $race->description; ?></td>
 				<td><?php echo ( $race->active ? "Oui" : "Non" ); ?></td>
 				<td><a href="?s=admin&a=updateRace&i=<?php echo $race->id; ?>">Modifier</a></td>
 			</tr>

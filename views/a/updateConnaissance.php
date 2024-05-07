@@ -11,7 +11,7 @@
 				</div>
 				<div>
 					<label for="connaissance_cout">Coût :</label>
-					<input type="number" min="1" max="4" name="connaissance_cout" id="connaissance_cout" value="<?php echo $connaissance->cout; ?>" />
+					<input type="number" min="0" max="4" name="connaissance_cout" id="connaissance_cout" value="<?php echo $connaissance->cout; ?>" />
 				</div>
 				<div>
 					<label for="connaissance_type">Type :</label>

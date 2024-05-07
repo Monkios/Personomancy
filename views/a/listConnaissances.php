@@ -37,10 +37,10 @@
 				<label for="connaissance_nom">Nom :</label>
 				<input type="text" name="connaissance_nom" id="connaissance_nom" />
 			</div>
-			
 			<div>
 				<label for="connaissance_voie">Voie :</label>
 				<select name="connaissance_voie" id="connaissance_voie">
+					<option value="">Veuillez sélectionner un élément...</option>
 <?php
 	foreach( $list_voies as $id => $voie ){
 ?>
