@@ -36,6 +36,7 @@
 				<div>
 					<label for="capacite">Capacité :</label>
 					<select name="capacite" id="capacite">
+						<option value="">Veuillez sélectionner un élément...</option>
 <?php
 	foreach( $list_capacites as $id => $nom ){
 		if( !array_key_exists( $id, $capacites ) ){

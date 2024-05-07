@@ -1,120 +1,48 @@
 <?php
 	if( is_numeric( $_GET["i"] ) ){
-		$capacite_raciale_repository = new PouvoirRepository();
+		$capacite_raciale_repository = new CapaciteRacialeRepository();
 		
 		$capaciteRaciale = $capacite_raciale_repository->Find( $_GET["i"] );
 		
-		$list_capacites = Dictionary::GetCapacites();
-		$list_connaissances = Dictionary::GetConnaissances();
-		$list_voies = Dictionary::GetVoies();
-		
+		$list_races = Dictionary::GetRaces( FALSE );
 		$list_choix_capacites = Dictionary::GetChoixCapacites();
 		$list_choix_connaissances = Dictionary::GetChoixConnaissances();
 		$list_choix_pouvoirs = Dictionary::GetChoixPouvoirs();
+		$list_choix_voies = Dictionary::GetChoixVoies();
 		
 		if( isset( $_POST["capacite_raciale_id"] ) && $_GET["i"] == $_POST["capacite_raciale_id"] ){
 			if( isset( $_POST["save_capacite_raciale"] ) ){
-				$capaciteRaciale->nom = mb_convert_encoding( Security::FilterInput( $_POST["capacite_raciale_nom"] ), 'ISO-8859-1', 'UTF-8');
+				$capaciteRaciale->nom = Security::FilterInput( $_POST["capacite_raciale_nom"] );
+				$capaciteRaciale->description = Security::FilterInput( $_POST["capacite_raciale_description"] );
 				$capaciteRaciale->active = isset( $_POST["capacite_raciale_active"] );
-				$capaciteRaciale->affiche = isset( $_POST["capacite_raciale_affiche"] );
-				
-				$capaciteRaciale->bonus_alerte = $_POST["capacite_raciale_bonus_alerte"];
-				$capaciteRaciale->bonus_constitution = $_POST["capacite_raciale_bonus_constitution"];
-				$capaciteRaciale->bonus_intelligence = $_POST["capacite_raciale_bonus_intelligence"];
-				$capaciteRaciale->bonus_spiritisme = $_POST["capacite_raciale_bonus_spiritisme"];
-				$capaciteRaciale->bonus_vigueur = $_POST["capacite_raciale_bonus_vigueur"];
-				$capaciteRaciale->bonus_volonte = $_POST["capacite_raciale_bonus_volonte"];
-				
-				// ...
-				
-				if( !$capacite_raciale_repository->Save( $capaciteRaciale ) ){
-					Message::Erreur( "Une erreur s'est produite en mettant à jour les informations de la capacité raciale." );
+
+				if( !isset( $_POST["capacite_raciale_race_id"] ) || !array_key_exists( $_POST[ "capacite_raciale_race_id"], $list_races ) ){
+					Message::Erreur( "Aucun identifiant de race n'a été fournit ou ce dernier est invalide." );
+				} else if( !isset( $_POST["capacite_raciale_cout"] ) || !is_numeric( $_POST[ "capacite_raciale_cout"] ) || $_POST[ "capacite_raciale_cout"] < 0 || $_POST[ "capacite_raciale_cout"] > 4 ){
+					Message::Erreur( "Le coût de la capacité raciale doit être un nombre entre 0 et 4." );
 				} else {
-					Message::Notice( "Les informations de la capacité raciale ont été mises à jour." );
-				}
-			} elseif( isset( $_POST["add_capacite"] ) ){
-				if( is_numeric( $_POST["capacite"] ) &&
-							is_numeric( $_POST["capacite"] ) &&
-							!$capacite_raciale_repository->AddBonusCapacite( $capaciteRaciale, $_POST["capacite"] ) ){
-					Message::Erreur( "Une erreur s'est produite en ajoutant la capacité à la capacité raciale." );
-				} else {
-					Message::Notice( "La capacité a été ajoutée." );
-				}
-			} elseif( isset( $_POST["delete_capacite"] ) ){
-				if( !$capacite_raciale_repository->RemoveBonusCapacite( $capaciteRaciale, $_POST["delete_capacite"] ) ){
-					Message::Erreur( "Une erreur s'est produite en retirant la capacité de la capacité raciale." );
-				} else {
-					Message::Notice( "La capacité a été retirée." );
-				}
-			} elseif( isset( $_POST["add_connaissance"] ) ){
-				if( is_numeric( $_POST["connaissance"] ) &&
-							is_numeric( $_POST["connaissance"] ) &&
-							!$capacite_raciale_repository->AddBonusConnaissance( $capaciteRaciale, $_POST["connaissance"] ) ){
-					Message::Erreur( "Une erreur s'est produite en ajoutant la connaissance à la capacité raciale." );
-				} else {
-					Message::Notice( "La connaissance a été ajoutée." );
-				}
-			} elseif( isset( $_POST["delete_connaissance"] ) ){
-				if( !$capacite_raciale_repository->RemoveBonusConnaissance( $capaciteRaciale, $_POST["delete_connaissance"] ) ){
-					Message::Erreur( "Une erreur s'est produite en retirant la connaissance de la capacité raciale." );
-				} else {
-					Message::Notice( "La connaissance a été retirée." );
-				}
-			} elseif( isset( $_POST["add_voie"] ) ){
-				if( is_numeric( $_POST["voie"] ) &&
-							is_numeric( $_POST["voie"] ) &&
-							!$capacite_raciale_repository->AddBonusVoie( $capaciteRaciale, $_POST["voie"] ) ){
-					Message::Erreur( "Une erreur s'est produite en ajoutant la voie à la capacité raciale." );
-				} else {
-					Message::Notice( "La voie a été ajoutée." );
-				}
-			} elseif( isset( $_POST["delete_voie"] ) ){
-				if( !$capacite_raciale_repository->RemoveBonusVoie( $capaciteRaciale, $_POST["delete_voie"] ) ){
-					Message::Erreur( "Une erreur s'est produite en retirant la voie de la capacité raciale." );
-				} else {
-					Message::Notice( "La voie a été retirée." );
-				}
-			} elseif( isset( $_POST["add_choix_capacite"] ) ){
-				if( is_numeric( $_POST["choix_capacite"] ) &&
-							is_numeric( $_POST["choix_capacite"] ) &&
-							!$capacite_raciale_repository->AddChoixCapacite( $capaciteRaciale, $_POST["choix_capacite"] ) ){
-					Message::Erreur( "Une erreur s'est produite en ajoutant le choix de capacité à la capacité raciale." );
-				} else {
-					Message::Notice( "Le choix de capacité a été ajouté." );
-				}
-			} elseif( isset( $_POST["delete_choix_capacite"] ) ){
-				if( !$capacite_raciale_repository->RemoveChoixCapacite( $capaciteRaciale, $_POST["delete_choix_capacite"] ) ){
-					Message::Erreur( "Une erreur s'est produite en retirant le choix de capacité de la capacité raciale." );
-				} else {
-					Message::Notice( "Le choix de capacité a été retiré." );
-				}
-			} elseif( isset( $_POST["add_choix_connaissance"] ) ){
-				if( is_numeric( $_POST["choix_connaissance"] ) &&
-							is_numeric( $_POST["choix_connaissance"] ) &&
-							!$capacite_raciale_repository->AddChoixConnaissance( $capaciteRaciale, $_POST["choix_connaissance"] ) ){
-					Message::Erreur( "Une erreur s'est produite en ajoutant le choix de capacité à la capacité raciale." );
-				} else {
-					Message::Notice( "Le choix de capacité a été ajouté." );
-				}
-			} elseif( isset( $_POST["delete_choix_connaissance"] ) ){
-				if( !$capacite_raciale_repository->RemoveChoixConnaissance( $capaciteRaciale, $_POST["delete_choix_connaissance"] ) ){
-					Message::Erreur( "Une erreur s'est produite en retirant le choix de capacité de la capacité raciale." );
-				} else {
-					Message::Notice( "Le choix de capacité a été retiré." );
-				}
-			} elseif( isset( $_POST["add_choix_pouvoir"] ) ){
-				if( is_numeric( $_POST["choix_pouvoir"] ) &&
-							is_numeric( $_POST["choix_pouvoir"] ) &&
-							!$capacite_raciale_repository->AddChoixPouvoir( $capaciteRaciale, $_POST["choix_pouvoir"] ) ){
-					Message::Erreur( "Une erreur s'est produite en ajoutant le choix de capacité à la capacité raciale." );
-				} else {
-					Message::Notice( "Le choix de capacité a été ajouté." );
-				}
-			} elseif( isset( $_POST["delete_choix_pouvoir"] ) ){
-				if( !$capacite_raciale_repository->RemoveChoixPouvoir( $capaciteRaciale, $_POST["delete_choix_pouvoir"] ) ){
-					Message::Erreur( "Une erreur s'est produite en retirant le choix de capacité de la capacité raciale." );
-				} else {
-					Message::Notice( "Le choix de capacité a été retiré." );
+					$capaciteRaciale->race_id = $_POST["capacite_raciale_race_id"];
+					$capaciteRaciale->cout = $_POST["capacite_raciale_cout" ];
+
+					if( isset( $_POST["capacite_raciale_bonus_capacite"] ) && array_key_exists( $_POST["capacite_raciale_bonus_capacite"], $list_choix_capacites) ){
+						$capaciteRaciale->choix_capacite_bonus_id = $_POST["capacite_raciale_bonus_capacite"];
+					}
+					if( isset( $_POST["capacite_raciale_bonus_connaissance"] ) && array_key_exists( $_POST["capacite_raciale_bonus_connaissance"], $list_choix_connaissances) ){
+						$capaciteRaciale->choix_connaissance_bonus_id = $_POST["capacite_raciale_bonus_connaissance"];
+					}
+					if( isset( $_POST["capacite_raciale_bonus_pouvoir"] ) && array_key_exists( $_POST["capacite_raciale_bonus_pouvoir"], $list_choix_pouvoirs) ){
+						$capaciteRaciale->choix_pouvoir_bonus_id = $_POST["capacite_raciale_bonus_pouvoir"];
+					}
+					if( isset( $_POST["capacite_raciale_bonus_voie"] ) && array_key_exists( $_POST["capacite_raciale_bonus_voie"], $list_choix_voies) ){
+						$capaciteRaciale->choix_voie_bonus_id = $_POST["capacite_raciale_bonus_voie"];
+					}
+
+					
+					if( !$capacite_raciale_repository->Save( $capaciteRaciale ) ){
+						Message::Erreur( "Une erreur s'est produite en mettant à jour les informations de la capacité raciale." );
+					} else {
+						Message::Notice( "Les informations de la capacité raciale ont été mises à jour." );
+					}
 				}
 			}
 			

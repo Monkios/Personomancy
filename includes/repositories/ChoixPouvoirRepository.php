@@ -1,5 +1,5 @@
 <?php
-	class ChoixCapaciteRepository implements IRepository {
+	class ChoixPouvoirRepository implements IRepository {
 		public function Find( $id ){
 			if( !is_numeric( $id ) ){
 				Message::Fatale( "Bad choix capacit� entity ID." );

@@ -40,18 +40,74 @@
 			return self::GetResultByName( $sql, $params );
 		}
 		
-		public static function GetCapacitesByVoie( $id ){
+		public static function GetCapacitesRaciales( $id = FALSE, $activeOnly = TRUE ){
+			$params = array();
 			$sql = "SELECT id, nom
-					FROM capacite
-					WHERE voie = ? AND active = '1' AND supprime = 0
-					ORDER BY nom";
-			return self::GetResultByName( $sql, array( $id ) );
+					FROM race_capacite
+					WHERE supprime = '0'";
+			if( $id !== FALSE ){
+				$sql .= " AND id = ?";
+				$params[] = $id;
+			}
+			if( $activeOnly ){
+				$sql .= " AND active = '1'";
+			}
+			$sql .= " ORDER BY nom";
+			return self::GetResultByName( $sql, $params );
 		}
 		
 		public static function GetChoixCapacites( $id = FALSE, $activeOnly = TRUE ){
 			$params = array();
 			$sql = "SELECT id, nom
-					FROM capacite_categorie
+					FROM choix_capacite
+					WHERE supprime = '0'";
+			if( $id !== FALSE ){
+				$sql .= " AND id = ?";
+				$params[] = $id;
+			}
+			if( $activeOnly ){
+				$sql .= " AND active = '1'";
+			}
+			$sql .= " ORDER BY nom";
+			return self::GetResultByName( $sql, $params );
+		}
+		
+		public static function GetChoixConnaissances( $id = FALSE, $activeOnly = TRUE ){
+			$params = array();
+			$sql = "SELECT id, nom
+					FROM choix_connaissance
+					WHERE supprime = '0'";
+			if( $id !== FALSE ){
+				$sql .= " AND id = ?";
+				$params[] = $id;
+			}
+			if( $activeOnly ){
+				$sql .= " AND active = '1'";
+			}
+			$sql .= " ORDER BY nom";
+			return self::GetResultByName( $sql, $params );
+		}
+		
+		public static function GetChoixPouvoirs( $id = FALSE, $activeOnly = TRUE ){
+			$params = array();
+			$sql = "SELECT id, nom
+					FROM choix_pouvoir
+					WHERE supprime = '0'";
+			if( $id !== FALSE ){
+				$sql .= " AND id = ?";
+				$params[] = $id;
+			}
+			if( $activeOnly ){
+				$sql .= " AND active = '1'";
+			}
+			$sql .= " ORDER BY nom";
+			return self::GetResultByName( $sql, $params );
+		}
+		
+		public static function GetChoixVoies( $id = FALSE, $activeOnly = TRUE ){
+			$params = array();
+			$sql = "SELECT id, nom
+					FROM choix_voie
 					WHERE supprime = '0'";
 			if( $id !== FALSE ){
 				$sql .= " AND id = ?";

@@ -31,6 +31,7 @@
 
 	require_once "./includes/entities/GenericEntity.php";
 	require_once "./includes/entities/Capacite.php";
+	require_once "./includes/entities/CapaciteRaciale.php";
 	require_once "./includes/entities/ChoixCapacite.php";
 	require_once "./includes/entities/CiteEtat.php";
 	require_once "./includes/entities/Connaissance.php";
@@ -53,7 +54,10 @@
 	require_once "./includes/services/Security.php";
 	
 	require_once "./includes/repositories/CapaciteRepository.php";
+	require_once "./includes/repositories/CapaciteRacialeRepository.php";
 	require_once "./includes/repositories/ChoixCapaciteRepository.php";
+	require_once "./includes/repositories/ChoixPouvoirRepository.php";
+	require_once "./includes/repositories/ChoixVoieRepository.php";
 	require_once "./includes/repositories/CiteEtatRepository.php";
 	require_once "./includes/repositories/ConnaissanceRepository.php";
 	require_once "./includes/repositories/CroyanceRepository.php";
