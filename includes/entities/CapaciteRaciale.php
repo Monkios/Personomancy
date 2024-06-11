@@ -5,7 +5,7 @@
 
 		public $choix_capacite_bonus_id = 0;
 		public $choix_connaissance_bonus_id = 0;
-		public $choix_pouvoir_bonus_id = 0;
+		public $choix_capacite_raciale_bonus_id = 0;
 		public $choix_voie_bonus_id = 0;
 	}
 ?>

@@ -22,13 +22,13 @@ DROP TABLE IF EXISTS `personnage_connaissance`;
 DROP TABLE IF EXISTS `personnage_journal`;
 DROP TABLE IF EXISTS `personnage_voie`;
 DROP TABLE IF EXISTS `personnage`;
-DROP TABLE IF EXISTS `choix_pouvoir_race_capacite`;
-DROP TABLE IF EXISTS `race_capacite`;
+DROP TABLE IF EXISTS `choix_capacite_raciale_capacite_raciale`;
+DROP TABLE IF EXISTS `capacite_raciale`;
 DROP TABLE IF EXISTS `choix_capacite_capacite`;
 DROP TABLE IF EXISTS `choix_capacite`;
 DROP TABLE IF EXISTS `choix_connaissance_connaissance`;
 DROP TABLE IF EXISTS `choix_connaissance`;
-DROP TABLE IF EXISTS `choix_pouvoir`;
+DROP TABLE IF EXISTS `choix_capacite_raciale`;
 DROP TABLE IF EXISTS `choix_voie_voie`;
 DROP TABLE IF EXISTS `choix_voie`;
 DROP TABLE IF EXISTS `connaissance`;
@@ -55,6 +55,25 @@ CREATE TABLE `capacite` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
+-- Structure de la table `capacite_raciale`
+--
+
+CREATE TABLE `capacite_raciale` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL DEFAULT '',
+  `description` text NOT NULL,
+  `cout` tinyint NOT NULL DEFAULT 0,
+  `race_id` int UNSIGNED NULL,
+  `choix_capacite_bonus_id` int UNSIGNED NULL,
+  `choix_connaissance_bonus_id` int UNSIGNED NULL,
+  `choix_capacite_raciale_bonus_id` int UNSIGNED NULL,
+  `choix_voie_bonus_id` int UNSIGNED NULL,
+  `active` tinyint NOT NULL DEFAULT 1,
+  `supprime` tinyint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
 -- Structure de la table `choix_capacite`
 --
 
@@ -73,7 +92,17 @@ CREATE TABLE `choix_capacite` (
 CREATE TABLE `choix_capacite_capacite` (
   `choix_capacite_id` int UNSIGNED NOT NULL,
   `capacite_id` int UNSIGNED NOT NULL,
-  UNIQUE KEY `id_sort` (`choix_capacite_id`,`capacite_id`)
+  UNIQUE KEY (`choix_capacite_id`,`capacite_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Structure de la table `choix_capacite_raciale_capacite_raciale`
+--
+
+CREATE TABLE `choix_capacite_raciale_capacite_raciale` (
+  `choix_capacite_raciale_id` int UNSIGNED NOT NULL,
+  `capacite_raciale_id` int UNSIGNED NOT NULL,
+  UNIQUE KEY (`choix_capacite_raciale_id`,`capacite_raciale_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
@@ -95,29 +124,19 @@ CREATE TABLE `choix_connaissance` (
 CREATE TABLE `choix_connaissance_connaissance` (
   `choix_connaissance_id` int UNSIGNED NOT NULL,
   `connaissance_id` int UNSIGNED NOT NULL,
-  UNIQUE KEY `id_sort` (`choix_connaissance_id`,`connaissance_id`)
+  UNIQUE KEY (`choix_connaissance_id`,`connaissance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
--- Structure de la table `choix_pouvoir`
+-- Structure de la table `choix_capacite_raciale`
 --
 
-CREATE TABLE `choix_pouvoir` (
+CREATE TABLE `choix_capacite_raciale` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `nom` varchar(100) NOT NULL DEFAULT '',
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
-
---
--- Structure de la table `choix_pouvoir_race_capacite`
---
-
-CREATE TABLE `choix_pouvoir_race_capacite` (
-  `choix_pouvoir_id` int UNSIGNED NOT NULL,
-  `race_capacite_id` int UNSIGNED NOT NULL,
-  UNIQUE KEY `id_sort` (`choix_pouvoir_id`,`race_capacite_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
@@ -139,7 +158,7 @@ CREATE TABLE `choix_voie` (
 CREATE TABLE `choix_voie_voie` (
   `choix_voie_id` int UNSIGNED NOT NULL,
   `voie_id` int UNSIGNED NOT NULL,
-  UNIQUE KEY `id_sort` (`choix_voie_id`,`voie_id`)
+  UNIQUE KEY (`choix_voie_id`,`voie_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
@@ -289,25 +308,6 @@ CREATE TABLE `race` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
--- Structure de la table `race_capacite`
---
-
-CREATE TABLE `race_capacite` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `nom` varchar(100) NOT NULL DEFAULT '',
-  `description` text NOT NULL,
-  `cout` tinyint NOT NULL DEFAULT 0,
-  `race_id` int UNSIGNED NULL,
-  `choix_capacite_bonus_id` int UNSIGNED NULL,
-  `choix_connaissance_bonus_id` int UNSIGNED NULL,
-  `choix_pouvoir_bonus_id` int UNSIGNED NULL,
-  `choix_voie_bonus_id` int UNSIGNED NULL,
-  `active` tinyint NOT NULL DEFAULT 1,
-  `supprime` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
-
---
 -- Structure de la table `voie`
 --
 
@@ -328,6 +328,16 @@ CREATE TABLE `voie` (
 
 ALTER TABLE `capacite`
   ADD FOREIGN KEY (`voie_id`) REFERENCES `voie` (`id`);
+ALTER TABLE `capacite_raciale`
+  ADD FOREIGN KEY (`race_id`) REFERENCES `race` (`id`);
+ALTER TABLE `capacite_raciale`
+  ADD FOREIGN KEY (`choix_capacite_bonus_id`) REFERENCES `choix_capacite` (`id`);
+ALTER TABLE `capacite_raciale`
+  ADD FOREIGN KEY (`choix_connaissance_bonus_id`) REFERENCES `choix_connaissance` (`id`);
+ALTER TABLE `capacite_raciale`
+  ADD FOREIGN KEY (`choix_capacite_raciale_bonus_id`) REFERENCES `choix_capacite_raciale` (`id`);
+ALTER TABLE `capacite_raciale`
+  ADD FOREIGN KEY (`choix_voie_bonus_id`) REFERENCES `choix_voie` (`id`);
 ALTER TABLE `choix_capacite_capacite`
   ADD FOREIGN KEY (`choix_capacite_id`) REFERENCES `choix_capacite` (`id`);
 ALTER TABLE `choix_capacite_capacite`
@@ -336,10 +346,10 @@ ALTER TABLE `choix_connaissance_connaissance`
   ADD FOREIGN KEY (`choix_connaissance_id`) REFERENCES `choix_connaissance` (`id`);
 ALTER TABLE `choix_connaissance_connaissance`
   ADD FOREIGN KEY (`connaissance_id`) REFERENCES `connaissance` (`id`);
-ALTER TABLE `choix_pouvoir_race_capacite`
-  ADD FOREIGN KEY (`choix_pouvoir_id`) REFERENCES `choix_pouvoir` (`id`);
-ALTER TABLE `choix_pouvoir_race_capacite`
-  ADD FOREIGN KEY (`race_capacite_id`) REFERENCES `race_capacite` (`id`);
+ALTER TABLE `choix_capacite_raciale_capacite_raciale`
+  ADD FOREIGN KEY (`choix_capacite_raciale_id`) REFERENCES `choix_capacite_raciale` (`id`);
+ALTER TABLE `choix_capacite_raciale_capacite_raciale`
+  ADD FOREIGN KEY (`capacite_raciale_id`) REFERENCES `capacite_raciale` (`id`);
 ALTER TABLE `choix_voie_voie`
   ADD FOREIGN KEY (`choix_voie_id`) REFERENCES `choix_voie` (`id`);
 ALTER TABLE `choix_voie_voie`
@@ -374,16 +384,6 @@ ALTER TABLE `personnage_voie`
   ADD FOREIGN KEY (`personnage_id`) REFERENCES `personnage` (`id`);
 ALTER TABLE `personnage_voie`
   ADD FOREIGN KEY (`voie_id`) REFERENCES `voie` (`id`);
-ALTER TABLE `race_capacite`
-  ADD FOREIGN KEY (`race_id`) REFERENCES `race` (`id`);
-ALTER TABLE `race_capacite`
-  ADD FOREIGN KEY (`choix_capacite_bonus_id`) REFERENCES `choix_capacite` (`id`);
-ALTER TABLE `race_capacite`
-  ADD FOREIGN KEY (`choix_connaissance_bonus_id`) REFERENCES `choix_connaissance` (`id`);
-ALTER TABLE `race_capacite`
-  ADD FOREIGN KEY (`choix_pouvoir_bonus_id`) REFERENCES `choix_pouvoir` (`id`);
-ALTER TABLE `race_capacite`
-  ADD FOREIGN KEY (`choix_voie_bonus_id`) REFERENCES `choix_voie` (`id`);
 
 COMMIT;
 

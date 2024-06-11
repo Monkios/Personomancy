@@ -86,7 +86,10 @@
 								<li><a href="?s=admin&a=listCapacitesRaciales">Gestion des capacités raciales</a></li>
 								<li>
 									<ul>
-										<li><a href="?s=admin&a=listChoixCapacites">Gestion des listes de capacités</a>(TODO)</li>
+										<li><a href="?s=admin&a=listChoixCapacites">Gestion des listes de capacités bonus</a></li>
+										<li><a href="?s=admin&a=listChoixConnaissances">Gestion des listes de connaissances bonus</a></li>
+										<li><a href="?s=admin&a=listChoixCapacitesRaciales">Gestion des listes de capacités raciales bonus</a></li>
+										<li><a href="?s=admin&a=listChoixVoies">Gestion des listes de voies bonus</a></li>
 									</ul>
 								</li>
 							</ul>

@@ -232,15 +232,15 @@
 						}
 					}
 					
-					// Sauvegarde des selections de choix de pouvoirs
-					if( $_GET["st"] == "choix_pouvoirs" && isset( $_POST["perso_choix_pouvoirs"] ) && count( $_POST["perso_choix_pouvoirs"] ) > 0 ){
+					// Sauvegarde des selections de choix de capacites raciales
+					if( $_GET["st"] == "choix_capacites_raciales" && isset( $_POST["perso_choix_capacites_raciales"] ) && count( $_POST["perso_choix_capacites_raciales"] ) > 0 ){
 						if( $personnage->pc_raciales == 0 ){
 							// Bouclera sur chaque liste mais ne s'arretera pas sur celles qui ne retournent rien
-							foreach( $_POST["perso_choix_pouvoirs"] as $choix_pouvoirs_id => $choix_pouvoirs_pouvoir ){
-								if( is_numeric( $choix_pouvoirs_id )
-										&& array_key_exists( $choix_pouvoirs_id, $list_choix_pouvoirs )
-										&& array_key_exists( $choix_pouvoirs_pouvoir, $list_choix_pouvoirs_pouvoirs[ $choix_pouvoirs_id ] ) ){
-									$personnage = $char_sheet->BuyChoixPouvoir( $personnage->id, $choix_pouvoirs_id, $choix_pouvoirs_pouvoir );
+							foreach( $_POST["perso_choix_capacites_raciales"] as $choix_capacites_raciales_id => $choix_capacites_raciales_capacite_raciale ){
+								if( is_numeric( $choix_capacites_raciales_id )
+										&& array_key_exists( $choix_capacites_raciales_id, $list_choix_capacites_raciales )
+										&& array_key_exists( $choix_capacites_raciales_capacite_raciale, $list_choix_capacites_raciales_capacites_raciales[ $choix_capacites_raciales_id ] ) ){
+									$personnage = $char_sheet->BuyChoixCapaciteRaciale( $personnage->id, $choix_capacites_raciales_id, $choix_capacites_raciales_capacite_raciale );
 							
 									if( $personnage == FALSE ){
 										Message::Erreur( "Une erreur s'est produite lors de la sélection de capacité." );

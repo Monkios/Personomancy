@@ -2,7 +2,7 @@
 	class ChoixCapaciteRepository implements IRepository {
 		public function Find( $id ){
 			if( !is_numeric( $id ) ){
-				Message::Fatale( "Bad choix capacit� entity ID." );
+				Message::Fatale( "Bad choix capacité entity ID." );
 			}
 			
 			$db = new Database();
@@ -59,14 +59,14 @@
 			$capacite_repository = new CapaciteRepository();
 			
 			$db = new Database();
-			$sql = "SELECT ccc.id_capacite
-					FROM capacite_choix_capacite ccc
-							LEFT JOIN capacite c ON ccc.id_capacite = c.id
-					WHERE c.supprime = '0' AND ccc.id_choix_capacite = ?
+			$sql = "SELECT ccc.capacite_id
+					FROM choix_capacite_capacite ccc
+							LEFT JOIN capacite c ON ccc.capacite_id = c.id
+					WHERE c.supprime = '0' AND ccc.choix_capacite_id = ?
 					ORDER BY c.nom";
 			$db->Query( $sql, array( $choix_capacite->id ) );
 			while( $result = $db->GetResult() ){
-				$capacites[ $result[ "id_capacite" ] ] = $capacite_repository->Find( $result[ "id_capacite" ] );
+				$capacites[ $result[ "capacite_id" ] ] = $capacite_repository->Find( $result[ "capacite_id" ] );
 			}
 			
 			return $capacites;
@@ -77,7 +77,7 @@
 			
 			if( !isset( $capacites[ $capaciteId ] ) ){
 				$db = new Database();
-				$sql = "INSERT INTO capacite_choix_capacite ( id_choix_capacite, id_capacite )
+				$sql = "INSERT INTO choix_capacite_capacite ( choix_capacite_id, capacite_id )
 						VALUE ( ?, ? )";
 				$params = array(
 					$choix_capacite->id,
@@ -95,8 +95,8 @@
 			
 			if( isset( $capacites[ $capaciteId ] ) ){
 				$db = new Database();
-				$sql = "DELETE FROM capacite_choix_capacite
-						WHERE id_choix_capacite = ? AND id_capacite = ?";
+				$sql = "DELETE FROM choix_capacite_capacite
+						WHERE choix_capacite_id = ? AND capacite_id = ?";
 				$params = array(
 					$choix_capacite->id,
 					$capaciteId

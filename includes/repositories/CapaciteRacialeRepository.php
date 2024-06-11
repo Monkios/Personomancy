@@ -7,8 +7,8 @@
 			
 			$db = new Database();
 			$sql = "SELECT nom, description, active,
-						cout, race_id, choix_capacite_bonus_id, choix_connaissance_bonus_id, choix_pouvoir_bonus_id, choix_voie_bonus_id
-					FROM race_capacite
+						cout, race_id, choix_capacite_bonus_id, choix_connaissance_bonus_id, choix_capacite_raciale_bonus_id, choix_voie_bonus_id
+					FROM capacite_raciale
 					WHERE id = ? AND supprime = '0'";
 			$db->Query( $sql, array( $id ) );
 			if( $result = $db->GetResult() ){
@@ -24,8 +24,8 @@
 				$entity->race_id = $result[ "race_id" ];
 
 				$entity->choix_capacite_bonus_id = $result[ "choix_capacite_bonus_id" ];
-				$entity->choix_connaissance_bonus_id = $result[ "choix_capacite_bonus_id" ];
-				$entity->choix_pouvoir_bonus_id = $result[ "choix_pouvoir_bonus_id" ];
+				$entity->choix_connaissance_bonus_id = $result[ "choix_connaissance_bonus_id" ];
+				$entity->choix_capacite_raciale_bonus_id = $result[ "choix_capacite_raciale_bonus_id" ];
 				$entity->choix_voie_bonus_id = $result[ "choix_voie_bonus_id" ];
 
 				return $entity;
@@ -40,7 +40,7 @@
 			}
 
 			$db = new Database();
-			$sql = "INSERT INTO race_capacite ( nom, description, race_id )
+			$sql = "INSERT INTO capacite_raciale ( nom, description, race_id )
 					VALUES ( ?, ?, ? )";
 			
 			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "description" ], $opts[ "id_race" ] ) );
@@ -51,7 +51,7 @@
 		
 		public function Save( $capacite_raciale ){
 			$db = new Database();
-			$sql = "UPDATE race_capacite SET
+			$sql = "UPDATE capacite_raciale SET
 					nom = ?,
 					description = ?,
 					active = ?,
@@ -59,7 +59,7 @@
 					race_id = ?,
 					choix_capacite_bonus_id = ?,
 					choix_connaissance_bonus_id = ?,
-					choix_pouvoir_bonus_id = ?,
+					choix_capacite_raciale_bonus_id = ?,
 					choix_voie_bonus_id = ?
 				WHERE supprime = '0' AND id = ?";
 			$params = array(
@@ -70,7 +70,7 @@
 					$capacite_raciale->race_id,
 					$capacite_raciale->choix_capacite_bonus_id,
 					$capacite_raciale->choix_connaissance_bonus_id,
-					$capacite_raciale->choix_pouvoir_bonus_id,
+					$capacite_raciale->choix_capacite_raciale_bonus_id,
 					$capacite_raciale->choix_voie_bonus_id,
 					$capacite_raciale->id
 			);

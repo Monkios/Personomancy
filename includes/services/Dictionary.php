@@ -43,7 +43,7 @@
 		public static function GetCapacitesRaciales( $id = FALSE, $activeOnly = TRUE ){
 			$params = array();
 			$sql = "SELECT id, nom
-					FROM race_capacite
+					FROM capacite_raciale
 					WHERE supprime = '0'";
 			if( $id !== FALSE ){
 				$sql .= " AND id = ?";
@@ -88,10 +88,10 @@
 			return self::GetResultByName( $sql, $params );
 		}
 		
-		public static function GetChoixPouvoirs( $id = FALSE, $activeOnly = TRUE ){
+		public static function GetChoixCapacitesRaciales( $id = FALSE, $activeOnly = TRUE ){
 			$params = array();
 			$sql = "SELECT id, nom
-					FROM choix_pouvoir
+					FROM choix_capacite_raciale
 					WHERE supprime = '0'";
 			if( $id !== FALSE ){
 				$sql .= " AND id = ?";

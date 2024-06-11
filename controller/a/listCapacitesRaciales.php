@@ -8,9 +8,9 @@
 	}
 	
 	if( isset( $_POST["add_capacite_raciale"] ) ){
-		$capaciteRaciale = $capacite_raciale_repository->Create( array( "nom" => Security::FilterInput( $_POST["capacite_raciale_nom"] ), $_POST["capacite_raciale_race"] ) );
+		$capacite_raciale = $capacite_raciale_repository->Create( array( "nom" => Security::FilterInput( $_POST["capacite_raciale_nom"] ), $_POST["capacite_raciale_race"] ) );
 		
-		header( "Location: ?s=admin&a=updateCapaciteRaciale&i=" . $capaciteRaciale->id );
+		header( "Location: ?s=admin&a=updateCapaciteRaciale&i=" . $capacite_raciale->id );
 		die();
 	}
 	

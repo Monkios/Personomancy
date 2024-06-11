@@ -2,16 +2,16 @@
 	class ChoixVoieRepository implements IRepository {
 		public function Find( $id ){
 			if( !is_numeric( $id ) ){
-				Message::Fatale( "Bad choix capacit� entity ID." );
+				Message::Fatale( "Bad choix voie entity ID." );
 			}
 			
 			$db = new Database();
 			$sql = "SELECT nom, active
-					FROM choix_capacite 
+					FROM choix_voie 
 						WHERE id = ? AND supprime = '0'";
 			$db->Query( $sql, array( $id ) );
 			if( $result = $db->GetResult() ){
-				$entity = new ChoixCapacite();
+				$entity = new ChoixVoie();
 				$entity->id = $id;
 
 				$entity->nom = $result[ "nom" ];
@@ -25,7 +25,7 @@
 		
 		public function Create( $opts = array() ){
 			$db = new Database();
-			$sql = "INSERT INTO choix_capacite ( nom )
+			$sql = "INSERT INTO choix_voie ( nom )
 					VALUES ( ? )";
 			
 			$db->Query( $sql, array( $opts[ "nom" ] ) );
@@ -34,54 +34,54 @@
 			return $this->Find( $insert_id );
 		}
 		
-		public function Save( $choix_capacite ){
+		public function Save( $choix_voie ){
 			$db = new Database();
-			$sql = "UPDATE choix_capacite SET
+			$sql = "UPDATE choix_voie SET
 					nom = ?,
 					active = ?
 				WHERE supprime = '0' AND id = ?";
 			$params = array(
-					$choix_capacite->nom,
-					$choix_capacite->active ? 1 : 0,
-					$choix_capacite->id
+					$choix_voie->nom,
+					$choix_voie->active ? 1 : 0,
+					$choix_voie->id
 			);
 			
 			$db->Query( $sql, $params );
-			$choix_capacite = $this->Find( $choix_capacite->id );
+			$choix_voie = $this->Find( $choix_voie->id );
 			
-			return $choix_capacite != FALSE;
+			return $choix_voie != FALSE;
 		}
 		
 		public function Delete( $id ){ die( "Not implemented exception." ); }
 		
-		public function GetCapacites( ChoixCapacite $choix_capacite ){
-			$capacites = array();
-			$capacite_repository = new CapaciteRepository();
+		public function GetVoies( ChoixVoie $choix_voie ){
+			$voies = array();
+			$voie_repository = new VoieRepository();
 			
 			$db = new Database();
-			$sql = "SELECT ccc.id_capacite
-					FROM capacite_choix_capacite ccc
-							LEFT JOIN capacite c ON ccc.id_capacite = c.id
-					WHERE c.supprime = '0' AND ccc.id_choix_capacite = ?
+			$sql = "SELECT ccc.voie_id
+					FROM choix_voie_voie ccc
+							LEFT JOIN voie c ON ccc.voie_id = c.id
+					WHERE c.supprime = '0' AND ccc.choix_voie_id = ?
 					ORDER BY c.nom";
-			$db->Query( $sql, array( $choix_capacite->id ) );
+			$db->Query( $sql, array( $choix_voie->id ) );
 			while( $result = $db->GetResult() ){
-				$capacites[ $result[ "id_capacite" ] ] = $capacite_repository->Find( $result[ "id_capacite" ] );
+				$voies[ $result[ "voie_id" ] ] = $voie_repository->Find( $result[ "voie_id" ] );
 			}
 			
-			return $capacites;
+			return $voies;
 		}
 		
-		public function AddCapacite( ChoixCapacite $choix_capacite, $capaciteId ){
-			$capacites = $this->GetCapacites( $choix_capacite );
+		public function AddVoie( ChoixVoie $choix_voie, $voieId ){
+			$voies = $this->GetVoies( $choix_voie );
 			
-			if( !isset( $capacites[ $capaciteId ] ) ){
+			if( !isset( $voies[ $voieId ] ) ){
 				$db = new Database();
-				$sql = "INSERT INTO capacite_choix_capacite ( id_choix_capacite, id_capacite )
+				$sql = "INSERT INTO choix_voie_voie ( choix_voie_id, voie_id )
 						VALUE ( ?, ? )";
 				$params = array(
-					$choix_capacite->id,
-					$capaciteId
+					$choix_voie->id,
+					$voieId
 				);
 				
 				$db->Query( $sql, $params );
@@ -90,16 +90,16 @@
 			return FALSE;
 		}
 		
-		public function RemoveCapacite( ChoixCapacite $choix_capacite, $capaciteId ){
-			$capacites = $this->GetCapacites( $choix_capacite );
+		public function RemoveVoie( ChoixVoie $choix_voie, $voieId ){
+			$voies = $this->GetVoies( $choix_voie );
 			
-			if( isset( $capacites[ $capaciteId ] ) ){
+			if( isset( $voies[ $voieId ] ) ){
 				$db = new Database();
-				$sql = "DELETE FROM capacite_choix_capacite
-						WHERE id_choix_capacite = ? AND id_capacite = ?";
+				$sql = "DELETE FROM choix_voie_voie
+						WHERE choix_voie_id = ? AND voie_id = ?";
 				$params = array(
-					$choix_capacite->id,
-					$capaciteId
+					$choix_voie->id,
+					$voieId
 				);
 				
 				$db->Query( $sql, $params );
