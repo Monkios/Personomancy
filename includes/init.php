@@ -39,7 +39,6 @@
 	require_once "./includes/entities/CiteEtat.php";
 	require_once "./includes/entities/Connaissance.php";
 	require_once "./includes/entities/Croyance.php";
-	require_once "./includes/entities/PersonnagePartiel.php";
 	require_once "./includes/entities/Personnage.php";
 	require_once "./includes/entities/Race.php";
 	require_once "./includes/entities/Voie.php";

@@ -18,6 +18,11 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `personnage_capacite`;
+DROP TABLE IF EXISTS `personnage_capacite_raciale`;
+DROP TABLE IF EXISTS `personnage_choix_capacite`;
+DROP TABLE IF EXISTS `personnage_choix_capacite_raciale`;
+DROP TABLE IF EXISTS `personnage_choix_connaissance`;
+DROP TABLE IF EXISTS `personnage_choix_voie`;
 DROP TABLE IF EXISTS `personnage_connaissance`;
 DROP TABLE IF EXISTS `personnage_journal`;
 DROP TABLE IF EXISTS `personnage_voie`;
@@ -52,7 +57,7 @@ CREATE TABLE `capacite` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `capacite_raciale`
@@ -71,7 +76,7 @@ CREATE TABLE `capacite_raciale` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `choix_capacite`
@@ -83,7 +88,7 @@ CREATE TABLE `choix_capacite` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `choix_capacite_capacite`
@@ -93,7 +98,7 @@ CREATE TABLE `choix_capacite_capacite` (
   `choix_capacite_id` int UNSIGNED NOT NULL,
   `capacite_id` int UNSIGNED NOT NULL,
   UNIQUE KEY (`choix_capacite_id`,`capacite_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `choix_capacite_raciale_capacite_raciale`
@@ -103,7 +108,7 @@ CREATE TABLE `choix_capacite_raciale_capacite_raciale` (
   `choix_capacite_raciale_id` int UNSIGNED NOT NULL,
   `capacite_raciale_id` int UNSIGNED NOT NULL,
   UNIQUE KEY (`choix_capacite_raciale_id`,`capacite_raciale_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `choix_connaissance`
@@ -115,7 +120,7 @@ CREATE TABLE `choix_connaissance` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `choix_connaissance_connaissance`
@@ -125,7 +130,7 @@ CREATE TABLE `choix_connaissance_connaissance` (
   `choix_connaissance_id` int UNSIGNED NOT NULL,
   `connaissance_id` int UNSIGNED NOT NULL,
   UNIQUE KEY (`choix_connaissance_id`,`connaissance_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `choix_capacite_raciale`
@@ -137,7 +142,7 @@ CREATE TABLE `choix_capacite_raciale` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `choix_voie`
@@ -149,7 +154,7 @@ CREATE TABLE `choix_voie` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `choix_voie_voie`
@@ -159,7 +164,7 @@ CREATE TABLE `choix_voie_voie` (
   `choix_voie_id` int UNSIGNED NOT NULL,
   `voie_id` int UNSIGNED NOT NULL,
   UNIQUE KEY (`choix_voie_id`,`voie_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `cite_etat`
@@ -172,7 +177,7 @@ CREATE TABLE `cite_etat` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `connaissance`
@@ -189,7 +194,7 @@ CREATE TABLE `connaissance` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `croyance`
@@ -202,7 +207,7 @@ CREATE TABLE `croyance` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `joueur`
@@ -221,7 +226,7 @@ CREATE TABLE `joueur` (
   `date_insert` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_modify` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `personnage`
@@ -243,7 +248,7 @@ CREATE TABLE `personnage` (
   `commentaire` text NOT NULL,
   `notes` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `personnage_capacite`
@@ -254,7 +259,57 @@ CREATE TABLE `personnage_capacite` (
   `capacite_id` int UNSIGNED NOT NULL,
   `niveau` enum('0','1','2','3') NOT NULL DEFAULT '0',
   UNIQUE KEY (`personnage_id`,`capacite_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
+
+--
+-- Structure de la table `personnage_capacite_raciale`
+--
+
+CREATE TABLE `personnage_capacite_raciale` (
+  `personnage_id` int UNSIGNED NOT NULL,
+  `capacite_raciale_id` int UNSIGNED NOT NULL,
+  UNIQUE KEY (`personnage_id`,`capacite_raciale_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
+
+--
+-- Structure de la table `personnage_choix_capacite`
+--
+
+CREATE TABLE `personnage_choix_capacite` (
+  `personnage_id` int UNSIGNED NOT NULL,
+  `choix_capacite_id` int UNSIGNED NOT NULL,
+  UNIQUE KEY (`personnage_id`,`choix_capacite_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
+
+--
+-- Structure de la table `personnage_choix_capacite_raciale`
+--
+
+CREATE TABLE `personnage_choix_capacite_raciale` (
+  `personnage_id` int UNSIGNED NOT NULL,
+  `choix_capacite_raciale_id` int UNSIGNED NOT NULL,
+  UNIQUE KEY (`personnage_id`,`choix_capacite_raciale_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
+
+--
+-- Structure de la table `personnage_choix_connaissance`
+--
+
+CREATE TABLE `personnage_choix_connaissance` (
+  `personnage_id` int UNSIGNED NOT NULL,
+  `choix_connaissance_id` int UNSIGNED NOT NULL,
+  UNIQUE KEY (`personnage_id`,`choix_connaissance_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
+
+--
+-- Structure de la table `personnage_choix_voie`
+--
+
+CREATE TABLE `personnage_choix_voie` (
+  `personnage_id` int UNSIGNED NOT NULL,
+  `choix_voie_id` int UNSIGNED NOT NULL,
+  UNIQUE KEY (`personnage_id`,`choix_voie_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `personnage_connaissance`
@@ -264,7 +319,7 @@ CREATE TABLE `personnage_connaissance` (
   `personnage_id` int UNSIGNED NOT NULL,
   `connaissance_id` int UNSIGNED NOT NULL,
   UNIQUE KEY (`personnage_id`,`connaissance_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `personnage_journal`
@@ -282,7 +337,7 @@ CREATE TABLE `personnage_journal` (
   `backtrack` tinyint NOT NULL DEFAULT 1,
   `joueur_id` int UNSIGNED NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `personnage_voie`
@@ -292,7 +347,7 @@ CREATE TABLE `personnage_voie` (
   `personnage_id` int UNSIGNED NOT NULL,
   `voie_id` int UNSIGNED NOT NULL,
   UNIQUE KEY (`personnage_id`,`voie_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `race`
@@ -305,7 +360,7 @@ CREATE TABLE `race` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 --
 -- Structure de la table `voie`
@@ -318,7 +373,7 @@ CREATE TABLE `voie` (
   `active` tinyint NOT NULL DEFAULT 1,
   `supprime` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -372,6 +427,26 @@ ALTER TABLE `personnage_capacite`
   ADD FOREIGN KEY (`personnage_id`) REFERENCES `personnage` (`id`);
 ALTER TABLE `personnage_capacite`
   ADD FOREIGN KEY (`capacite_id`) REFERENCES `capacite` (`id`);
+ALTER TABLE `personnage_capacite_raciale`
+  ADD FOREIGN KEY (`personnage_id`) REFERENCES `personnage` (`id`);
+ALTER TABLE `personnage_capacite_raciale`
+  ADD FOREIGN KEY (`capacite_raciale_id`) REFERENCES `capacite_raciale` (`id`);
+ALTER TABLE `personnage_choix_capacite`
+  ADD FOREIGN KEY (`personnage_id`) REFERENCES `personnage` (`id`);
+ALTER TABLE `personnage_choix_capacite`
+  ADD FOREIGN KEY (`choix_capacite_id`) REFERENCES `choix_capacite` (`id`);
+ALTER TABLE `personnage_choix_capacite_raciale`
+  ADD FOREIGN KEY (`personnage_id`) REFERENCES `personnage` (`id`);
+ALTER TABLE `personnage_choix_capacite_raciale`
+  ADD FOREIGN KEY (`choix_capacite_raciale_id`) REFERENCES `choix_capacite_raciale` (`id`);
+ALTER TABLE `personnage_choix_connaissance`
+  ADD FOREIGN KEY (`personnage_id`) REFERENCES `personnage` (`id`);
+ALTER TABLE `personnage_choix_connaissance`
+  ADD FOREIGN KEY (`choix_connaissance_id`) REFERENCES `choix_connaissance` (`id`);
+ALTER TABLE `personnage_choix_voie`
+  ADD FOREIGN KEY (`personnage_id`) REFERENCES `personnage` (`id`);
+ALTER TABLE `personnage_choix_voie`
+  ADD FOREIGN KEY (`choix_voie_id`) REFERENCES `choix_voie` (`id`);
 ALTER TABLE `personnage_connaissance`
   ADD FOREIGN KEY (`personnage_id`) REFERENCES `personnage` (`id`);
 ALTER TABLE `personnage_connaissance`

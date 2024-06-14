@@ -71,6 +71,15 @@
 			
 			return $capacites;
 		}
+
+		public function GetCapacitesByChoixId( $choix_id ){
+			$choix_capacite = $this->Find( $choix_id );
+			if( $choix_capacite == FALSE){
+				Message::Erreur( "Le choix de capacité doit être existant pour récupérer la liste des capacités." );
+				return FALSE;
+			}
+			return $this->GetCapacites( $choix_capacite );
+		}
 		
 		public function AddCapacite( ChoixCapacite $choix_capacite, $capaciteId ){
 			$capacites = $this->GetCapacites( $choix_capacite );

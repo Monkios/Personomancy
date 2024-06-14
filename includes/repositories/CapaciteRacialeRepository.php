@@ -43,7 +43,7 @@
 			$sql = "INSERT INTO capacite_raciale ( nom, description, race_id )
 					VALUES ( ?, ?, ? )";
 			
-			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "description" ], $opts[ "id_race" ] ) );
+			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "description" ], $opts[ "race_id" ] ) );
 			
 			$insert_id = $db->GetInsertId();
 			return $this->Find( $insert_id );

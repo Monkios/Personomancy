@@ -18,8 +18,6 @@
 				$entity->description = $result[ "description" ];
 				$entity->active = $result[ "active" ] == 1;
 
-				//$entity->list_capacites_raciales = $this->FetchCapacitesRaciales( $id );
-
 				return $entity;
 			}
 			
@@ -60,15 +58,24 @@
 			$db->Query( $sql, $params );
 			$race = $this->Find( $race->id );
 			
-			/*foreach( $race->list_capacites_raciales as $id => $capacite_raciale ){
-				if( $capacite_raciale[ 1 ] != $capacites_raciales[ $id ][ 1 ] ){
-					$this->UpdateCoutCR( $race->id, $id, $capacites_raciales[ $id ][ 1 ] );
-				}
-			}*/
-			
 			return $race != FALSE;
 		}
 		
-		public function Delete( $id_race ){ die( "NotImplementedException()" ); }
+		public function Delete( $race_id ){ die( "NotImplementedException()" ); }
+
+		public function GetCapacitesRacialesByRace( $race_id ){
+			$list_capacites_raciales = array();
+			
+			$db = new Database();
+			$sql = "SELECT cr.id, cr.nom, cr.cout
+					FROM capacite_raciale cr
+					WHERE cr.race_id = ? AND cr.active = '1' AND cr.supprime = '0'
+					ORDER BY nom";
+			$db->Query( $sql, array( $race_id ) );
+			while( $result = $db->GetResult() ){
+				$list_capacites_raciales[ $result[ "id" ] ] = array( $result[ "nom" ], $result[ "cout" ] );
+			}
+			return $list_capacites_raciales;
+		}
 	}
 ?>

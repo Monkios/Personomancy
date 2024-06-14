@@ -6,6 +6,20 @@
 				<input type="text" name="character_name" id="character_name" value="<?php echo $character_name; ?>" />
 			</div>
 			
+			
+			<div>
+				<label for="character_race">Race :</label>
+				<select type="text" name="character_race" id="character_race">
+					<option>== Veuillez choisir une race ==</option>
+<?php
+	foreach( $list_races as $id => $nom ){
+?>
+					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_race ) ? " selected='selected'" : ""; ?>><?php echo $nom; ?></option>
+<?php
+	}
+?>
+				</select>
+			</div>
 			<div>
 				<label for="character_cite_etat">Cité-État :</label>
 				<select name="character_cite_etat" id="character_cite_etat">
@@ -27,19 +41,6 @@
 	foreach( $list_croyances as $id => $croyance ){
 ?>
 					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_croyance ) ? " selected='selected'" : ""; ?>><?php echo $croyance[ "nom" ]; ?></option>
-<?php
-	}
-?>
-				</select>
-			</div>
-			<div>
-				<label for="character_race">Race :</label>
-				<select type="text" name="character_race" id="character_race">
-					<option>== Veuillez choisir une race ==</option>
-<?php
-	foreach( $list_races as $id => $nom ){
-?>
-					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_race ) ? " selected='selected'" : ""; ?>><?php echo $nom; ?></option>
 <?php
 	}
 ?>

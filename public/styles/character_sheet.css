@@ -45,7 +45,7 @@
 	#fiche_perso .fiche_regroupement .fiche_element input,
 	#fiche_perso .fiche_regroupement .fiche_element select,
 	#fiche_perso .fiche_regroupement .fiche_element .as_input {
-		width: 295px;
+		width: 288px;
 		margin-right: 10px;
 		display: inline-block;
 		border-bottom: 1px solid #333;
@@ -58,7 +58,7 @@
 	}
 	
 	#fiche_perso .fiche_regroupement .fiche_element input {
-		width: 290px;
+		width: 280px;
 	}
 	
 		#fiche_perso .fiche_regroupement.fiche_regroupement_base {

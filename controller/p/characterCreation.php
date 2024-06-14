@@ -26,6 +26,12 @@
 		} else {
 			$character_name = Security::FilterInput( $_POST['character_name'] );
 		}
+		if( empty( $_POST['character_race'] ) || !is_numeric( $_POST['character_race'] ) || !array_key_exists( $_POST['character_race'], $list_races ) ){
+			$erreur = true;
+			Message::Erreur( "Vous n'avez choisit aucune race pour ce personnage." );
+		} else {
+			$character_race = $_POST['character_race'];
+		}
 		if( empty( $_POST['character_cite_etat'] ) || !is_numeric( $_POST['character_cite_etat'] ) || !array_key_exists( $_POST['character_cite_etat'], $list_cites_etats ) ){
 			$erreur = true;
 			Message::Erreur( "Vous n'avez choisit aucune cité-État pour ce personnage." );
@@ -38,18 +44,12 @@
 		} else {
 			$character_croyance = $_POST['character_croyance'];
 		}
-		if( empty( $_POST['character_race'] ) || !is_numeric( $_POST['character_race'] ) || !array_key_exists( $_POST['character_race'], $list_races ) ){
-			$erreur = true;
-			Message::Erreur( "Vous n'avez choisit aucune race pour ce personnage." );
-		} else {
-			$character_race = $_POST['character_race'];
-		}
 		
 		// Si aucune erreur n'est trouvee, lance la creation du personnage
 		if( !$erreur ){
 			// Inserer le nouveau personnage
 			$sheet = new CharacterSheet();
-			$character = $sheet->Create( $joueur->Id, $character_name, $character_cite_etat, $character_croyance, $character_race );
+			$character = $sheet->Create( $joueur->Id, $character_name, $character_race, $character_cite_etat, $character_croyance );
 			if( $character !== FALSE ){
 				Message::Notice( "Création du personnage : ". $character_name );
 				

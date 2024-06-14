@@ -39,6 +39,16 @@
 			$sql .= " ORDER BY nom";
 			return self::GetResultByName( $sql, $params );
 		}
+
+		public static function GetCapacitesByVoie( $voie_id ){
+			$params = array();
+			$sql = "SELECT id, nom
+					FROM capacite
+					WHERE supprime = '0' AND active = '1' AND voie_id = ?
+					ORDER BY nom";
+			$params[] = $voie_id;
+			return self::GetResultByName( $sql, $params );
+		}
 		
 		public static function GetCapacitesRaciales( $id = FALSE, $activeOnly = TRUE ){
 			$params = array();
@@ -148,7 +158,7 @@
 			if( $activeOnly ){
 				$sql .= " AND active = '1'";
 			}
-			$sql .= " ORDER BY nom";
+			$sql .= " ORDER BY prereq_voie_primaire, cout, nom";
 			return self::GetResultByName( $sql, $params );
 		}
 		

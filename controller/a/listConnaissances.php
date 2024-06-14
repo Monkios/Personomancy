@@ -4,7 +4,7 @@
 	
 	$connaissance_repository = new ConnaissanceRepository();
 	foreach( $list_connaissances as $id => $nom ){
-		$list_connaissances[ $id ] = $connaissance_repository->Find( $id );
+		$list_connaissances[ $id ] = $connaissance_repository->Find( $id, "cout" );
 	}
 	
 	if( isset( $_POST["add_connaissance"] ) ){

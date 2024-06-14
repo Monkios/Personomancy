@@ -71,6 +71,15 @@
 			
 			return $capacites_raciales;
 		}
+
+		public function GetCapacitesRacialesByChoixId( $choix_id ){
+			$choix_capacite_raciale = $this->Find( $choix_id );
+			if( $choix_capacite_raciale == FALSE){
+				Message::Erreur( "Le choix de capacité doit être existant pour récupérer la liste des capacités." );
+				return FALSE;
+			}
+			return $this->GetCapacitesRaciales( $choix_capacite_raciale );
+		}
 		
 		public function AddCapaciteRaciale( CapaciteRaciale $choix_capacite_raciale, $capacite_racialeId ){
 			$capacites_raciales = $this->GetCapacitesRaciales( $choix_capacite_raciale );

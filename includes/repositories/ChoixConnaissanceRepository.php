@@ -71,6 +71,15 @@
 			
 			return $connaissances;
 		}
+
+		public function GetConnaissancesByChoixId( $choix_id ){
+			$choix_connaissance = $this->Find( $choix_id );
+			if( $choix_connaissance == FALSE){
+				Message::Erreur( "Le choix de capacité doit être existant pour récupérer la liste des capacités." );
+				return FALSE;
+			}
+			return $this->GetConnaissances( $choix_connaissance );
+		}
 		
 		public function AddConnaissance( ChoixConnaissance $choix_connaissance, $connaissanceId ){
 			$connaissances = $this->GetConnaissances( $choix_connaissance );

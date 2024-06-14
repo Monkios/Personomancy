@@ -71,6 +71,15 @@
 			
 			return $voies;
 		}
+
+		public function GetVoiesByChoixId( $choix_id ){
+			$choix_voie = $this->Find( $choix_id );
+			if( $choix_voie == FALSE){
+				Message::Erreur( "Le choix de capacité doit être existant pour récupérer la liste des capacités." );
+				return FALSE;
+			}
+			return $this->GetVoies( $choix_voie );
+		}
 		
 		public function AddVoie( ChoixVoie $choix_voie, $voieId ){
 			$voies = $this->GetVoies( $choix_voie );

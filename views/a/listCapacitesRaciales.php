@@ -3,7 +3,9 @@
 			<tr>
 				<th>Nom</th>
 				<th>Description</th>
+				<th>Race</th>
 				<th>Coût</th>
+				<th>Bonus</th>
 				<th>Active</th>
 				<th></th>
 			</tr>
@@ -16,11 +18,18 @@
 <?php
 	} else {
 		foreach( $list_capacites_raciales as $capacite_raciale ){
+			$bonus = "";
+			if( $capacite_raciale->choix_capacite_bonus_id != 0 ){ $bonus .= " + " . $list_choix_capacites[ $capacite_raciale->choix_capacite_bonus_id ]; }
+			if( $capacite_raciale->choix_capacite_raciale_bonus_id != 0 ){ $bonus .= " + " . $list_choix_capacites_raciales[ $capacite_raciale->choix_capacite_raciale_bonus_id ]; }
+			if( $capacite_raciale->choix_connaissance_bonus_id != 0 ){ $bonus .= " + " . $list_choix_connaissances[ $capacite_raciale->choix_connaissance_bonus_id ]; }
+			if( $capacite_raciale->choix_voie_bonus_id != 0 ){ $bonus .= " + " . $list_choix_voies[ $capacite_raciale->choix_voie_bonus_id ]; }
 ?>
 			<tr>
 				<td><?php echo $capacite_raciale->nom; ?></td>
 				<td><?php echo $capacite_raciale->description; ?></td>
+				<td><?php echo $list_races[ $capacite_raciale->race_id ]; ?></td>
 				<td><?php echo $capacite_raciale->cout; ?></td>
+				<td><?php echo $bonus; ?></td>
 				<td><?php echo ( $capacite_raciale->active ? "Oui" : "Non" ); ?></td>
 				<td><a href="?s=admin&a=updateCapaciteRaciale&i=<?php echo $capacite_raciale->id; ?>">Modifier</a></td>
 			</tr>

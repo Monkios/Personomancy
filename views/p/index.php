@@ -76,29 +76,20 @@
 				<li><a href="?s=admin&a=listCitesEtats">Gestion des cités-états</a></li>
 				<li><a href="?s=admin&a=listCroyances">Gestion des croyances</a></li>
 				<li><a href="?s=admin&a=listVoies">Gestion des voies</a></li>
-				<li>
+				<ul>
+					<li><a href="?s=admin&a=listCapacites">Gestion des capacités</a></li>
+					<li><a href="?s=admin&a=listConnaissances">Gestion des connaissances</a></li>
+				</ul>
+				<li><a href="?s=admin&a=listRaces">Gestion des races</a></li>
+				<ul>
+					<li><a href="?s=admin&a=listCapacitesRaciales">Gestion des capacités raciales</a></li>
 					<ul>
-						<li><a href="?s=admin&a=listCapacites">Gestion des capacités</a></li>
-						<li><a href="?s=admin&a=listConnaissances">Gestion des connaissances</a></li>
-						<li><a href="?s=admin&a=listRaces">Gestion des races</a></li>
-						<li>
-							<ul>
-								<li><a href="?s=admin&a=listCapacitesRaciales">Gestion des capacités raciales</a></li>
-								<li>
-									<ul>
-										<li><a href="?s=admin&a=listChoixCapacites">Gestion des listes de capacités bonus</a></li>
-										<li><a href="?s=admin&a=listChoixConnaissances">Gestion des listes de connaissances bonus</a></li>
-										<li><a href="?s=admin&a=listChoixCapacitesRaciales">Gestion des listes de capacités raciales bonus</a></li>
-										<li><a href="?s=admin&a=listChoixVoies">Gestion des listes de voies bonus</a></li>
-									</ul>
-								</li>
-							</ul>
-						</li>
+						<li><a href="?s=admin&a=listChoixCapacites">Gestion des listes de capacités bonus</a></li>
+						<li><a href="?s=admin&a=listChoixConnaissances">Gestion des listes de connaissances bonus</a></li>
+						<li><a href="?s=admin&a=listChoixCapacitesRaciales">Gestion des listes de capacités raciales bonus</a></li>
+						<li><a href="?s=admin&a=listChoixVoies">Gestion des listes de voies bonus</a></li>
 					</ul>
-				</li>
-				<!--<ul>
-					<li><a href="?s=admin&a=listChoixCapacites">Gestion des groupes de capacité</a>TODO</li>
-				</ul>-->
+				</ul>
 			</ul>
 		</div>
 <?php

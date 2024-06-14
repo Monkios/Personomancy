@@ -4,6 +4,7 @@
 				<th>Nom</th>
 				<th>Voie</th>
 				<th>Description</th>
+				<th>Coût</th>
 				<th>Type</th>
 				<th>Active</th>
 				<th></th>
@@ -22,6 +23,7 @@
 				<td><?php echo $connaissance->nom; ?></td>
 				<td><?php echo $list_voies[ $connaissance->prereq_voie_primaire ]; ?></td>
 				<td><?php echo $connaissance->description; ?></td>
+				<td><?php echo $connaissance->cout; ?></td>
 				<td><?php echo $connaissance->GetConnaissanceType(); ?></td>
 				<td><?php echo ( $connaissance->active ? "Oui" : "Non" ); ?></td>
 				<td><a href="?s=admin&a=updateConnaissance&i=<?php echo $connaissance->id; ?>">Modifier</a></td>
