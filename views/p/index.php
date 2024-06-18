@@ -52,11 +52,11 @@
 ?>
 		<div>
 			<h2>Animateurs</h2>
-			<ul>
+			<!--<ul>
 				<li><a href="?s=gm&a=characterList">Liste des personnages</a>TODO</li>
 				<li><a href="?s=gm&a=printAll">Imprimer toutes les fiches</a>TODO</li>
 				<li><a href="?s=gm&a=userPresences">Liste de présences</a>TODO</li>
-			</ul>
+			</ul>-->
 		</div>
 <?php
 	}
@@ -66,22 +66,30 @@
 			<h2>Administrateurs</h2>
 			<ul>
 				<li><a href="?s=admin&a=userList">Gestion des utilisateurs</a></li>
-				<li><a href="?s=admin&a=assignXP">Gestion massive de l'XP</a>TODO</li>
+				<!--<li><a href="?s=admin&a=assignXP">Gestion massive de l'XP</a>TODO</li>
 				<li><a href="?s=admin&a=characterLog">Journal des modifications</a>TODO</li>
 				<li><a href="?s=admin&a=characterTransfer">Transfert de personnage</a>TODO</li>
-				<li><a href="?s=admin&a=destroyDeadCharacters">Destruction des personnages désactivés</a>TODO</li>
+				<li><a href="?s=admin&a=destroyDeadCharacters">Destruction des personnages désactivés</a>TODO</li>-->
 			</ul>
 			<h3>Configurations du système</h3>
 			<ul>
 				<li><a href="?s=admin&a=listCitesEtats">Gestion des cités-états</a></li>
 				<li><a href="?s=admin&a=listCroyances">Gestion des croyances</a></li>
-				<li><a href="?s=admin&a=listRaces">Gestion des races</a>TODO</li>
-				<li><a href="?s=admin&a=listCapacitesRaciales">Gestion des capacités raciales</a>TODO</li>
-				<li><a href="?s=admin&a=listCapacites">Gestion des capacités</a>TODO</li>
+				<li><a href="?s=admin&a=listVoies">Gestion des voies</a></li>
 				<ul>
-					<li><a href="?s=admin&a=listChoixCapacites">Gestion des groupes de capacité</a>TODO</li>
+					<li><a href="?s=admin&a=listCapacites">Gestion des capacités</a></li>
+					<li><a href="?s=admin&a=listConnaissances">Gestion des connaissances</a></li>
 				</ul>
-				<li><a href="?s=admin&a=listConnaissances">Gestion des connaissances</a>TODO</li>
+				<li><a href="?s=admin&a=listRaces">Gestion des races</a></li>
+				<ul>
+					<li><a href="?s=admin&a=listCapacitesRaciales">Gestion des capacités raciales</a></li>
+					<ul>
+						<li><a href="?s=admin&a=listChoixCapacites">Gestion des listes de capacités bonus</a></li>
+						<li><a href="?s=admin&a=listChoixConnaissances">Gestion des listes de connaissances bonus</a></li>
+						<li><a href="?s=admin&a=listChoixCapacitesRaciales">Gestion des listes de capacités raciales bonus</a></li>
+						<li><a href="?s=admin&a=listChoixVoies">Gestion des listes de voies bonus</a></li>
+					</ul>
+				</ul>
 			</ul>
 		</div>
 <?php

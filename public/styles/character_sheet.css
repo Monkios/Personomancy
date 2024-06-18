@@ -45,7 +45,7 @@
 	#fiche_perso .fiche_regroupement .fiche_element input,
 	#fiche_perso .fiche_regroupement .fiche_element select,
 	#fiche_perso .fiche_regroupement .fiche_element .as_input {
-		width: 295px;
+		width: 288px;
 		margin-right: 10px;
 		display: inline-block;
 		border-bottom: 1px solid #333;
@@ -58,7 +58,7 @@
 	}
 	
 	#fiche_perso .fiche_regroupement .fiche_element input {
-		width: 290px;
+		width: 280px;
 	}
 	
 		#fiche_perso .fiche_regroupement.fiche_regroupement_base {
@@ -92,54 +92,41 @@
 		#fiche_perso .fiche_regroupement.fiche_regroupement_base .fiche_element {
 			width: 470px;
 		}
-		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_statistiques {
-			width: 304px;
-			border: 1px solid #000;
+
+		#fiche_perso .fiche_regroupement.fiche_regroupement_cr,
+		#fiche_perso .fiche_regroupement.fiche_regroupement_synergies {
+			width: 960px;
 		}
 		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_statistiques label {
-			width: 156px;
-			padding-left: 4px;
-		}
+			#fiche_perso .fiche_regroupement.fiche_regroupement_cr label {
+				width: 60px;
+			}
+			
+			#fiche_perso .fiche_regroupement.fiche_regroupement_cr .as_input,
+			#fiche_perso .fiche_regroupement.fiche_regroupement_synergies .as_input {
+				width: 230px;
+			}
 		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_statistiques .as_input {
-			width: 130px;
-			text-align: center;
+		#fiche_perso .fiche_regroupement.fiche_regroupement_capacites,
+		#fiche_perso .fiche_regroupement.fiche_regroupement_capacites .fiche_element,
+		#fiche_perso .fiche_regroupement.fiche_regroupement_connaissances,
+		#fiche_perso .fiche_regroupement.fiche_regroupement_connaissances .fiche_element,
+		#fiche_perso .fiche_regroupement.fiche_regroupement_synergies .fiche_element {
+			width: 235px;
 		}
-		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_attributs .fiche_element .as_label span {
-			width: 135px;
-		}
-		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_attributs .fiche_element .as_label select,
-		#fiche_perso .fiche_regroupement.fiche_regroupement_capacites .fiche_element .as_label select {
-			width: 150px;
-		}
-		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_cr label {
-			width: 60px;
-		}
-		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_cr .as_input {
-			width: 230px;
-		}
-		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_capacites .fiche_element_prestige {
-			width: 304px;
-			padding: 0 2px;
-			border: 1px solid #EEE;
-			background-color: #FAFAFA;
-		}
-		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_capacites .fiche_element .as_label span {
-			width: 135px;
-		}
-		
-		#fiche_perso .fiche_regroupement.fiche_regroupement_connaissances .fiche_element label,
-		#fiche_perso .fiche_regroupement.fiche_regroupement_sorts .fiche_element label {
-			width: 290px;
-		}
+
+			#fiche_perso .fiche_regroupement.fiche_regroupement_capacites .fiche_element .as_label select {
+				width: 150px;
+			}
+			
+			#fiche_perso .fiche_regroupement.fiche_regroupement_capacites .fiche_element .as_label span{
+				width: 180px;
+			}
+
+			#fiche_perso .fiche_regroupement.fiche_regroupement_connaissances .fiche_element label,
+			#fiche_perso .fiche_regroupement.fiche_regroupement_synergies .fiche_element label {
+				width: 215px;
+			}
 
 #perso_options {
 	background-color: #DDD;

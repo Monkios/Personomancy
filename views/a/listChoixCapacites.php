@@ -6,19 +6,19 @@
 				<th></th>
 			</tr>
 <?php
-	if( count( $choixCapacites ) == 0 ){
+	if( count( $list_choix_capacites ) == 0 ){
 ?>
 			<tr>
 				<td colspan="6">Aucun choix de capacité trouvé.</td>
 			</tr>
 <?php
 	} else {
-		foreach( $choixCapacites as $choixCapacite ){
+		foreach( $list_choix_capacites as $choix_capacites ){
 ?>
 			<tr>
-				<td><?php echo $choixCapacite->nom; ?></td>
-				<td><?php echo ( $choixCapacite->active ? "Oui" : "Non" ); ?></td>
-				<td><a href="?s=admin&a=updateChoixCapacite&i=<?php echo $choixCapacite->id; ?>">Modifier</a></td>
+				<td><?php echo $choix_capacites->nom; ?></td>
+				<td><?php echo ( $choix_capacites->active ? "Oui" : "Non" ); ?></td>
+				<td><a href="?s=admin&a=updateChoixCapacite&i=<?php echo $choix_capacites->id; ?>">Modifier</a></td>
 			</tr>
 <?php
 		}

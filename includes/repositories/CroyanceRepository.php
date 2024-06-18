@@ -30,8 +30,8 @@
 			}
 
 			$db = new Database();
-			$sql = "INSERT INTO croyance ( nom, description, active, supprime )
-					VALUES ( ?, ?, 1, 0 )";
+			$sql = "INSERT INTO croyance ( nom, description )
+					VALUES ( ?, ? )";
 			
 			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "description" ] ) );
 			
@@ -44,7 +44,7 @@
 			$sql = "UPDATE croyance SET
 					nom = ?,
 					description = ?,
-					active = b?
+					active = ?
 				WHERE supprime = 0 AND id = ?";
 			$params = array(
 					$croyance->nom,

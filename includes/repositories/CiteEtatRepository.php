@@ -30,8 +30,8 @@
 			}
 
 			$db = new Database();
-			$sql = "INSERT INTO cite_etat ( nom, description, active, supprime )
-					VALUES ( ?, ?, 1, 0 )";
+			$sql = "INSERT INTO cite_etat ( nom, description )
+					VALUES ( ?, ? )";
 			
 			$db->Query( $sql, array( $opts[ "nom" ], $opts[ "description" ] ) );
 			
@@ -44,7 +44,7 @@
 			$sql = "UPDATE cite_etat SET
 					nom = ?,
 					description = ?,
-					active = b?
+					active = ?
 				WHERE supprime = 0 AND id = ?";
 			$params = array(
 					$cite_etat->nom,

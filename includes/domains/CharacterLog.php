@@ -14,14 +14,14 @@
 		}
 		
 		public static function GetByCharacter( $id ){
-			$where = "l.active = '1' && l.id_personnage = ?";
+			$where = "l.active = '1' && l.personnage_id = ?";
 			$order_by = "l.id DESC, p.nom ASC";
 			
 			return self::FetchFromDB( $order_by, $where, array( $id ) );
 		}
 		
 		public static function GetLastByCharacter( $id ){
-			$where = "l.id_personnage = ? AND l.id = ( SELECT MAX( id ) FROM personnage_journal WHERE id_personnage = l.id_personnage AND active = '1' )";
+			$where = "l.personnage_id = ? AND l.id = ( SELECT MAX( id ) FROM personnage_journal WHERE personnage_id = l.personnage_id AND active = '1' )";
 			$order_by = "";
 			
 			$result = self::FetchFromDB( $order_by, $where, array( $id ) );
@@ -37,11 +37,11 @@
 			
 			$sql = "SELECT l.id, l.active, l.quand, l.combien, l.quoi, l.pourquoi, l.note, l.backtrack,
 							l.joueur_id AS player_id, CONCAT( j.prenom, ' ', j.nom ) AS player_name,
-							l.id_personnage AS character_id, p.nom AS character_name,
+							p.id AS character_id, p.nom AS character_name,
 							p.est_cree, p.est_vivant, p.est_detruit
 					FROM personnage_journal l
 						LEFT JOIN joueur j ON j.id = l.joueur_id
-						LEFT JOIN personnage p ON l.id_personnage = p.id";
+						LEFT JOIN personnage p ON l.personnage_id = p.id";
 			
 			if( $where != "" ){
 				$sql .= " WHERE " . $where;

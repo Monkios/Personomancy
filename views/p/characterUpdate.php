@@ -6,10 +6,6 @@
 			<div class="fiche_regroupement fiche_regroupement_base">
 				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=bases">
 					<div class="fiche_element">
-						<label for="perso_joueur">Nom du joueur :</label>
-						<span id="perso_joueur" class="as_input"><?php echo $personnage->joueur_nom; ?></span>
-					</div>
-					<div class="fiche_element">
 						<label for="perso_nom">Nom du personnage :</label>
 <?php
 	if( $can_change_bases && $personnage->est_vivant ){
@@ -24,37 +20,19 @@
 ?>
 					</div>
 					<div class="fiche_element">
-						<label for="perso_alignement">Alignement :</label>
-<?php
-	if( $can_change_bases && $personnage->est_vivant ){
-?>
-						<select name="perso_alignement" id="perso_alignement">
-<?php
-		foreach( $list_alignements as $alignement_id => $alignement_nom ){
-?>
-							<option value="<?php echo $alignement_id; ?>"<?php echo ( $alignement_id == $perso_alignement ) ? " selected='selected'" : ""; ?>><?php echo $alignement_nom; ?></option>
-<?php
-		}
-?>
-						</select>
-<?php
-	} else {
-?>
-						<span id="perso_alignement" class="as_input"><?php echo $personnage->alignement_nom; ?></span>
-<?php
-	}
-?>
+						<label for="perso_joueur">Nom du joueur :</label>
+						<span id="perso_joueur" class="as_input"><?php echo $personnage->joueur_nom; ?></span>
 					</div>
 					<div class="fiche_element">
-						<label for="perso_religion">Religion :</label>
+						<label for="perso_cite_etat">Cité-État :</label>
 <?php
 	if( $can_change_bases && $personnage->est_vivant ){
 ?>
-						<select name="perso_religion" id="perso_religion">
+						<select name="perso_cite_etat" id="perso_cite_etat">
 <?php
-		foreach( $list_religions as $religion_id => $religion_infos ){
+		foreach( $list_cites_etats as $cite_etat_id => $cite_etat_nom ){
 ?>
-							<option value="<?php echo $religion_id; ?>"<?php echo ( $religion_id == $perso_religion ) ? " selected='selected'" : ""; ?>><?php echo $religion_infos[ "nom" ]; ?></option>
+							<option value="<?php echo $cite_etat_id; ?>"<?php echo ( $cite_etat_id == $perso_cite_etat ) ? " selected='selected'" : ""; ?>><?php echo $cite_etat_nom; ?></option>
 <?php
 		}
 ?>
@@ -62,7 +40,7 @@
 <?php
 	} else {
 ?>
-						<span id="perso_religion" class="as_input"><?php echo $personnage->religion_nom; ?></span>
+						<span id="perso_cite_etat" class="as_input"><?php echo $personnage->cite_etat_nom; ?></span>
 <?php
 	}
 ?>
@@ -91,25 +69,23 @@
 ?>
 					</div>
 					<div class="fiche_element">
-						<label for="perso_faction">Faction :</label>
+						<label for="perso_croyance">Croyance :</label>
 <?php
 	if( $can_change_bases && $personnage->est_vivant ){
 ?>
-						<select name="perso_faction" id="perso_faction">
+						<select name="perso_croyance" id="perso_croyance">
 <?php
-		foreach( $list_factions as $faction_id => $faction_nom ){
-			if( $faction_id != 1 ){
+		foreach( $list_croyances as $croyance_id => $croyance_infos ){
 ?>
-							<option value="<?php echo $faction_id; ?>"<?php echo ( $faction_id == $perso_faction ) ? " selected='selected'" : ""; ?>><?php echo $faction_nom; ?></option>
+							<option value="<?php echo $croyance_id; ?>"<?php echo ( $croyance_id == $perso_croyance ) ? " selected='selected'" : ""; ?>><?php echo $croyance_infos[ "nom" ]; ?></option>
 <?php
-			}
 		}
 ?>
 						</select>
 <?php
 	} else {
 ?>
-						<span id="perso_faction" class="as_input"><?php echo $personnage->faction_nom; ?></span>
+						<span id="perso_croyance" class="as_input"><?php echo $personnage->croyance_nom; ?></span>
 <?php
 	}
 ?>
@@ -128,7 +104,7 @@
 						<label for="perso_xp">Points d'expérience :</label>
 						<span id="perso_xp" class="as_input"><?php echo $xp_txt; ?></span>
 <?php
-	if( $can_change_xp ){
+	/*if( $can_change_xp ){
 ?>
 						<select name="change_xp" onchange="this.form.submit();">
 <?php
@@ -140,7 +116,7 @@
 ?>
 						</select>
 <?php
-	}
+	}*/
 ?>
 					</div>
 <?php
@@ -163,9 +139,10 @@
 		if( $personnage->pc_raciales > 0 ){
 ?>
 				<div class="fiche_element">
-					<p>Chaque personnage débute avec <?php echo CHARACTER_BASE_PCR; ?> points qu'il peut utiliser pour sélectionner des capacités raciales. Chaque capacité raciale ne peut être sélectionnée qu'une seule fois.</p>
+					<p>Chaque personnage débute avec <?php echo CHARACTER_BASE_PCR; ?> points qu’il peut utiliser pour sélectionner des capacités raciales. Chaque capacité raciale ne peut être sélectionnée qu’une seule fois.</p>
+					<p>Il vous reste encore <strong><?=$personnage->pc_raciales; ?> points</strong> à utiliser.</p>
 					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=capacites_raciales">
-						<label for="perso_capacite_raciale">Choix de capacités raciales :</label>
+						<label for="perso_capacite_raciale">Capacités raciales :</label>
 						<select name="perso_capacite_raciale" id="perso_capacite_raciale" onchange="this.form.submit();">
 							<option>-- Choix nécessaire --</option>
 <?php
@@ -175,7 +152,6 @@
 <?php
 			}
 ?>
-							<option value="burn">Abandonner les points restants (<?php echo $personnage->pc_raciales; ?> PCR)</option>
 						</select>
 					</form>
 				</div>
@@ -185,19 +161,92 @@
 ?>
 				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=choix_capacites">
 <?php
-			foreach( $personnage->choix_capacites as $choix_id => $choix_nombre ){
+			foreach( $personnage->choix_capacites as $choix_id => $choix_nom ){
 ?>
 					<div class="fiche_element">
-						<label for="perso_choix_capacites_<?php echo $choix_id; ?>">Choix de capacités "<?php echo $list_choix_capacites[ $choix_id ]; ?>" (x<?php echo $choix_nombre; ?>) :</label>
+						<label for="perso_choix_capacites_<?php echo $choix_id; ?>">Choix de capacités "<?php echo $choix_nom; ?>" :</label>
 						<select name="perso_choix_capacites[<?php echo $choix_id; ?>]" id="perso_choix_capacites_<?php echo $choix_id; ?>" onchange="this.form.submit();">
 							<option value="">-- Choix nécessaire --</option>
 <?php
-				foreach( $list_choix_capacites_capacites[ $choix_id ] as $capacite_id => $capacite_infos ){
-					if( $capacite_infos->active && in_array( $capacite_infos->voie_id, $personnage->voies ) ){
+				foreach( $list_choix_capacites[ $choix_id ] as $capacite_id => $capacite_infos ){
 ?>
-							<option value="<?php echo $capacite_id; ?>"<?php echo ( $personnage->pc_raciales > 0 ) ? " disabled='disabled'" : ""; ?>><?php echo $capacite_infos->nom; ?></option>
+							<option value="<?php echo $capacite_id; ?>"><?php echo $capacite_infos->nom; ?></option>
 <?php
-					}
+				}
+?>
+						</select>
+					</div>
+<?php
+			}
+?>
+				</form>
+<?php
+		}
+		if( count( $personnage->choix_capacites_raciales ) > 0 ){
+?>
+				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=choix_capacites_raciales">
+<?php
+			foreach( $personnage->choix_capacites_raciales as $choix_id => $choix_nom ){
+?>
+					<div class="fiche_element">
+						<label for="perso_choix_capacites_raciales_<?php echo $choix_id; ?>">Choix de capacités raciales "<?php echo $choix_nom; ?>" :</label>
+						<select name="perso_choix_capacites_raciales[<?php echo $choix_id; ?>]" id="perso_choix_capacites_raciales_<?php echo $choix_id; ?>" onchange="this.form.submit();">
+							<option value="">-- Choix nécessaire --</option>
+<?php
+				foreach( $list_choix_capacites_raciales[ $choix_id ] as $capacite_raciale_id => $capacite_raciale_infos ){
+?>
+							<option value="<?php echo $capacite_raciale_id; ?>"><?php echo $capacite_raciale_infos->nom; ?></option>
+<?php
+				}
+?>
+						</select>
+					</div>
+<?php
+			}
+?>
+				</form>
+<?php
+		}
+		if( count( $personnage->choix_connaissances ) > 0 ){
+?>
+				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=choix_connaissances">
+<?php
+			foreach( $personnage->choix_connaissances as $choix_id => $choix_nom ){
+?>
+					<div class="fiche_element">
+						<label for="perso_choix_connaissances_<?php echo $choix_id; ?>">Choix de connaissances "<?php echo $choix_nom; ?>" :</label>
+						<select name="perso_choix_connaissances[<?php echo $choix_id; ?>]" id="perso_choix_connaissances_<?php echo $choix_id; ?>" onchange="this.form.submit();">
+							<option value="">-- Choix nécessaire --</option>
+<?php
+				foreach( $list_choix_connaissances[ $choix_id ] as $connaissance_id => $connaissance_infos ){
+?>
+							<option value="<?php echo $connaissance_id; ?>"><?php echo $connaissance_infos->nom; ?></option>
+<?php
+				}
+?>
+						</select>
+					</div>
+<?php
+			}
+?>
+				</form>
+<?php
+		}
+		if( count( $personnage->choix_voies ) > 0 ){
+?>
+				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=choix_voies">
+<?php
+			foreach( $personnage->choix_voies as $choix_id => $choix_nom ){
+?>
+					<div class="fiche_element">
+						<label for="perso_choix_voies_<?php echo $choix_id; ?>">Choix de voies "<?php echo $choix_nom; ?>" :</label>
+						<select name="perso_choix_voies[<?php echo $choix_id; ?>]" id="perso_choix_voies_<?php echo $choix_id; ?>" onchange="this.form.submit();">
+							<option value="">-- Choix nécessaire --</option>
+<?php
+				foreach( $list_choix_voies[ $choix_id ] as $voie_id => $voie_infos ){
+?>
+							<option value="<?php echo $voie_id; ?>"><?php echo $voie_infos->nom; ?></option>
+<?php
 				}
 ?>
 						</select>
@@ -213,12 +262,12 @@
 <?php
 		if( ( $personnage->pc_raciales > 0 ) || $has_choices ){
 ?>
-					<p>Avant de pouvoir activer le personnage, un élément de chaque liste ci-dessus doit être sélectionné.</p>
+					<p>Avant de pouvoir activer le personnage, toutes les capacités raciales doivent être choisies.</p>
 <?php
 		}
 ?>
 					<input type="submit" name="activate_character" value="Activer le personnage"<?php echo ( $personnage->pc_raciales > 0 ) || $has_choices ? " disabled='disabled'" : ""; ?> />
-					<p>En activant ce personnage, il pourra recevoir ses points d'expérience mais les informations de base du personnage (nom, alignement, religion) ne pourront plus être changées.</p>
+					<p>Le personnage doit être activé avant de pouvoir utiliser et recevoir ses points d'expérience. Une fois activé, les informations de base du personnage (nom, cité-État, race, croyance) ne pourront plus être changées.</p>
 				</form>
 			</div>
 <?php
@@ -238,7 +287,6 @@
 	}
 ?>
 			</div>
-			<div class="fiche_regroupement fiche_regroupement_capacites">
 <?php
 	foreach( $list_voies as $voie_id => $voie_desc ){
 		$has_voie = in_array( $voie_id, $personnage->voies );
@@ -252,6 +300,8 @@
 			$voie_status = "disabled='disabled'";
 		}
 ?>
+			
+			<div class="fiche_regroupement fiche_regroupement_capacites">
 				<div>
 					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_capacite">
 						<h3>
@@ -279,30 +329,66 @@
 ?>
 					</form>
 				</div>
-<?php
-	}
-?>
 			</div>
+<?php
+		$connaissances_type = array( CHARACTER_COST_CONN_AVANCEE => "Avancées", CHARACTER_COST_CONN_MAITRE => "Maîtres", CHARACTER_COST_CONN_LEGENDAIRE => "Légendaires" );
+		foreach( $connaissances_type as $connaissances_type_cout => $connaissances_type_nom ){
+?>
 			<div class="fiche_regroupement fiche_regroupement_connaissances">
 				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_connaissance">
-					<h3>Connaissances</h3>
+					<h3><?php echo $connaissances_type_nom; ?></h3>
 <?php
-	foreach( $personnage->connaissances_accessibles as $connaissance_id ){
-		$connaissance_status = "";
-		if( in_array( $connaissance_id, $personnage->connaissances ) ){
-			$connaissance_status = " checked='checked' disabled='disabled'";
-		} elseif( CharacterSheet::GetConnaissanceCost() <= $personnage->GetRealCurrentXP() && $personnage->est_vivant && $personnage->est_cree ) {
-			$connaissance_status = " onchange='this.form.submit()'";
-		} else {
-			$connaissance_status = " disabled='disabled'";
-		}
+			foreach( $list_connaissances_completes[ $voie_id ] as $connaissance_id => $connaissance ){
+				if( $connaissance->cout == $connaissances_type_cout ){
+					$connaissance_status = "title='" . $connaissance->GetConnaissanceType() . " (" . $connaissance->cout . " XP)'";
+					if( in_array( $connaissance_id, $personnage->connaissances ) ){
+						$connaissance_status .= " checked='checked' disabled='disabled'";
+					} elseif( $personnage->est_vivant && $personnage->est_cree && in_array( $connaissance_id, $personnage->connaissances_accessibles ) && $connaissance->cout <= $personnage->GetRealCurrentXP() ) {
+						$connaissance_status .= " onchange='this.form.submit()'";
+					} else {
+						$connaissance_status .= " disabled='disabled'";
+					}
 ?>
 					<div class="fiche_element">
-						<label for="perso_connaissance_<?php echo $connaissance_id; ?>" title="<?php echo htmlentities( $list_connaissances[ $connaissance_id ] ); ?>"><?php echo $list_connaissances[ $connaissance_id ]; ?></label>
+						<label for="perso_connaissance_<?php echo $connaissance_id; ?>" title="<?php echo htmlentities( $connaissance->nom ); ?>"><?php echo $connaissance->nom; ?></label>
 						<input type="checkbox" name="perso_connaissance" id="perso_connaissance_<?php echo $connaissance_id; ?>" value="<?php echo $connaissance_id; ?>"<?php echo $connaissance_status; ?> />
 					</div>
 <?php
+				}
+			}
+?>
+				</form>
+			</div>
+<?php
+		}
+?>
+<?php
 	}
+?>
+			<div class="fiche_regroupement fiche_regroupement_synergies">
+				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_connaissance">
+					<h3>Synergiques</h3>
+<?php
+			foreach( $list_voies as $voie_id => $voie_desc ){
+				foreach( $list_connaissances_completes[ $voie_id ] as $connaissance_id => $connaissance ){
+					if( $connaissance->cout == CHARACTER_COST_CONN_SYNERGIQUE ){
+						$connaissance_status = "title='" . $connaissance->GetConnaissanceType() . " (" . $connaissance->cout . " XP)'";
+						if( in_array( $connaissance_id, $personnage->connaissances ) ){
+							$connaissance_status .= " checked='checked' disabled='disabled'";
+						} elseif( $personnage->est_vivant && $personnage->est_cree && in_array( $connaissance_id, $personnage->connaissances_accessibles ) && $connaissance->cout <= $personnage->GetRealCurrentXP() ) {
+							$connaissance_status .= " onchange='this.form.submit()'";
+						} else {
+							$connaissance_status .= " disabled='disabled'";
+						}
+?>
+					<div class="fiche_element">
+						<label for="perso_connaissance_<?php echo $connaissance_id; ?>" title="<?php echo htmlentities( $connaissance->nom ); ?>"><?php echo $connaissance->nom; ?></label>
+						<input type="checkbox" name="perso_connaissance" id="perso_connaissance_<?php echo $connaissance_id; ?>" value="<?php echo $connaissance_id; ?>"<?php echo $connaissance_status; ?> />
+					</div>
+<?php
+					}
+				}
+			}
 ?>
 				</form>
 			</div>
@@ -365,7 +451,7 @@
 				</ul>
 			</form>
 <?php
-	if( $personnage->est_vivant ){
+	/*if( $personnage->est_vivant ){
 ?>
 			<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=kill" onsubmit="return confirm('Voulez-vous vraiment désactiver ce personnage ?\n\nUne fois désactivé, il ne sera plus possible de reprendre ce personnage et vous devrez en commencer un nouveau.');" id="perso_kill">
 				<h3>Désactivation</h3>
@@ -395,6 +481,6 @@
 				<button type="submit" name="perso_rebuild_perte">Rebuild à perte (<?=$personnage->GetPerteXP(); ?> XP)</button>
 			</form>
 <?php
-	}
+	}*/
 ?>
 		</div>

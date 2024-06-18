@@ -3,34 +3,23 @@
 		$connaissance_repository = new ConnaissanceRepository();
 		
 		$list_capacites = Dictionary::GetCapacites();
-		$list_connaissances = Dictionary::GetConnaissances();
-		$list_religions = Dictionary::GetReligions();
-		$list_statistiques = Dictionary::GetStatistiques();
 		$list_voies = Dictionary::GetVoies();
 		
 		$connaissance = $connaissance_repository->Find( $_GET["i"] );
 		
 		if( isset( $_POST["connaissance_id"] ) && $_GET["i"] == $_POST["connaissance_id"] ){
-			if( isset( $_POST["save_connaissance"] ) ){
-				$connaissance->nom = mb_convert_encoding( Security::FilterInput( $_POST["connaissance_nom"] ), 'ISO-8859-1', 'UTF-8');
+			if( isset( $_POST["save_connaissance"] ) &&
+					( empty( $_POST[ "connaissance_prereq_capacite" ] ) || array_key_exists( $_POST["connaissance_prereq_capacite"], $list_capacites ) ) &&
+					array_key_exists( $_POST["connaissance_prereq_voie_primaire"], $list_voies ) &&
+					( empty( $_POST[ "connaissance_prereq_voie_secondaire" ] ) || array_key_exists( $_POST["connaissance_prereq_voie_secondaire"], $list_voies ) ) ){
+				$connaissance->nom = Security::FilterInput( $_POST["connaissance_nom"] );
+				$connaissance->description = Security::FilterInput( $_POST["connaissance_description"] );
+				$connaissance->cout = is_numeric( $_POST["connaissance_cout"] ) ? $_POST["connaissance_cout"] : 0;
 				$connaissance->active = isset( $_POST["connaissance_active"] );
 				
-				$connaissance->prereq_statistique_prim_id = ( array_key_exists( $_POST["connaissance_statistique_prim_id"], $list_statistiques ) ? $_POST["connaissance_statistique_prim_id"] : 0 );
-				$connaissance->prereq_statistique_prim_sel = is_numeric( $_POST["connaissance_statistique_prim_sel"] ) ? $_POST["connaissance_statistique_prim_sel"] : 0;
-				
-				$connaissance->prereq_statistique_sec_id = array_key_exists( $_POST["connaissance_statistique_sec_id"], $list_statistiques ) ? $_POST["connaissance_statistique_sec_id"] : 0;
-				$connaissance->prereq_statistique_sec_sel = is_numeric( $_POST["connaissance_statistique_sec_sel"] ) ? $_POST["connaissance_statistique_sec_sel"] : 0;
-				
-				$connaissance->prereq_capacite_prim_id = array_key_exists( $_POST["connaissance_capacite_prim_id"], $list_capacites ) ? $_POST["connaissance_capacite_prim_id"] : 0;
-				$connaissance->prereq_capacite_prim_sel = is_numeric( $_POST["connaissance_capacite_prim_sel"] ) ? $_POST["connaissance_capacite_prim_sel"] : 0;
-				
-				$connaissance->prereq_capacite_sec_id = array_key_exists( $_POST["connaissance_capacite_sec_id"], $list_capacites ) ? $_POST["connaissance_capacite_sec_id"] : 0;
-				$connaissance->prereq_capacite_sec_sel = is_numeric( $_POST["connaissance_capacite_sec_sel"] ) ? $_POST["connaissance_capacite_sec_sel"] : 0;
-				
-				$connaissance->prereq_connaissance_prim_id = array_key_exists( $_POST["connaissance_connaissance_prim_id"], $list_connaissances ) ? $_POST["connaissance_connaissance_prim_id"] : 0;
-				$connaissance->prereq_connaissance_sec_id = array_key_exists( $_POST["connaissance_connaissance_sec_id"], $list_connaissances ) ? $_POST["connaissance_connaissance_sec_id"] : 0;
-				$connaissance->prereq_voie_id = array_key_exists( $_POST["connaissance_voie_id"], $list_voies ) ? $_POST["connaissance_voie_id"] : 0;
-				$connaissance->prereq_divin_id = array_key_exists( $_POST["connaissance_divin_id"], $list_religions ) ? $_POST["connaissance_divin_id"] : 0;
+				$connaissance->prereq_capacite = array_key_exists( $_POST["connaissance_prereq_capacite"], $list_capacites ) ? $_POST["connaissance_prereq_capacite"] : null;
+				$connaissance->prereq_voie_primaire = array_key_exists( $_POST["connaissance_prereq_voie_primaire"], $list_voies ) ? $_POST["connaissance_prereq_voie_primaire"] : null;
+				$connaissance->prereq_voie_secondaire = array_key_exists( $_POST["connaissance_prereq_voie_secondaire"], $list_voies ) ? $_POST["connaissance_prereq_voie_secondaire"] : null;
 				
 				// ...
 				

@@ -60,21 +60,20 @@
 			return FALSE;
 		}
 		
-		public static function Create( $email, $firstname, $lastname ){
-			if( !Community::GetPlayerByEMail( $email ) ){
+		public static function Create( $player_email, $firstname, $lastname ){
+			if( !Community::GetPlayerByEMail( $player_email ) ){
 				$db = new Database();
 				$sql = "INSERT INTO joueur ( prenom, nom, courriel, salt, password )
 						VALUES( ?, ?, ?, 'temp_salt', 'temp_password' )"; // Le sel et le mot de passe sont créés tout de suite après
-				$db->Query( $sql, array( $firstname, $lastname, $email ) );
+				$db->Query( $sql, array( $firstname, $lastname, $player_email ) );
 				
-				if( $joueur = Community::GetPlayerByEMail( $email ) ){
+				if( $joueur = Community::GetPlayerByEMail( $player_email ) ){
 					$password_temp = Identity::GenerateRandomPassword();
-					$generation_key_salt = self::GetNewSalt();
 
 					$identity = new Identity( $joueur->Id );
 					$identity->ChangePasswordTo( $password_temp );
 					
-					return self::SendActivationEmail( $email, $generation_key_salt, $password_temp );
+					return self::SendActivationEmail( $identity->GetPlayer(), $password_temp );
 				}
 			}
 			return FALSE;
@@ -209,12 +208,12 @@
 			return FALSE;
 		}
 
-		private static function GetActivationUrl( $player_email, $generation_key_salt ){
-			return "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?s=user&a=activate&m=" . urlencode( $player_email ) . "&k=" . urlencode( self::GenerateActivationKey( $player_email, $generation_key_salt ) );
+		private static function GetActivationUrl( $player ){
+			return "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?s=user&a=activate&m=" . urlencode( $player->Email ) . "&k=" . self::GenerateActivationKey( $player->Email, $player->Salt );
 		}
 
-		private static function SendActivationEmail( $email, $salt, $password_temp ){
-			$activation_url = self::GetActivationUrl($email, $salt);
+		private static function SendActivationEmail( $player, $password_temp ){
+			$activation_url = self::GetActivationUrl( $player );
 				
 			$body  = "Une requête de création de compte vient d'être faite en votre nom.<br />\n";
 			$body .= "<br />\n";
@@ -223,12 +222,12 @@
 			$body .= "Lors de votre prochaine connexion, veuillez utiliser le mot de passe suivant : <b>" . $password_temp . "</b><br />\n";
 			$body .= "Pour plus de sécurité, pensez à changer ce mot de passe dès que possible.<br />\n";
 				
-			return Email::Send( $email, "Nouveau compte", $body );
+			return Email::Send( $player->Email, "Nouveau compte", $body );
 		}
 		
 		public function SendValidationEmail(){
 			if( $this->player ){
-				$activation_url = self::GetActivationUrl( $this->player->Email, $this->player->Salt );
+				$activation_url = self::GetActivationUrl( $this->player );
 					
 				$body  = "Une demande d'activation de compte vient d'être faite en votre nom.<br />\n";
 				$body .= "<br />\n";

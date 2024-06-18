@@ -8,7 +8,7 @@
 		
 		if( isset( $_POST["choix_capacite_id"] ) && $_GET["i"] == $_POST["choix_capacite_id"] ){
 			if( isset( $_POST["save_choix_capacite"] ) ){
-				$choixCapacite->nom = mb_convert_encoding( Security::FilterInput( $_POST["choix_capacite_nom"] ), 'ISO-8859-1', 'UTF-8');
+				$choixCapacite->nom = Security::FilterInput( $_POST["choix_capacite_nom"] );
 				$choixCapacite->active = isset( $_POST["choix_capacite_active"] );
 				
 				// ...
@@ -22,13 +22,13 @@
 				if( is_numeric( $_POST["capacite"] ) &&
 							is_numeric( $_POST["capacite"] ) &&
 							!$choix_capacite_repository->AddCapacite( $choixCapacite, $_POST["capacite"] ) ){
-					Message::Erreur( "Une erreur s'est produite en ajoutant la capacité au choix de capacités." );
+					Message::Erreur( "Une erreur s'est produite en ajoutant la capacité bonus au choix." );
 				} else {
 					Message::Notice( "La capacité a été ajoutée." );
 				}
 			} elseif( isset( $_POST["delete_capacite"] ) ){
 				if( !$choix_capacite_repository->RemoveCapacite( $choixCapacite, $_POST["delete_capacite"] ) ){
-					Message::Erreur( "Une erreur s'est produite en retirant la capacité au choix de capacités." );
+					Message::Erreur( "Une erreur s'est produite en retirant la capacité bonus au choix." );
 				} else {
 					Message::Notice( "La capacité a été retirée." );
 				}

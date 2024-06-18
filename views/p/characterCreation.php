@@ -5,59 +5,8 @@
 				<label for="character_name">Nom complet :</label>
 				<input type="text" name="character_name" id="character_name" value="<?php echo $character_name; ?>" />
 			</div>
-			<div>
-				<label for="character_alignment">Alignement :</label>
-				<select name="character_alignment" id="character_alignment">
-					<option>== Veuillez choisir un alignement ==</option>
-<?php
-	foreach( $list_alignements as $id => $nom ){
-?>
-					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_alignment ) ? " selected='selected'" : ""; ?>><?php echo $nom; ?></option>
-<?php
-	}
-?>
-				</select>
-			</div>
-			<div>
-				<label for="character_faction">Faction :</label>
-				<select name="character_faction" id="character_faction">
-					<option>== Veuillez choisir une faction ==</option>
-<?php
-	foreach( $list_factions as $id => $nom ){
-		if($id != 1 ){
-?>
-					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_faction ) ? " selected='selected'" : ""; ?>><?php echo $nom; ?></option>
-<?php
-		}
-	}
-?>
-				</select>
-			</div>
-			<div>
-				<label for="character_religion">Religion :</label>
-				<select type="text" name="character_religion" id="character_religion">
-					<option>== Veuillez choisir une religion ==</option>
-<?php
-	$pantheon = "";
-	foreach( $list_religions as $id => $religion ){
-		if( $religion[ "pantheon" ] != $pantheon ){
-			if( $pantheon != "" ){
-?>
-						</optgroup>
-<?php
-			}
-?>
-						<optgroup label="<?php echo $religion[ "pantheon" ]; ?>">
-<?php
-			$pantheon = $religion[ "pantheon" ];
-		}
-?>
-					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_religion ) ? " selected='selected'" : ""; ?>><?php echo $religion[ "nom" ]; ?></option>
-<?php
-	}
-?>
-				</select>
-			</div>
+			
+			
 			<div>
 				<label for="character_race">Race :</label>
 				<select type="text" name="character_race" id="character_race">
@@ -66,6 +15,32 @@
 	foreach( $list_races as $id => $nom ){
 ?>
 					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_race ) ? " selected='selected'" : ""; ?>><?php echo $nom; ?></option>
+<?php
+	}
+?>
+				</select>
+			</div>
+			<div>
+				<label for="character_cite_etat">Cité-État :</label>
+				<select name="character_cite_etat" id="character_cite_etat">
+					<option>== Veuillez choisir une cité-État ==</option>
+<?php
+	foreach( $list_cites_etats as $id => $nom ){
+?>
+					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_cite_etat ) ? " selected='selected'" : ""; ?>><?php echo $nom; ?></option>
+<?php
+	}
+?>
+				</select>
+			</div>
+			<div>
+				<label for="character_croyance">Croyance :</label>
+				<select type="text" name="character_croyance" id="character_croyance">
+					<option>== Veuillez choisir une croyance ==</option>
+<?php
+	foreach( $list_croyances as $id => $croyance ){
+?>
+					<option value="<?php echo $id; ?>"<?php echo ( $id === $character_croyance ) ? " selected='selected'" : ""; ?>><?php echo $croyance[ "nom" ]; ?></option>
 <?php
 	}
 ?>

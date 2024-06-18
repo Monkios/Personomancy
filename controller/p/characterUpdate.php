@@ -13,16 +13,19 @@
 				Message::Fatale( "Vous n'avez pas le droit d'accéder à ce personnage.",
 						"U" . $_SESSION[ SESSION_KEY ][ "User" ]->Id . " / C" . $_GET['c'] );
 			}
-			
-			$can_change_bases = ( $personnage->est_cree == FALSE && ( empty( $personnage->race_id ) || $personnage->race_id == -1 ) ) || $is_animateur;
+
+			$can_change_bases = $personnage->est_cree == FALSE;//( $personnage->est_cree == FALSE && ( empty( $personnage->race_id ) || $personnage->race_id == -1 ) ) || $is_animateur;
 			$can_change_race = FALSE;
-			$can_choose_spells = FALSE;
 			$has_choices = FALSE;
 			
-			$can_change_xp = $personnage->est_cree && ( $is_administrateur || ( $is_animateur && $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id ));
-			$can_destroy = $is_administrateur || ( $is_animateur && $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id );
-			$can_rebuild = $can_rebuild_perte = $can_destroy;
-			$can_add_comment = $can_destroy;
+			// Les administrateurs peuvent changer les points d'expérience des personnages créés
+			// Les animateurs peuvent changer les points d'expérience de leurs personnages créés
+			$can_change_xp = false;// $personnage->est_cree && ( $is_administrateur || ( $is_animateur && $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id ));
+			// Les administrateurs peuvent détruire les personnages
+			// Les animateurs peuvent détruire leurs personnages
+			//$can_destroy = $is_administrateur || ( $is_animateur && $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id );
+			//$can_rebuild = $can_rebuild_perte = $can_destroy;
+			$can_add_comment = $is_animateur;
 			$can_add_notes = $is_administrateur || $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id;
 
 			$list_journal = CharacterLog::GetByCharacter( $personnage->id );
@@ -30,85 +33,97 @@
 			
 			$list_voies = Dictionary::GetVoies();
 			$list_capacites = array();
-			$list_sorts = array();
-			$list_spheres = array();
 			foreach( $list_voies as $voie_id => $voie_desc ){
-				$capacites = Dictionary::GetCapacitesByVoie( $voie_id );
-				$list_capacites[ $voie_id ] = $capacites;
-				
-				foreach( $capacites as $capacite_id => $capacite_nom ){
-					if( array_key_exists( $capacite_id, $personnage->capacites ) && $personnage->capacites[ $capacite_id ] > 0 ){
-						$list_spheres[ $capacite_id ] = $capacite_nom;
-						
-						$list_sorts[ $capacite_id ] = CapaciteRepository::GetSorts( $capacite_id );
-						$can_choose_spells = TRUE;
-					}
-				}
+				$list_capacites[ $voie_id ] = Dictionary::GetCapacitesByVoie( $voie_id );
 			}
+
 			$list_connaissances = Dictionary::GetConnaissances();
-			$list_prestiges = Dictionary::GetPrestiges();
-			$perso_prestige_sphere = 0;
-			if( $personnage->prestige_id != 0 ){
-				$perso_prestige_sphere = $list_prestiges[ $personnage->prestige_id ][ "voie_id" ];
+			$list_connaissances_completes = array();
+			$connaissance_repository = new ConnaissanceRepository();
+			// Remplace les connaissances par les entités complètes
+			$list_connaissances_completes[ $voie_id ] = array();
+			foreach( $list_connaissances as $connaissance_id => $connaissance_desc ){
+				$connaissance = $connaissance_repository->Find( $connaissance_id );
+				if( !array_key_exists( $connaissance->prereq_voie_primaire, $list_connaissances_completes ) ){
+					$list_connaissances_completes[ $connaissance->prereq_voie_primaire ] = array();
+				}
+				$list_connaissances_completes[ $connaissance->prereq_voie_primaire ][ $connaissance_id ] = $connaissance;
 			}
 			
+			// Liste les capacités raciales disponibles au personnage
 			$list_capacites_raciales = array();
-			$race_capacites_raciales = array();
-			if( is_numeric( $personnage->race_id ) && $personnage->race_id >= 0 && !$personnage->est_cree ){
+			if( !$personnage->est_cree && is_numeric( $personnage->race_id ) && $personnage->race_id >= 0 ){
 				$race_repository = new RaceRepository();
-				$race = $race_repository->Find( $personnage->race_id );
-				if( $race ){
-					$race_capacites_raciales = $race->list_capacites_raciales;
-					foreach( $race_capacites_raciales as $cr_id => $cr_infos ){
-						if( !array_key_exists( $cr_id, $personnage->capacites_raciales ) && $personnage->pc_raciales >= $cr_infos[ 1 ] ){
-							$list_capacites_raciales[ $cr_id ] = $cr_infos[ 0 ] . " (" . $cr_infos[ 1 ] . " PCR)";
-						}
+				$race_capacites_raciales = $race_repository->GetCapacitesRacialesByRace( $personnage->race_id );
+				foreach( $race_capacites_raciales as $cr_id => $cr_infos ){
+					if( !array_key_exists( $cr_id, $personnage->capacites_raciales ) && $personnage->pc_raciales >= $cr_infos[ 1 ] ){
+						$list_capacites_raciales[ $cr_id ] = $cr_infos[ 0 ] . " (" . $cr_infos[ 1 ] . "cr)";
 					}
 				}
 			}
 			
+			// Liste les capacités au choix du personnage
 			$list_choix_capacites = array();
-			$list_choix_capacites_capacites = array();
 			if( count( $personnage->choix_capacites ) > 0 ){
 				$choix_capacite_repository = new ChoixCapaciteRepository();
-				foreach( $personnage->choix_capacites as $choix_id => $choix_nombre ){
-					$choix_capacites = $choix_capacite_repository->Find( $choix_id );
-					$list_choix_capacites[ $choix_id ] = $choix_capacites->nom;
-					$list_choix_capacites_capacites[ $choix_id ] = $choix_capacite_repository->GetCapacites( $choix_capacites );
+				foreach( $personnage->choix_capacites as $choix_id => $choix_nom ){
+					$list_choix_capacites[ $choix_id ] = $choix_capacite_repository->GetCapacitesByChoixId( $choix_id );
 				}
 			}
 			
+			// Liste les capacités raciales au choix du personnage
+			$list_choix_capacites_raciales = array();
+			if( count( $personnage->choix_capacites_raciales ) > 0 ){
+				$choix_capacite_raciale_repository = new ChoixCapaciteRacialeRepository();
+				foreach( $personnage->choix_capacites_raciales as $choix_id => $choix_nom ){
+					$list_choix_capacites_raciales[ $choix_id ] = $choix_capacite_raciale_repository->GetCapacitesRacialesByChoixId( $choix_id );
+				}
+			}
+			
+			// Liste les connaissances au choix du personnage
 			$list_choix_connaissances = array();
-			$list_choix_connaissances_connaissances = array();
 			if( count( $personnage->choix_connaissances ) > 0 ){
 				$choix_connaissance_repository = new ChoixConnaissanceRepository();
 				foreach( $personnage->choix_connaissances as $choix_id => $choix_nombre ){
-					$choix_connaissance = $choix_connaissance_repository->Find( $choix_id );
-					$list_choix_connaissances[ $choix_id ] = $choix_connaissance->nom;
-					$list_choix_connaissances_connaissances[ $choix_id ] = $choix_connaissance_repository->GetConnaissances( $choix_connaissance );
+					$list_choix_connaissances[ $choix_id ] = $choix_connaissance_repository->GetConnaissancesByChoixId( $choix_id );
+				}
+			}
+
+			// Liste les voies au choix du personnage
+			$list_choix_voies = array();
+			if( count( $personnage->choix_voies ) > 0 ){
+				$choix_voie_repository = new ChoixVoieRepository();
+				foreach( $personnage->choix_voies as $choix_id => $choix_nombre ){
+					$list_choix_voies[ $choix_id ] = $choix_voie_repository->GetVoiesByChoixId( $choix_id );
 				}
 			}
 			
-			$has_choices = count( $list_choix_capacites ) > 0 || count( $list_choix_connaissances ) > 0;
+			// S'il a au moins un item au choix, le personnage a "des choix à faire"
+			$has_choices = count( $list_choix_capacites ) > 0
+					|| count( $list_choix_capacites_raciales ) > 0
+					|| count( $list_choix_connaissances ) > 0
+					|| count( $list_choix_voies ) > 0;
 			
 			// Liste seulement les informations de base si elles peuvent etre changees
 			if( $can_change_bases ){
 				if( $is_animateur ){
 					$list_joueurs = Community::GetPlayerList( TRUE );
 				}
-				if( ( $last_log && $last_log->Quoi == CharacterSheet::RECORD_RACE ) || ( empty( $personnage->race_id ) || $personnage->race_id == -1 ) ){
+				if( $personnage->pc_raciales == CHARACTER_BASE_PCR ){
 					$can_change_race = TRUE;
 					$list_races = Dictionary::GetRaces();
 				}
 				$list_cites_etats = Dictionary::GetCitesEtats();
 				$list_croyances = Dictionary::GetCroyances();
-				
+
+				// Garde en mémoire s'ils doivent être modifiés
 				$perso_nom = $personnage->nom;
 				$perso_cite_etat = $personnage->cite_etat_id;
-				$perso_croyance = $personnage->croyance_id;
 				$perso_race = $personnage->race_id;
+				$perso_croyance = $personnage->croyance_id;
 			}
-			
+
+			// Gestion des cases à cocher de la fiche de personnage
 			if( isset( $_GET["st"] ) ){
 				if( $personnage->est_vivant ){
 					// Sauvegarde des informations d'identification du personnage et changement de race
@@ -117,28 +132,39 @@
 						if( $can_change_bases ){
 							// Valide que le nom est bon
 							if( empty( Security::FilterInput( $_POST['perso_nom'] ) ) ){
-								Message::Erreur( "Vous n'avez fournit aucun nom pour ce personnage." );
+								Message::Erreur( "Vous n'avez fourni aucun nom pour ce personnage." );
 								$erreur = TRUE;
 							} else {
 								$perso_nom = Security::FilterInput( $_POST['perso_nom'] );
 							}
-							// Valide que la faction est bonne
-							if( empty( $_POST['perso_faction'] )
-									|| !is_numeric( $_POST['perso_faction'] )
-									|| !array_key_exists( $_POST['perso_faction'], $list_factions ) ){
-								Message::Erreur( "Vous n'avez choisit aucune faction pour ce personnage." );
+							// Valide que la cite_etat est bonne
+							if( empty( $_POST['perso_cite_etat'] )
+									|| !is_numeric( $_POST['perso_cite_etat'] )
+									|| !array_key_exists( $_POST['perso_cite_etat'], $list_cites_etats ) ){
+								Message::Erreur( "Vous n'avez choisi aucune cité-État pour ce personnage." );
 								$erreur = TRUE;
 							} else {
-								$perso_faction = $_POST['perso_faction'];
+								$perso_cite_etat = $_POST['perso_cite_etat'];
 							}
-							// Valide que la religion est bonne
-							if( empty( $_POST['perso_religion'] )
-									|| !is_numeric( $_POST['perso_religion'] )
-									|| !array_key_exists( $_POST['perso_religion'], $list_religions ) ){
-								Message::Erreur( "Vous n'avez choisit aucune religion pour ce personnage." );
+							if( $can_change_race ){
+								// Valide que la race est bonne
+								if( empty( $_POST['perso_race'] )
+										|| !is_numeric( $_POST['perso_race'] )
+										|| !array_key_exists( $_POST['perso_race'], $list_races ) ){
+									Message::Erreur( "Vous n'avez choisi aucune race pour ce personnage." );
+									$erreur = TRUE;
+								} else {
+									$perso_race = $_POST['perso_race'];
+								}
+							}
+							// Valide que la croyance est bonne
+							if( empty( $_POST['perso_croyance'] )
+									|| !is_numeric( $_POST['perso_croyance'] )
+									|| !array_key_exists( $_POST['perso_croyance'], $list_croyances ) ){
+								Message::Erreur( "Vous n'avez choisi aucune croyance pour ce personnage." );
 								$erreur = TRUE;
 							} else {
-								$perso_religion = $_POST['perso_religion'];
+								$perso_croyance = $_POST['perso_croyance'];
 							}
 						}
 						
@@ -146,9 +172,10 @@
 						if( !$erreur ){
 							// Ne fait la modification que si un des champ a change
 							if( $perso_nom != $personnage->nom
-									|| $perso_faction != $personnage->faction_id 
-									|| $perso_religion != $personnage->religion_id ){
-								$personnage = $char_sheet->UpdateBases( $personnage->id, mb_convert_encoding( $perso_nom, 'ISO-8859-1', 'UTF-8'), $perso_alignement, $perso_faction, $perso_religion );
+									|| $perso_cite_etat != $personnage->cite_etat_id
+									|| $perso_race != $personnage->race_id
+									|| $perso_croyance != $personnage->croyance_id ){
+								$personnage = $char_sheet->UpdateBases( $personnage->id, $perso_nom, $perso_race, $perso_cite_etat, $perso_croyance );
 								
 								if( $personnage == FALSE ){
 									Message::Erreur( "Une erreur s'est produite en enregistrant les informations d'identification du personnage." );
@@ -157,34 +184,17 @@
 									Message::Notice( "Les informations d'identification du personnage ont été enregistrées." );
 								}
 							}
-							
-							// Ne fait pas le changement de race si les informations de base n'ont pas ete enregistrees
-							if( !empty( $_POST['perso_race'] )
-									&& $can_change_race
-									&& !$erreur ){
-								// Valide que la race est bonne
-								if( !is_numeric( $_POST['perso_race'] )
-										|| !array_key_exists( $_POST['perso_race'], $list_races ) ){
-									Message::Erreur( "Vous n'avez choisit aucune race pour ce personnage." );
-								// Ne fait le changement que si la race a changee
-								} elseif( $_POST['perso_race'] != $personnage->race_id ) {
-									$perso_race = $_POST['perso_race'];
-									$personnage = $char_sheet->ChangeRace( $personnage->id, $perso_race );
-									
-									if( $personnage == FALSE ){
-										Message::Erreur( "Une erreur s'est produite lors du changement de race du personnage." );
-									} else {
-										Message::Notice( "La race du personnage a été changée." );
-									}
-								}
-							}
 						}
+					}
+					
+					/*
 					// Alternativement, on peut aussi changer les points d'experience lorsque c'est permit
-					} else if( $can_change_xp && isset( $_POST['change_xp'] ) &&is_numeric( $_POST[ 'change_xp' ] ) ){
+					if( $can_change_xp && isset( $_POST['change_xp'] ) &&is_numeric( $_POST[ 'change_xp' ] ) ){
 						if( $char_sheet->ManageExperience( $personnage->id, $_POST[ 'change_xp' ], FALSE, TRUE, mb_convert_encoding( "Modification manuelle.", 'ISO-8859-1', 'UTF-8') ) ){
 							Message::Notice( "Les points d'expérience du personnage ont été modifiés de " . $_POST['change_xp'] . "." );
 						}
 					}
+					*/
 					
 					// Sauvegarde des selections de capacites raciales
 					if( $_GET["st"] == "capacites_raciales" && isset( $_POST["perso_capacite_raciale"] ) ){
@@ -200,57 +210,78 @@
 							} else {
 								Message::Erreur( "Le personnage possède déjà cette capacité raciale.", $_POST["perso_capacite_raciale"] );
 							}
-						} elseif( $_POST["perso_capacite_raciale"] == "burn" ) {
-							$personnage = $char_sheet->BurnRemainingPCR( $personnage->id );
-							if( $personnage == FALSE ){
-								Message::Erreur( "Une erreur s'est produite lors de l'abandon des points de capacités raciales restants." );
-							} else {
-								Message::Notice( "Les points de capacités raciales restants ont été abandonnés." );
-							}
 						}
 					}
 					
 					// Sauvegarde des selections de choix de capacites
 					if( $_GET["st"] == "choix_capacites" && isset( $_POST["perso_choix_capacites"] ) && count( $_POST["perso_choix_capacites"] ) > 0 ){
-						if( $personnage->pc_raciales == 0 ){
-							// Bouclera sur chaque liste mais ne s'arretera pas sur celles qui ne retournent rien
-							foreach( $_POST["perso_choix_capacites"] as $choix_capacites_id => $choix_capacites_capacite ){
-								if( is_numeric( $choix_capacites_id )
-										&& array_key_exists( $choix_capacites_id, $list_choix_capacites )
-										&& array_key_exists( $choix_capacites_capacite, $list_choix_capacites_capacites[ $choix_capacites_id ] ) ){
-									$personnage = $char_sheet->BuyChoixCapacite( $personnage->id, $choix_capacites_id, $choix_capacites_capacite );
-							
-									if( $personnage == FALSE ){
-										Message::Erreur( "Une erreur s'est produite lors de la sélection de capacité." );
-									} else {
-										Message::Notice( "La capacité a été sélectionnée." );
-									}
+						// Bouclera sur chaque liste mais ne s'arretera pas sur celles qui ne retournent rien
+						foreach( $_POST["perso_choix_capacites"] as $choix_capacites_list => $choix_capacites_selectionnee ){
+							if( is_numeric( $choix_capacites_list )
+									&& array_key_exists( $choix_capacites_list, $list_choix_capacites )
+									&& array_key_exists( $choix_capacites_selectionnee, $list_choix_capacites[ $choix_capacites_list ] ) ){
+								$personnage = $char_sheet->BuyChoixCapacite( $personnage->id, $choix_capacites_list, $choix_capacites_selectionnee );
+						
+								if( $personnage == FALSE ){
+									Message::Erreur( "Une erreur s'est produite lors de la sélection de capacité." );
+								} else {
+									Message::Notice( "La capacité a été sélectionnée." );
 								}
 							}
-						} else {
-							Message::Erreur( "Veuillez sélectionner vos capacités raciales avant de continuer." );
 						}
 					}
-					
-					// Sauvegarde des selections de choix de pouvoirs
-					if( $_GET["st"] == "choix_pouvoirs" && isset( $_POST["perso_choix_pouvoirs"] ) && count( $_POST["perso_choix_pouvoirs"] ) > 0 ){
-						if( $personnage->pc_raciales == 0 ){
-							// Bouclera sur chaque liste mais ne s'arretera pas sur celles qui ne retournent rien
-							foreach( $_POST["perso_choix_pouvoirs"] as $choix_pouvoirs_id => $choix_pouvoirs_pouvoir ){
-								if( is_numeric( $choix_pouvoirs_id )
-										&& array_key_exists( $choix_pouvoirs_id, $list_choix_pouvoirs )
-										&& array_key_exists( $choix_pouvoirs_pouvoir, $list_choix_pouvoirs_pouvoirs[ $choix_pouvoirs_id ] ) ){
-									$personnage = $char_sheet->BuyChoixPouvoir( $personnage->id, $choix_pouvoirs_id, $choix_pouvoirs_pouvoir );
-							
-									if( $personnage == FALSE ){
-										Message::Erreur( "Une erreur s'est produite lors de la sélection de capacité." );
-									} else {
-										Message::Notice( "La capacité a été sélectionnée." );
-									}
+
+					// Sauvegarde des selections de choix de capacités raciales
+					if( $_GET["st"] == "choix_capacites_raciales" && isset( $_POST["perso_choix_capacites_raciales"] ) && count( $_POST["perso_choix_capacites_raciales"] ) > 0 ){
+						// Bouclera sur chaque liste mais ne s'arretera pas sur celles qui ne retournent rien
+						foreach( $_POST["perso_choix_capacites_raciales"] as $choix_capacites_raciales_list => $choix_capacites_raciales_selectionnee ){
+							if( is_numeric( $choix_capacites_raciales_list )
+									&& array_key_exists( $choix_capacites_raciales_list, $list_choix_capacites_raciales )
+									&& array_key_exists( $choix_capacites_raciales_selectionnee, $list_choix_capacites_raciales[ $choix_capacites_raciales_list ] ) ){
+								$personnage = $char_sheet->BuyChoixCapaciteRaciale( $personnage->id, $choix_capacites_raciales_list, $choix_capacites_raciales_selectionnee );
+						
+								if( $personnage == FALSE ){
+									Message::Erreur( "Une erreur s'est produite lors de la sélection de capacité raciale." );
+								} else {
+									Message::Notice( "La capacité raciale a été sélectionnée." );
 								}
 							}
-						} else {
-							Message::Erreur( "Veuillez sélectionner vos capacités raciales avant de continuer." );
+						}
+					}
+
+					// Sauvegarde des selections de choix de connaissances
+					if( $_GET["st"] == "choix_connaissances" && isset( $_POST["perso_choix_connaissances"] ) && count( $_POST["perso_choix_connaissances"] ) > 0 ){
+						// Bouclera sur chaque liste mais ne s'arretera pas sur celles qui ne retournent rien
+						foreach( $_POST["perso_choix_connaissances"] as $choix_connaissances_list => $choix_connaissances_selectionnee ){
+							if( is_numeric( $choix_connaissances_list )
+									&& array_key_exists( $choix_connaissances_list, $list_choix_connaissances )
+									&& array_key_exists( $choix_connaissances_selectionnee, $list_choix_connaissances[ $choix_connaissances_list ] ) ){
+								$personnage = $char_sheet->BuyChoixConnaissance( $personnage->id, $choix_connaissances_list, $choix_connaissances_selectionnee );
+						
+								if( $personnage == FALSE ){
+									Message::Erreur( "Une erreur s'est produite lors de la sélection de connaissance." );
+								} else {
+									Message::Notice( "La connaissance a été sélectionnée." );
+								}
+							}
+						}
+					}
+
+					// Sauvegarde des selections de choix de voies
+					if( $_GET["st"] == "choix_voies" && isset( $_POST["perso_choix_voies"] ) && count( $_POST["perso_choix_voies"] ) > 0 ){
+						// Bouclera sur chaque liste mais ne s'arretera pas sur celles qui ne retournent rien
+						foreach( $_POST["perso_choix_voies"] as $choix_voies_list => $choix_voies_selectionnee ){
+							if( is_numeric( $choix_voies_list )
+									&& array_key_exists( $choix_voies_list, $list_choix_voies )
+									&& array_key_exists( $choix_voies_selectionnee, $list_choix_voies[ $choix_voies_list ] ) ){
+								$personnage = $char_sheet->BuyChoixVoie( $personnage->id, $choix_voies_list, $choix_voies_selectionnee );
+						
+								if( $personnage == FALSE ){
+									Message::Erreur( "Une erreur s'est produite lors de la sélection de voie." );
+								} else {
+									Message::Notice( "La voie a été sélectionnée." );
+								}
+							}
 						}
 					}
 					
@@ -266,6 +297,7 @@
 							Message::Notice( "Le personnage a été activé." );
 						}
 					}
+					
 					
 					if( $personnage->est_cree ){
 						// Sauvegarde de l'achat d'un point de capacite
@@ -337,12 +369,14 @@
 						}
 					}
 					
+					/*
 					if( $_GET["st"] == "kill" ){
 						$personnage = $char_sheet->Deactivate( $personnage->id );
 						if( $personnage == FALSE ){
 							Message::Erreur( "Une erreur s'est produite lors de la désactivation." );
 						}
 					}
+					*/
 				}
 
 				if( $_GET["st"] == "comment" && isset( $_POST["perso_save_comment"] ) && isset( $_POST["perso_comment"] ) ){				
@@ -365,6 +399,7 @@
 					}
 				}
 				
+				/*
 				if( $_GET["st"] == "delete" && isset( $_POST["perso_delete"] ) ){
 					if( $can_destroy ){
 						if( !$char_sheet->Destroy( $personnage->id ) ){
@@ -406,6 +441,7 @@
 						Message::Erreur( "Vous n'avez pas les droits de rebuild à perte sur ce personnage." );
 					}
 				}
+				*/
 				
 				header( "Location: ?s=player&a=characterUpdate&c=" . $character_id );
 				die();

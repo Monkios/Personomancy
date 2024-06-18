@@ -1,15 +1,21 @@
 <?php
-	$list_capacites_raciales = Dictionary::GetPouvoirs( FALSE, FALSE );
+	$list_capacites_raciales = Dictionary::GetCapacitesRaciales( FALSE, FALSE );
+	$list_races = Dictionary::GetRaces( FALSE );
+
+	$list_choix_capacites = Dictionary::GetChoixCapacites( FALSE, FALSE );
+	$list_choix_capacites_raciales = Dictionary::GetChoixCapacitesRaciales( FALSE, FALSE );
+	$list_choix_connaissances = Dictionary::GetChoixConnaissances( FALSE, FALSE );
+	$list_choix_voies = Dictionary::GetChoixVoies( FALSE, FALSE );
 	
-	$capacite_raciale_repository = new PouvoirRepository();
+	$capacite_raciale_repository = new CapaciteRacialeRepository();
 	foreach( $list_capacites_raciales as $id => $nom ){
 		$list_capacites_raciales[ $id ] = $capacite_raciale_repository->Find( $id );
 	}
 	
 	if( isset( $_POST["add_capacite_raciale"] ) ){
-		$capaciteRaciale = $capacite_raciale_repository->Create( array( "nom" => mb_convert_encoding( Security::FilterInput( $_POST["capacite_raciale_nom"] ), 'ISO-8859-1', 'UTF-8') ) );
+		$capacite_raciale = $capacite_raciale_repository->Create( array( "nom" => Security::FilterInput( $_POST["capacite_raciale_nom"] ), "race_id" => $_POST["capacite_raciale_race"] ) );
 		
-		header( "Location: ?s=admin&a=updateCapaciteRaciale&i=" . $capaciteRaciale->id );
+		header( "Location: ?s=admin&a=updateCapaciteRaciale&i=" . $capacite_raciale->id );
 		die();
 	}
 	
