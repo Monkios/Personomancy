@@ -16,19 +16,9 @@
 			return $cost;
 		}
 		
-		/*
 		public static function GetVoieCost( $nb_voies_possedees ){
-			return $nb_voies_possedees * 10;
+			return $nb_voies_possedees * CHARACTER_COST_VOIE_MULTIPLIER;
 		}
-		
-		public static function GetConnaissanceCost(){
-			return 10;
-		}
-		
-		public static function GetPrestigeCost(){
-			return 100;
-		}
-		*/
 		
 		public function Load( $character_id ){
 			if( is_numeric( $character_id ) ){
@@ -110,7 +100,7 @@
 		public function BuyCapaciteRaciale( $character_id, $new_cr ){
 			$personnage_repository = new PersonnageRepository();
 			$c = $personnage_repository->FindComplete( $character_id );
-			// Valide que le personnage peut acheter des capacite raciales
+			// Valide que le personnage peut acheer des capacite raciales
 			if( $c != FALSE ){
 				$capacite_raciale_repository = new CapaciteRacialeRepository();
 				$cr = $capacite_raciale_repository->Find( $new_cr );
@@ -139,26 +129,6 @@
 			
 			return FALSE;
 		}
-		
-		/*
-		public function BurnRemainingPCR( $character_id ){
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->FindComplete( $character_id );
-			// Valide que le personnage peut acheter des capacite raciales
-			if( $c != FALSE && $c->pc_raciales > 0 ){
-				$remaining_pcr = $c->pc_raciales;
-				
-				$c->pc_raciales -= $remaining_pcr;
-				if( $personnage_repository->Save( $c ) ){
-					$this->RecordAction( $c->id, CharacterSheet::RECORD_RACIALE_EMPTY, 0, $remaining_pcr, mb_convert_encoding( "Abandon des " . $remaining_pcr . " points de capacités raciales restants.", 'ISO-8859-1', 'UTF-8'), TRUE );
-					
-					return $personnage_repository->FindComplete( $character_id );
-				}
-			}
-			
-			return FALSE;
-		}
-		*/
 		
 		public function BuyChoixCapacite( $character_id, $list_id, $choix_id ){
 			$personnage_repository = new PersonnageRepository();
@@ -320,7 +290,6 @@
 			return FALSE;
 		}
 		
-		/*
 		public function BuyCapacite( $character_id, $capacite_id, $nb_selections ){
 			$personnage_repository = new PersonnageRepository();
 			$c = $personnage_repository->FindComplete( $character_id );
@@ -332,7 +301,7 @@
 				$curr_score = $c->capacites[ $capacite_id ];
 				
 				if( $nb_selections > 0
-						&& $curr_score + $nb_selections <= CHARACTER_MAX_CAPACITES_SELECTIONS
+						&& $curr_score + $nb_selections <= CHARACTER_MAX_SELECTION_COUNT
 						&& $capacite && $capacite->active
 						&& in_array( $capacite->voie_id, $c->voies ) ){
 					$xp_cost = self::GetSelectionCompoundCost( $curr_score + $nb_selections, $curr_score );
@@ -341,7 +310,7 @@
 							$c->px_restants -= $xp_cost;
 						
 							if( $personnage_repository->Save( $c ) ){
-								$this->RecordAction( $c->id, CharacterSheet::RECORD_CAPACITE, $capacite_id, $nb_selections, mb_convert_encoding( "Augmentation de la capacité " . $capacite->nom . " à " . ( $curr_score + $nb_selections ) . " (-" . $xp_cost . " XP)", 'ISO-8859-1', 'UTF-8'), TRUE );
+								$this->RecordAction( $c->id, CharacterSheet::RECORD_CAPACITE, $capacite_id, $nb_selections, "Augmentation de la capacité " . $capacite->nom . " à " . ( $curr_score + $nb_selections ) . " (-" . $xp_cost . " XP)", TRUE );
 							
 								return $c;
 							}
@@ -384,7 +353,7 @@
 				$voie = $voie_repository->Find( $voie_id );
 				
 				if( $voie && $voie->active ){
-					$xp_cost = self::GetVoieCost( count( $c->voies ) );
+					echo $xp_cost = self::GetVoieCost( count( $c->voies ) );
 					if( $c->CanAfford( $xp_cost ) ){
 						if( $personnage_repository->AddVoie( $c, $voie_id ) ){
 							$c->px_restants -= $xp_cost;
@@ -431,13 +400,12 @@
 				$connaissance = $connaissance_repository->Find( $connaissance_id );
 				
 				if( $connaissance && $connaissance->active ){
-					$xp_cost = self::GetConnaissanceCost();
-					if( $c->CanAfford( $xp_cost ) ){
+					if( $c->CanAfford( $connaissance->cout ) ){
 						if( $personnage_repository->AddConnaissance( $c, $connaissance_id ) ){
-							$c->px_restants -= $xp_cost;
+							$c->px_restants -= $connaissance->cout;
 						
 							if( $personnage_repository->Save( $c ) ){
-								$this->RecordAction( $c->id, CharacterSheet::RECORD_CONNAISSANCE, $connaissance_id, 1, "Ajout de la connaissance " . $connaissance->nom . " (-" . $xp_cost . " XP)", TRUE );
+								$this->RecordAction( $c->id, CharacterSheet::RECORD_CONNAISSANCE, $connaissance_id, 1, "Ajout de la connaissance " . $connaissance->nom . " (-" . $connaissance->cout . " XP)", TRUE );
 							
 								return $c;
 							}
@@ -452,11 +420,13 @@
 		public function RefundConnaissance( Personnage $character, $connaissance_id ){
 			if( $character->est_vivant
 					&& in_array( $connaissance_id, $character->connaissances ) ){
-				$xp_cost = self::GetConnaissanceCost();
-				if( $character->px_restants + $xp_cost <= $character->px_totaux ){
+				$connaissance_repository = new ConnaissanceRepository();
+				$connaissance = $connaissance_repository->Find( $connaissance_id );
+
+				if( $character->px_restants + $connaissance->cout <= $character->px_totaux ){
 					$personnage_repository = new PersonnageRepository();
 					if( $personnage_repository->RemoveConnaissance( $character, $connaissance_id ) ){
-						$character->px_restants += $xp_cost;
+						$character->px_restants += $connaissance->cout;
 					
 						if( $personnage_repository->Save( $character ) ){
 							return $character;
@@ -468,6 +438,7 @@
 			return FALSE;
 		}
 		
+		/*
 		public function SaveCommentaire( Personnage $character, $commentaire ){
 			$personnage_repository = new PersonnageRepository();
 			
@@ -501,7 +472,6 @@
 			return FALSE;
 		}
 		
-		/*
 		public function Activate( $id ){
 			$personnage_repository = new PersonnageRepository();
 			$c = $personnage_repository->Find( $id );
@@ -510,25 +480,27 @@
 					&& !$c->est_cree
 					&& $c->pc_raciales == 0
 					&& count( $c->choix_capacites ) == 0
-					&& count( $c->choix_connaissances ) == 0
 					&& count( $c->choix_capacites_raciales ) == 0
+					&& count( $c->choix_connaissances ) == 0
+					&& count( $c->choix_voies == 0 )
 			){
 				if( $personnage_repository->Activate( $c ) ){
-					$this->RecordAction( $c->id, CharacterSheet::RECORD_ACTIVATE, 0, 0, mb_convert_encoding( "Activation du personnage", 'ISO-8859-1', 'UTF-8'), FALSE );
+					$this->RecordAction( $c->id, CharacterSheet::RECORD_ACTIVATE, 0, 0, "Activation du personnage", FALSE );
 					return TRUE;
 				}
 			}
 			
 			return FALSE;
 		}
-		
+
+		/*
 		public function Deactivate( $id ){
 			$personnage_repository = new PersonnageRepository();
 			$c = $personnage_repository->Find( $id );
 			
 			if( $c && $c->est_vivant ){
 				if( $personnage_repository->Deactivate( $c ) ){
-					$this->RecordAction( $c->id, CharacterSheet::RECORD_DEACTIVATE, 0, 0, mb_convert_encoding( "Désactivation du personnage", 'ISO-8859-1', 'UTF-8'), FALSE );
+					$this->RecordAction( $c->id, CharacterSheet::RECORD_DEACTIVATE, 0, 0, "Désactivation du personnage", FALSE );
 					return TRUE;
 				}
 			}
@@ -542,7 +514,7 @@
 			
 			if( $c && !$c->est_vivant ){
 				if( $personnage_repository->Delete( $c->id ) ){
-					$this->RecordAction( $c->id, CharacterSheet::RECORD_DESTROY, 0, 0, mb_convert_encoding( "Destruction de ", 'ISO-8859-1', 'UTF-8') . $c->nom, FALSE );
+					$this->RecordAction( $c->id, CharacterSheet::RECORD_DESTROY, 0, 0, "Destruction de " . $c->nom, FALSE );
 					return TRUE;
 				}
 			}
@@ -555,7 +527,7 @@
 			$c = $personnage_repository->Find( $id );
 			
 			if( !$suffix ){
-				$suffix = mb_convert_encoding( " [REMPLACÉ " . date( "Y-m-d" ) . "]", 'ISO-8859-1', 'UTF-8');
+				$suffix = " [REMPLACÉ " . date( "Y-m-d" ) . "]";
 			}
 			
 			if( $c ){
@@ -569,7 +541,7 @@
 			$c = $personnage_repository->Find( $id );
 			
 			if( !$suffix ){
-				$suffix = mb_convert_encoding( " [REMPLACÉ (à perte) " . date( "Y-m-d" ) . "]", 'ISO-8859-1', 'UTF-8');
+				$suffix = " [REMPLACÉ (à perte) " . date( "Y-m-d" ) . "]";
 			}
 			
 			if( $c ){
@@ -581,18 +553,18 @@
 		private function Rebuild( $c, $xp_after_rebuild, $suffix ){
 			$rebuild = $this->Create( $c->joueur_id, $c->nom, $c->alignement_id, $c->cite_etat_id, $c->croyance_id, $c->race_id );
 			
-			$this->RecordAction( $c->id, 6, $rebuild->id, $rebuild->px_totaux, mb_convert_encoding( "Personnage copié.", 'ISO-8859-1', 'UTF-8'), FALSE );
+			$this->RecordAction( $c->id, 6, $rebuild->id, $rebuild->px_totaux, "Personnage copié.", FALSE );
 			if( $rebuild ){
 				// La différence entre l'XP que le personnage doit avoir et celui qu'il a déjà
 				$nouvel_xp = $xp_after_rebuild - $rebuild->px_totaux;
-				if( $nouvel_xp <= 0 || $this->ManageExperience( $rebuild->id, $nouvel_xp, FALSE, TRUE, mb_convert_encoding( "Transfert des points d'expérience de l'ancien personnage vers le nouveau.", 'ISO-8859-1', 'UTF-8') ) ){
+				if( $nouvel_xp <= 0 || $this->ManageExperience( $rebuild->id, $nouvel_xp, FALSE, TRUE, "Transfert des points d'expérience de l'ancien personnage vers le nouveau." ) ){
 					if( $nouvel_xp > 0 ){
 						$rebuild->px_restants += $nouvel_xp;
 						$rebuild->px_totaux += $nouvel_xp;
 					}
 					
 					// Bloque les modifications
-					$this->RecordAction( $rebuild->id, 0, 0, $c->id, mb_convert_encoding( "Copie du personnage.", 'ISO-8859-1', 'UTF-8'), FALSE );
+					$this->RecordAction( $rebuild->id, 0, 0, $c->id, "Copie du personnage.", FALSE );
 					
 					// Laisse une trace sur l'ancetre
 					$this->UpdateBases( $c->id, $c->nom . $suffix, $c->alignement_id, $c->cite_etat_id, $c->croyance_id );
@@ -630,7 +602,7 @@
 							}
 						
 							// La raison recue a deja ete decodee par le controleur
-							$record_msg = mb_convert_encoding( ( $modificateur >= 0 ? "Gain" : "Perte" ) . " de " . abs( $modificateur ) . " points d'expérience", 'ISO-8859-1', 'UTF-8') . $raison;
+							$record_msg = ( $modificateur >= 0 ? "Gain" : "Perte" ) . " de " . abs( $modificateur ) . " points d'expérience" . $raison;
 							$this->RecordAction( $c->id, CharacterSheet::RECORD_XP, 0, $modificateur, $record_msg, TRUE );
 						}
 						
@@ -663,19 +635,11 @@
 						}
 						break;
 					/*
-					case CharacterSheet::RECORD_RACIALE_EMPTY :
-						// Vidage des PCRs du personnage
-						$personnage_repository = new PersonnageRepository();
-						$character->pc_raciales += $last_modif->Combien;
-						if( $personnage_repository->Save( $character ) ){
-							Message::Notice( "La sélection de capacité raciale a été retirée." );
-							$rolled_back = true;
-						}
-						break;
 					//TODO: case CharacterSheet::RECORD_REBUILD :
 					//TODO: case CharacterSheet::RECORD_DESTROY :
 					//TODO: case CharacterSheet::RECORD_ACTIVATE :
 					//	break;
+					*/
 					case CharacterSheet::RECORD_VOIE :
 						// Achat d'une voie
 						if( $this->RefundVoie( $character, $last_modif->Pourquoi ) ){
@@ -697,7 +661,6 @@
 							$rolled_back = true;
 						}
 						break;
-					*/
 					case CharacterSheet::RECORD_CHOIX_CAPACITE :
 						// Achat d'un choix de capacite
 						if( $this->RefundChoixCapacite( $character, $last_modif->Pourquoi, $last_modif->Combien ) ){
@@ -750,14 +713,13 @@
 		const RECORD_MESSAGE = 0;
 		const RECORD_XP = 1;
 		const RECORD_RACIALE_CAPACITE = 4;
-		//const RECORD_RACIALE_EMPTY = 5;
 		//const RECORD_REBUILD = 6;
 		//const RECORD_DESTROY = 7;
-		//const RECORD_ACTIVATE = 8;
+		const RECORD_ACTIVATE = 8;
 		//const RECORD_DEACTIVATE = 9;
-		//const RECORD_VOIE = 10;
-		//const RECORD_CAPACITE = 11;
-		//const RECORD_CONNAISSANCE = 12;
+		const RECORD_VOIE = 10;
+		const RECORD_CAPACITE = 11;
+		const RECORD_CONNAISSANCE = 12;
 		const RECORD_CHOIX_CAPACITE = 21;
 		const RECORD_CHOIX_CAPACITE_RACIALE = 22;
 		const RECORD_CHOIX_CONNAISSANCE = 23;

@@ -262,7 +262,7 @@
 <?php
 		if( ( $personnage->pc_raciales > 0 ) || $has_choices ){
 ?>
-					<p>Avant de pouvoir activer le personnage, un élément de chaque liste ci-dessus doit être sélectionné.</p>
+					<p>Avant de pouvoir activer le personnage, toutes les capacités raciales doivent être choisies.</p>
 <?php
 		}
 ?>
@@ -287,7 +287,6 @@
 	}
 ?>
 			</div>
-			<div class="fiche_regroupement fiche_regroupement_capacites">
 <?php
 	foreach( $list_voies as $voie_id => $voie_desc ){
 		$has_voie = in_array( $voie_id, $personnage->voies );
@@ -301,6 +300,8 @@
 			$voie_status = "disabled='disabled'";
 		}
 ?>
+			
+			<div class="fiche_regroupement fiche_regroupement_capacites">
 				<div>
 					<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_capacite">
 						<h3>
@@ -328,30 +329,66 @@
 ?>
 					</form>
 				</div>
-<?php
-	}
-?>
 			</div>
+<?php
+		$connaissances_type = array( CHARACTER_COST_CONN_AVANCEE => "Avancées", CHARACTER_COST_CONN_MAITRE => "Maîtres", CHARACTER_COST_CONN_LEGENDAIRE => "Légendaires" );
+		foreach( $connaissances_type as $connaissances_type_cout => $connaissances_type_nom ){
+?>
 			<div class="fiche_regroupement fiche_regroupement_connaissances">
 				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_connaissance">
-					<h3>Connaissances</h3>
+					<h3><?php echo $connaissances_type_nom; ?></h3>
 <?php
-	foreach( $personnage->connaissances_accessibles as $connaissance_id ){
-		$connaissance_status = "";
-		if( in_array( $connaissance_id, $personnage->connaissances ) ){
-			$connaissance_status = " checked='checked' disabled='disabled'";
-		//} elseif( CharacterSheet::GetConnaissanceCost() <= $personnage->GetRealCurrentXP() && $personnage->est_vivant && $personnage->est_cree ) {
-		//	$connaissance_status = " onchange='this.form.submit()'";
-		} else {
-			$connaissance_status = " disabled='disabled'";
-		}
+			foreach( $list_connaissances_completes[ $voie_id ] as $connaissance_id => $connaissance ){
+				if( $connaissance->cout == $connaissances_type_cout ){
+					$connaissance_status = "title='" . $connaissance->GetConnaissanceType() . " (" . $connaissance->cout . " XP)'";
+					if( in_array( $connaissance_id, $personnage->connaissances ) ){
+						$connaissance_status .= " checked='checked' disabled='disabled'";
+					} elseif( $personnage->est_vivant && $personnage->est_cree && in_array( $connaissance_id, $personnage->connaissances_accessibles ) && $connaissance->cout <= $personnage->GetRealCurrentXP() ) {
+						$connaissance_status .= " onchange='this.form.submit()'";
+					} else {
+						$connaissance_status .= " disabled='disabled'";
+					}
 ?>
 					<div class="fiche_element">
-						<label for="perso_connaissance_<?php echo $connaissance_id; ?>" title="<?php echo htmlentities( $list_connaissances[ $connaissance_id ] ); ?>"><?php echo $list_connaissances[ $connaissance_id ]; ?></label>
+						<label for="perso_connaissance_<?php echo $connaissance_id; ?>" title="<?php echo htmlentities( $connaissance->nom ); ?>"><?php echo $connaissance->nom; ?></label>
 						<input type="checkbox" name="perso_connaissance" id="perso_connaissance_<?php echo $connaissance_id; ?>" value="<?php echo $connaissance_id; ?>"<?php echo $connaissance_status; ?> />
 					</div>
 <?php
+				}
+			}
+?>
+				</form>
+			</div>
+<?php
+		}
+?>
+<?php
 	}
+?>
+			<div class="fiche_regroupement fiche_regroupement_synergies">
+				<form method="post" action="?s=player&a=characterUpdate&c=<?php echo $personnage->id; ?>&st=buy_connaissance">
+					<h3>Synergiques</h3>
+<?php
+			foreach( $list_voies as $voie_id => $voie_desc ){
+				foreach( $list_connaissances_completes[ $voie_id ] as $connaissance_id => $connaissance ){
+					if( $connaissance->cout == CHARACTER_COST_CONN_SYNERGIQUE ){
+						$connaissance_status = "title='" . $connaissance->GetConnaissanceType() . " (" . $connaissance->cout . " XP)'";
+						if( in_array( $connaissance_id, $personnage->connaissances ) ){
+							$connaissance_status .= " checked='checked' disabled='disabled'";
+						} elseif( $personnage->est_vivant && $personnage->est_cree && in_array( $connaissance_id, $personnage->connaissances_accessibles ) && $connaissance->cout <= $personnage->GetRealCurrentXP() ) {
+							$connaissance_status .= " onchange='this.form.submit()'";
+						} else {
+							$connaissance_status .= " disabled='disabled'";
+						}
+?>
+					<div class="fiche_element">
+						<label for="perso_connaissance_<?php echo $connaissance_id; ?>" title="<?php echo htmlentities( $connaissance->nom ); ?>"><?php echo $connaissance->nom; ?></label>
+						<input type="checkbox" name="perso_connaissance" id="perso_connaissance_<?php echo $connaissance_id; ?>" value="<?php echo $connaissance_id; ?>"<?php echo $connaissance_status; ?> />
+					</div>
+<?php
+					}
+				}
+			}
 ?>
 				</form>
 			</div>

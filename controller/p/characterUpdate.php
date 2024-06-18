@@ -34,13 +34,25 @@
 			$list_voies = Dictionary::GetVoies();
 			$list_capacites = array();
 			foreach( $list_voies as $voie_id => $voie_desc ){
-				$capacites = Dictionary::GetCapacitesByVoie( $voie_id );
-				$list_capacites[ $voie_id ] = $capacites;
+				$list_capacites[ $voie_id ] = Dictionary::GetCapacitesByVoie( $voie_id );
 			}
+
 			$list_connaissances = Dictionary::GetConnaissances();
+			$list_connaissances_completes = array();
+			$connaissance_repository = new ConnaissanceRepository();
+			// Remplace les connaissances par les entités complètes
+			$list_connaissances_completes[ $voie_id ] = array();
+			foreach( $list_connaissances as $connaissance_id => $connaissance_desc ){
+				$connaissance = $connaissance_repository->Find( $connaissance_id );
+				if( !array_key_exists( $connaissance->prereq_voie_primaire, $list_connaissances_completes ) ){
+					$list_connaissances_completes[ $connaissance->prereq_voie_primaire ] = array();
+				}
+				$list_connaissances_completes[ $connaissance->prereq_voie_primaire ][ $connaissance_id ] = $connaissance;
+			}
 			
+			// Liste les capacités raciales disponibles au personnage
 			$list_capacites_raciales = array();
-			if( is_numeric( $personnage->race_id ) && $personnage->race_id >= 0 && !$personnage->est_cree ){
+			if( !$personnage->est_cree && is_numeric( $personnage->race_id ) && $personnage->race_id >= 0 ){
 				$race_repository = new RaceRepository();
 				$race_capacites_raciales = $race_repository->GetCapacitesRacialesByRace( $personnage->race_id );
 				foreach( $race_capacites_raciales as $cr_id => $cr_infos ){
@@ -50,6 +62,7 @@
 				}
 			}
 			
+			// Liste les capacités au choix du personnage
 			$list_choix_capacites = array();
 			if( count( $personnage->choix_capacites ) > 0 ){
 				$choix_capacite_repository = new ChoixCapaciteRepository();
@@ -58,6 +71,7 @@
 				}
 			}
 			
+			// Liste les capacités raciales au choix du personnage
 			$list_choix_capacites_raciales = array();
 			if( count( $personnage->choix_capacites_raciales ) > 0 ){
 				$choix_capacite_raciale_repository = new ChoixCapaciteRacialeRepository();
@@ -66,6 +80,7 @@
 				}
 			}
 			
+			// Liste les connaissances au choix du personnage
 			$list_choix_connaissances = array();
 			if( count( $personnage->choix_connaissances ) > 0 ){
 				$choix_connaissance_repository = new ChoixConnaissanceRepository();
@@ -74,6 +89,7 @@
 				}
 			}
 
+			// Liste les voies au choix du personnage
 			$list_choix_voies = array();
 			if( count( $personnage->choix_voies ) > 0 ){
 				$choix_voie_repository = new ChoixVoieRepository();
@@ -82,6 +98,7 @@
 				}
 			}
 			
+			// S'il a au moins un item au choix, le personnage a "des choix à faire"
 			$has_choices = count( $list_choix_capacites ) > 0
 					|| count( $list_choix_capacites_raciales ) > 0
 					|| count( $list_choix_connaissances ) > 0
@@ -106,6 +123,7 @@
 				$perso_croyance = $personnage->croyance_id;
 			}
 
+			// Gestion des cases à cocher de la fiche de personnage
 			if( isset( $_GET["st"] ) ){
 				if( $personnage->est_vivant ){
 					// Sauvegarde des informations d'identification du personnage et changement de race
@@ -267,7 +285,6 @@
 						}
 					}
 					
-					/*
 					// Activation du personnage
 					if( $_GET["st"] == "activation"
 							&& isset( $_POST["activate_character"] )
@@ -280,6 +297,7 @@
 							Message::Notice( "Le personnage a été activé." );
 						}
 					}
+					
 					
 					if( $personnage->est_cree ){
 						// Sauvegarde de l'achat d'un point de capacite
@@ -334,7 +352,6 @@
 							}
 						}
 					}
-					*/
 					
 					// Retour en arriere
 					if( $_GET["st"] == "rollback"

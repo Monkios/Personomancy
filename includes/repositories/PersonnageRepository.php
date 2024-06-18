@@ -135,8 +135,46 @@
 			$this->_db->Query( $sql, $params );
 			$insert_id = $this->_db->GetInsertId();
 			
-			$character = $this->Find( $insert_id );
-			if( !$character ){
+			$character = $this->FindComplete( $insert_id );
+			$error_occured = FALSE;
+			if( $character ){
+				// Ajout des bases obtenus automatiquement par tous les personnages
+				$automatics = json_decode( CHARACTER_BASE_AUTOMATICS, true );
+				if( array_key_exists( "voies", $automatics ) ){
+					foreach( $automatics[ "voies" ] as $id_voie ){
+						if( $this->AddVoie( $character, $id_voie ) == FALSE ){
+							Message::Erreur( "CREATION : Une erreur s'est produite lors de l'ajout de la voie #" . $id_voie );
+							$error_occured = TRUE;
+						}
+					}
+				}
+				if( array_key_exists( "capacites", $automatics ) ){
+					foreach( $automatics[ "capacites" ] as $id_capacite ){
+						if( $this->AddCapacite( $character, $id_capacite, 1, true ) == FALSE ){
+							Message::Erreur( "CREATION : Une erreur s'est produite lors de l'ajout de la capacité #" . $id_capacite );
+							$error_occured = TRUE;
+						}
+					}
+				}
+				if( array_key_exists( "connaissances", $automatics ) ){
+					foreach( $automatics[ "connaissances" ] as $id_connaissance ){
+						if( $this->AddConnaissance( $character, $id_connaissance, true ) == FALSE ){
+							Message::Erreur( "CREATION : Une erreur s'est produite lors de l'ajout de la connaissance #" . $id_connaissance );
+							$error_occured = TRUE;
+						}
+					}
+				}
+				if( array_key_exists( "capacites_raciales", $automatics ) ){
+					foreach( $automatics[ "capacites_raciales" ] as $id_pouvoir ){
+						if( $this->AddCapaciteRaciale( $character, $id_pouvoir, true ) == FALSE ){
+							Message::Erreur( "CREATION : Une erreur s'est produite lors de l'ajout du pouvoir #" . $id_pouvoir );
+							$error_occured = TRUE;
+						}
+					}
+				}
+			}
+			
+			if( !$character || $error_occured ){
 				$this->Delete( $insert_id );
 				return FALSE;
 			}
@@ -181,7 +219,6 @@
 			return $personnage != FALSE;
 		}
 		
-		/*
 		public function Activate( Personnage &$personnage ){
 			if( $personnage->est_cree == FALSE ){
 				$personnage->est_cree = TRUE;
@@ -192,6 +229,7 @@
 			return FALSE;
 		}
 		
+		/*
 		public function Deactivate( Personnage &$personnage ){
 			if( $personnage->est_vivant == TRUE ){
 				$personnage->est_vivant = FALSE;
@@ -286,7 +324,7 @@
 							return FALSE;
 						}
 						// Si la liste est d'exactement 1, ajoute l'élément automatiquement
-						$choix_capacite_raciale_repository = new ChoixCapacitesRacialesRepository();
+						$choix_capacite_raciale_repository = new ChoixCapaciteRacialeRepository();
 						$liste_capacites_raciales = $choix_capacite_raciale_repository->GetCapacitesRacialesByChoixId( $capacite_raciale->choix_capacite_raciale_bonus_id );
 						if( count( $liste_capacites_raciales ) == 1 ){
 							$this->BuyChoixCapacitesRaciales( $personnage, $capacite_raciale->choix_capacite_raciale_bonus_id, array_key_first( $liste_capacites_raciales ) );
@@ -356,9 +394,9 @@
 					if( $capacite_raciale->choix_capacite_raciale_bonus_id != 0 ){
 						// Si la liste est d'exactement 1, ajoute l'élément automatiquement
 						$choix_capacite_raciale_repository = new ChoixCapaciteRacialeRepository();
-						$liste_capacites_raciales = $choix_capacite_raciale_repository->GetCapaciteRacialesByChoixId( $capacite_raciale_raciale->choix_capacite_raciale_bonus_id );
+						$liste_capacites_raciales = $choix_capacite_raciale_repository->GetCapacitesRacialesByChoixId( $capacite_raciale->choix_capacite_raciale_bonus_id );
 						if( count( $liste_capacites_raciales ) == 1 ){
-							$this->RefundChoixCapaciteRaciale( $personnage, $capacite_raciale_raciale->choix_capacite_raciale_bonus_id, array_key_first( $liste_capacites_raciales ) );
+							$this->RefundChoixCapaciteRaciale( $personnage, $capacite_raciale->choix_capacite_raciale_bonus_id, array_key_first( $liste_capacites_raciales ) );
 						}
 
 						if( $this->RemoveChoixCapaciteRaciale( $personnage, $capacite_raciale->choix_capacite_raciale_bonus_id ) == FALSE ){
@@ -781,7 +819,7 @@
 			return FALSE;
 		}
 
-		public function AddConnaissance( Personnage &$personnage, $connaissance_id, $force ){
+		public function AddConnaissance( Personnage &$personnage, $connaissance_id, $force = FALSE ){
 			if( $personnage && $personnage->est_vivant && $personnage->est_complet ){
 				if( count( Dictionary::GetConnaissances( $connaissance_id ) ) == 0 ){
 					Message::Fatale( "Identifiant de connaissance invalide.", func_get_args() );
@@ -960,7 +998,6 @@
 			return FALSE;
 		}
 		
-		/*
 		private function HasPrerequisCapacite( Personnage &$personnage, $id_capacite ){
 			if( $personnage ){
 				$capacite_repository = new CapaciteRepository();
@@ -971,7 +1008,17 @@
 			}
 			return FALSE;
 		}
-		*/
+
+		private function HasPrerequisConnaissance( Personnage &$personnage, $id_connaissance ){
+			if( $personnage ){
+				$connaissance_repository = new ConnaissanceRepository();
+				$connaissance = $connaissance_repository->Find( $id_connaissance );
+				
+				return $connaissance !== FALSE && $connaissance->active
+						&& $connaissance->cout <= $personnage->GetRealCurrentXP();
+			}
+			return FALSE;
+		}
 		
 		private function FetchCharacterList( $order_by = "", $where = "", $params = array() ){
 			$list = array();
@@ -1152,9 +1199,11 @@
 
 		private function FetchCapacites( Personnage &$personnage ){
 			if( $personnage ){
-				$sql = "SELECT pc.capacite_id, COALESCE( pc.niveau, 0 ) AS niveau
-						FROM personnage_capacite AS pc
-						WHERE pc.personnage_id = ?";
+				// Sélectionne aussi les capacités que le personnage n'a pas en leur attribuant un niveau 0
+				$sql = "SELECT c.id AS capacite_id, COALESCE( pc.niveau, 0 ) AS niveau
+						FROM capacite AS c
+							LEFT JOIN personnage_capacite pc ON c.id = pc.capacite_id AND pc.personnage_id = ?
+						WHERE c.active = '1' AND c.supprime = '0'";
 				$this->_db->Query( $sql, array( $personnage->id ) );
 				while( $result = $this->_db->GetResult() ){
 					$personnage->capacites[ $result[ "capacite_id" ] ] = $result[ "niveau" ];
@@ -1181,46 +1230,17 @@
 		private function FetchConnaissancesAccessibles( Personnage &$personnage ){
 			if( $personnage ){
 				$sql = "SELECT c.id
-						FROM connaissance c
-						ORDER BY c.nom";
-				/*$sql = "SELECT c.id
 						FROM connaissance c,
 							personnage p
 						WHERE p.id = ?
 								AND c.active = '1' AND c.supprime = '0'
-								AND ( c.voie = 0 OR c.voie IN
-										( SELECT id_voie FROM personnage_voie WHERE id_personnage = p.id )
+								AND c.prereq_voie_primaire IN ( SELECT voie_id FROM personnage_voie WHERE personnage_id = p.id )
+								AND (
+									( c.prereq_voie_secondaire IS NULL AND c.prereq_capacite IS NULL ) -- AVANCÉE + MAÎTRE
+									OR c.prereq_capacite IN ( SELECT capacite_id FROM personnage_capacite WHERE personnage_id = p.id AND niveau >= " . CHARACTER_CONN_LEGENDAIRE_TRESHOLD . " ) -- LÉGENDAIRE
+									OR c.prereq_voie_secondaire IN ( SELECT voie_id FROM personnage_voie WHERE personnage_id = p.id ) -- SYNERGIQUE
 								)
-								AND ( c.capacite = 0 OR c.capacite IN
-										( SELECT id_capacite FROM personnage_capacite WHERE id_personnage = p.id AND niveau - 1 >= c.capacite_niveau )
-								)
-								AND ( c.capacite_sec = 0 OR c.capacite_sec IN
-										( SELECT id_capacite FROM personnage_capacite WHERE id_personnage = p.id AND niveau - 1 >= c.capacite_niveau )
-								)
-								AND ( c.connaissance = 0 OR c.connaissance IN
-										( SELECT id_connaissance FROM personnage_connaissance WHERE id_personnage = p.id )
-								)
-								AND ( c.connaissance_sec = 0 OR c.connaissance_sec IN
-										( SELECT id_connaissance FROM personnage_connaissance WHERE id_personnage = p.id )
-								)
-								AND ( c.divinite = 0 OR c.divinite = p.croyance )
-								AND ( c.statistique = 0
-									 OR ( c.statistique = 1 AND statistique_niveau <= p.st_constitution )
-									 OR ( c.statistique = 2 AND statistique_niveau <= p.st_intelligence )
-									 OR ( c.statistique = 3 AND statistique_niveau <= p.st_alerte )
-									 OR ( c.statistique = 4 AND statistique_niveau <= p.st_spiritisme )
-									 OR ( c.statistique = 5 AND statistique_niveau <= p.st_vigueur )
-									 OR ( c.statistique = 6 AND statistique_niveau <= p.st_volonte )
-								)
-								AND ( c.statistique_sec = 0
-									 OR ( c.statistique_sec = 1 AND statistique_sec_niveau <= p.st_constitution )
-									 OR ( c.statistique_sec = 2 AND statistique_sec_niveau <= p.st_intelligence )
-									 OR ( c.statistique_sec = 3 AND statistique_sec_niveau <= p.st_alerte )
-									 OR ( c.statistique_sec = 4 AND statistique_sec_niveau <= p.st_spiritisme )
-									 OR ( c.statistique_sec = 5 AND statistique_sec_niveau <= p.st_vigueur )
-									 OR ( c.statistique_sec = 6 AND statistique_sec_niveau <= p.st_volonte )
-								)
-						ORDER BY c.nom";*/
+						ORDER BY c.nom";
 				$this->_db->Query( $sql, array( $personnage->id ) );
 				while( $result = $this->_db->GetResult() ){
 					$personnage->connaissances_accessibles[] = $result[ "id" ];
