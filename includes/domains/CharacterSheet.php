@@ -577,6 +577,7 @@
 			}
 			return FALSE;
 		}
+		*/
 		
 		public function ManageExperience( $character_id, $modificateur, $silent = FALSE, $modif_total = FALSE, $raison = "" ){
 			if( is_numeric( $modificateur ) ){
@@ -607,7 +608,6 @@
 				}
 			}
 		}
-		*/
 		
 		public function Rollback( Personnage &$character ){
 			$rolled_back = FALSE;
@@ -615,14 +615,12 @@
 			
 			if( $last_modif != FALSE && $last_modif->CanBacktrack ){
 				switch( $last_modif->Quoi ){
-					/*
 					case CharacterSheet::RECORD_XP :
 						// Modification des XP
 						if( $this->ManageExperience( $character->id, ( $last_modif->Combien * -1 ), TRUE, TRUE ) ){
 							$rolled_back = true;
 						}
 						break;
-					*/
 					case CharacterSheet::RECORD_RACIALE_CAPACITE :
 						// Achat d'une capacite raciale
 						if( $this->RefundCapaciteRaciale( $character, $last_modif->Pourquoi, $last_modif->Combien ) ){

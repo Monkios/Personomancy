@@ -20,7 +20,9 @@
 			
 			// Les administrateurs peuvent changer les points d'expérience des personnages créés
 			// Les animateurs peuvent changer les points d'expérience de leurs personnages créés
-			$can_change_xp = false;// $personnage->est_cree && ( $is_administrateur || ( $is_animateur && $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id ));
+			$can_change_xp = $personnage->est_cree && ( $is_administrateur || ( $is_animateur && $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id ));
+			$xp_change_min = ( $personnage->px_totaux - CHARACTER_BASE_XP ) * -1;
+			$xp_change_max = CHARACTER_MAX_XP_INVESTED - $personnage->px_totaux;
 			// Les administrateurs peuvent détruire les personnages
 			// Les animateurs peuvent détruire leurs personnages
 			//$can_destroy = $is_administrateur || ( $is_animateur && $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id );
@@ -187,14 +189,13 @@
 						}
 					}
 					
-					/*
 					// Alternativement, on peut aussi changer les points d'experience lorsque c'est permit
-					if( $can_change_xp && isset( $_POST['change_xp'] ) &&is_numeric( $_POST[ 'change_xp' ] ) ){
-						if( $char_sheet->ManageExperience( $personnage->id, $_POST[ 'change_xp' ], FALSE, TRUE, mb_convert_encoding( "Modification manuelle.", 'ISO-8859-1', 'UTF-8') ) ){
+					if( $can_change_xp && isset( $_POST['change_xp'] ) && is_numeric( $_POST[ 'change_xp' ] )
+							&& $_POST[ 'change_xp' ] >= $xp_change_min && $_POST[ 'change_xp' ] <= $xp_change_max){
+						if( $char_sheet->ManageExperience( $personnage->id, $_POST[ 'change_xp' ], FALSE, TRUE, "Modification manuelle." ) ){
 							Message::Notice( "Les points d'expérience du personnage ont été modifiés de " . $_POST['change_xp'] . "." );
 						}
 					}
-					*/
 					
 					// Sauvegarde des selections de capacites raciales
 					if( $_GET["st"] == "capacites_raciales" && isset( $_POST["perso_capacite_raciale"] ) ){

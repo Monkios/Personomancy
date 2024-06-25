@@ -104,11 +104,12 @@
 						<label for="perso_xp">Points d'expérience :</label>
 						<span id="perso_xp" class="as_input"><?php echo $xp_txt; ?></span>
 <?php
-	/*if( $can_change_xp ){
+	if( $can_change_xp ){
 ?>
 						<select name="change_xp" onchange="this.form.submit();">
 <?php
-		for( $xp = -100; $xp <= 250; $xp += 5 ){
+		// La jauge va du nombre minimal reçu à la création au nombre maximal possible
+		for( $xp = $xp_change_min; $xp <= $xp_change_max; $xp++ ){
 ?>
 							<option value="<?php echo $xp; ?>"<?php echo $xp == 0 ? " selected='selected'" : ""; ?>><?php echo $xp > 0 ? "+" . $xp : $xp; ?> XP</option>
 <?php
@@ -116,7 +117,7 @@
 ?>
 						</select>
 <?php
-	}*/
+	}
 ?>
 					</div>
 <?php
