@@ -65,6 +65,18 @@
 
 			return 0; //TODO ceil( ( $invested - CHARACTER_BASE_XP ) * CHARACTER_REBUILD_PERTE_TAUX / 5 ) * 5 + CHARACTER_BASE_XP + $this->px_restants;
 		}
+
+		public function GetNextVoieCost(){
+			return $this->GetVoieCost( count( $this->voies ) );
+		}
+
+		public function GetRefundVoieCost(){
+			return $this->GetVoieCost( count( $this->voies ) - 1 );
+		}
+
+		public function GetVoieCost( $n ){
+			return $n * CHARACTER_COST_VOIE_MULTIPLIER;
+		}
 		
 		public function CanAfford( $xp_cost ) : bool {
 			return $xp_cost <= $this->GetRealCurrentXP();

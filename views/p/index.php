@@ -7,7 +7,7 @@
 					<th>P. Exp.</th>
 					<th>Dernière modif.</th>
 					<th></th>
-					<th></th>
+					<!--<th></th>-->
 				</tr>
 <?php
 	if( count( $chars ) == 0 ){
@@ -29,7 +29,7 @@
 					<td><?php echo $character->px_restants; ?> / <?php echo $character->px_totaux; ?></td>
 					<td><?php echo Date::FormatSQLDate( $character->dernier_changement_date ); ?> par <?php echo $character->dernier_changement_par; ?></td>
 					<td><a href="./?s=player&a=characterUpdate&c=<?php echo $character->id; ?>"><?php echo ( $character->est_vivant ) ? "Modifier" : "Voir"; ?></a></td>
-					<td><a target="_blank" href="?s=player&a=sheet&c=<?php echo $character->id; ?>">Fiche</a></td>
+					<!--<td><?php /*<a target="_blank" href="?s=player&a=sheet&c=<?php echo $character->id; ?>">Fiche</a>*/ ?></td>-->
 				</tr>
 <?php
 		}
@@ -40,11 +40,11 @@
 <?php
 	if( $can_create ){
 ?>
-				<li><a href="?s=player&a=characterCreation">Création d'un nouveau personnage</a>TODO</li>
+				<li><a href="?s=player&a=characterCreation">Création d'un nouveau personnage</a></li>
 <?php
 	}
 ?>
-				<li><a href="?s=player&a=playerLog">Journal des modifications</a>TODO</li>
+				<li><a href="?s=player&a=playerLog">Journal des modifications</a></li>
 			</ul>
 		</div>
 <?php
@@ -66,9 +66,9 @@
 			<h2>Administrateurs</h2>
 			<ul>
 				<li><a href="?s=admin&a=userList">Gestion des utilisateurs</a></li>
-				<!--<li><a href="?s=admin&a=assignXP">Gestion massive de l'XP</a>TODO</li>
-				<li><a href="?s=admin&a=characterLog">Journal des modifications</a>TODO</li>
-				<li><a href="?s=admin&a=characterTransfer">Transfert de personnage</a>TODO</li>
+				<!--<li><a href="?s=admin&a=assignXP">Gestion massive de l'XP</a>TODO</li>-->
+				<li><a href="?s=admin&a=characterLog">Journal des modifications</a></li>
+				<!--<li><a href="?s=admin&a=characterTransfer">Transfert de personnage</a>TODO</li>
 				<li><a href="?s=admin&a=destroyDeadCharacters">Destruction des personnages désactivés</a>TODO</li>-->
 			</ul>
 			<h3>Configurations du système</h3>

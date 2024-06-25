@@ -2,28 +2,30 @@
 	$action_link = "?s=admin&a=characterLog";
 ?>
 		<h2>Liste des modifications</h2>
+		<ul>
 <?php
 	if( $show_canceled ){
 ?>
-			<a href="<?php echo $action_link . "&show_canceled=0&show_dead=" . ( $show_dead ? 1 : 0 ); ?>">Modifications actives seulement</a>
+			<li><a href="<?php echo $action_link . "&show_canceled=0&show_dead=" . ( $show_dead ? 1 : 0 ); ?>">Cacher les modifications annulées</a></li>
 <?php
 	} else {
 ?>
-			<a href="<?php echo $action_link . "&show_canceled=1&show_dead=" . ( $show_dead ? 1 : 0 ); ?>">Afficher toutes les modifications</a>
+			<li><a href="<?php echo $action_link . "&show_canceled=1&show_dead=" . ( $show_dead ? 1 : 0 ); ?>">Afficher les modifications annulées</a></li>
 <?php
 	}
 ?>
 <?php
 	if( $show_dead ){
 ?>
-			<a href="<?php echo $action_link . "&show_dead=0&show_canceled=" . ( $show_canceled ? 1 : 0 ); ?>">Personnages actifs seulement</a>
+			<li><a href="<?php echo $action_link . "&show_dead=0&show_canceled=" . ( $show_canceled ? 1 : 0 ); ?>">Cacher les personnes désactivés</a></li>
 <?php
 	} else {
 ?>
-			<a href="<?php echo $action_link . "&show_dead=1&show_canceled=" . ( $show_canceled ? 1 : 0 ); ?>">Afficher aussi les personnages désactivés</a>
+			<li><a href="<?php echo $action_link . "&show_dead=1&show_canceled=" . ( $show_canceled ? 1 : 0 ); ?>">Afficher les personnages désactivés</li></a>
 <?php
 	}
 ?>
+		</ul>
 		<table>
 			<tr>
 				<th>Personnage</th>

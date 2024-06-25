@@ -262,12 +262,13 @@
 <?php
 		if( ( $personnage->pc_raciales > 0 ) || $has_choices ){
 ?>
-					<p>Avant de pouvoir activer le personnage, toutes les capacités raciales doivent être choisies.</p>
+					<p>Notez que vous ne pouvez dépenser vos points d’expérience qu’après avoir sélectionné vos capacités raciales. Avant de continuer, veuillez terminer tous les choix liés aux capacités raciales.</p>
 <?php
 		}
 ?>
+					<p>Votre personnage n'a pas encore été activé. Vous ne pouvez pas encore utiliser vos points d'expérience de base.</p>
+					<p>Une fois activé, les informations de base du personnage (nom, cité-État, race, croyance) ne pourront plus être changées.</p>
 					<input type="submit" name="activate_character" value="Activer le personnage"<?php echo ( $personnage->pc_raciales > 0 ) || $has_choices ? " disabled='disabled'" : ""; ?> />
-					<p>Le personnage doit être activé avant de pouvoir utiliser et recevoir ses points d'expérience. Une fois activé, les informations de base du personnage (nom, cité-État, race, croyance) ne pourront plus être changées.</p>
 				</form>
 			</div>
 <?php
@@ -292,12 +293,13 @@
 		$has_voie = in_array( $voie_id, $personnage->voies );
 		
 		$voie_status = "";
+		$voie_cost = " title='" . count( $personnage->voies ) . "e voie (" . $personnage->GetNextVoieCost() . " XP)'";
 		if( $has_voie ){
 			$voie_status = "checked='checked' disabled='disabled'";
-		} elseif( $personnage->est_vivant && $personnage->est_cree ) {
-			$voie_status = "onclick='this.form.submit();'";
+		} elseif( $personnage->est_vivant && $personnage->est_cree && $personnage->GetNextVoieCost() <= $personnage->GetRealCurrentXP() ) {
+			$voie_status = "onclick='this.form.submit();'" . $voie_cost;
 		} else {
-			$voie_status = "disabled='disabled'";
+			$voie_status = "disabled='disabled'" . $voie_cost;
 		}
 ?>
 			
@@ -340,13 +342,14 @@
 <?php
 			foreach( $list_connaissances_completes[ $voie_id ] as $connaissance_id => $connaissance ){
 				if( $connaissance->cout == $connaissances_type_cout ){
-					$connaissance_status = "title='" . $connaissance->GetConnaissanceType() . " (" . $connaissance->cout . " XP)'";
+					$connaissance_status = "";
+					$connaissance_cost = " title='" . $connaissance->GetConnaissanceType() . " (" . $connaissance->cout . " XP)'";
 					if( in_array( $connaissance_id, $personnage->connaissances ) ){
 						$connaissance_status .= " checked='checked' disabled='disabled'";
 					} elseif( $personnage->est_vivant && $personnage->est_cree && in_array( $connaissance_id, $personnage->connaissances_accessibles ) && $connaissance->cout <= $personnage->GetRealCurrentXP() ) {
-						$connaissance_status .= " onchange='this.form.submit()'";
+						$connaissance_status .= " onchange='this.form.submit()'" . $connaissance_cost;
 					} else {
-						$connaissance_status .= " disabled='disabled'";
+						$connaissance_status .= " disabled='disabled'" . $connaissance_cost;
 					}
 ?>
 					<div class="fiche_element">

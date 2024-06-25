@@ -16,10 +16,6 @@
 			return $cost;
 		}
 		
-		public static function GetVoieCost( $nb_voies_possedees ){
-			return $nb_voies_possedees * CHARACTER_COST_VOIE_MULTIPLIER;
-		}
-		
 		public function Load( $character_id ){
 			if( is_numeric( $character_id ) ){
 				$personnage_repository = new PersonnageRepository();
@@ -353,7 +349,7 @@
 				$voie = $voie_repository->Find( $voie_id );
 				
 				if( $voie && $voie->active ){
-					echo $xp_cost = self::GetVoieCost( count( $c->voies ) );
+					$xp_cost = $c->GetNextVoieCost();
 					if( $c->CanAfford( $xp_cost ) ){
 						if( $personnage_repository->AddVoie( $c, $voie_id ) ){
 							$c->px_restants -= $xp_cost;
@@ -374,7 +370,7 @@
 		public function RefundVoie( Personnage $character, $voie_id ){
 			if( $character->est_vivant
 					&& in_array( $voie_id, $character->voies ) ){
-				$xp_cost = self::GetVoieCost( count( $character->voies ) - 1 );
+				$xp_cost = $character->GetRefundVoieCost();
 				if( $character->px_restants + $xp_cost <= $character->px_totaux ){
 					$personnage_repository = new PersonnageRepository();
 					if( $personnage_repository->RemoveVoie( $character, $voie_id ) ){
