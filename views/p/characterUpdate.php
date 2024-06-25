@@ -63,11 +63,30 @@
 <?php
 	} else {
 ?>
-						<span id="perso_race" class="as_input"><?php echo $personnage->race_nom; ?></span>
+						<span id="perso_race" class="as_input"><?php echo $personnage->GetRaceDescription(); ?></span>
 <?php
 	}
 ?>
 					</div>
+<?php
+	if( $can_change_race && $personnage->est_vivant ){
+?>
+					<div class="fiche_element">
+						<label for="perso_race_secondaire">Demi-race :</label>
+						<select name="perso_race_secondaire" id="perso_race_secondaire">
+							<option value="0"<?php echo ( 0 == $perso_race_secondaire ) ? " selected='selected'" : ""; ?>>Ne s'applique pas</option>
+<?php
+		foreach( $list_races as $race_id => $race_nom ){
+?>
+							<option value="<?php echo $race_id; ?>"<?php echo ( $race_id == $perso_race_secondaire ) ? " selected='selected'" : ""; ?>><?php echo $race_nom; ?></option>
+<?php
+		}
+?>
+						</select>
+					</div>
+<?php
+	}
+?>
 					<div class="fiche_element">
 						<label for="perso_croyance">Croyance :</label>
 <?php

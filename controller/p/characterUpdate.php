@@ -122,6 +122,7 @@
 				$perso_nom = $personnage->nom;
 				$perso_cite_etat = $personnage->cite_etat_id;
 				$perso_race = $personnage->race_id;
+				$perso_race_secondaire = $personnage->race_secondaire_id;
 				$perso_croyance = $personnage->croyance_id;
 			}
 

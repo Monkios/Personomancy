@@ -23,6 +23,29 @@
 			
 			return FALSE;
 		}
+
+		public function FindAll( $active_only = TRUE ){
+			$list = array();
+			$db = new Database();
+			$sql = "SELECT id, nom, description, active
+					FROM race 
+					WHERE supprime = '0'";
+			if( $active_only ){
+				$sql .= " AND active = '1'";
+			}
+			$db->Query( $sql );
+			while( $result = $db->GetResult() ){
+				$entity = new Race();
+				$entity->id = $result[ "id" ];
+				$entity->nom = $result[ "nom" ];
+				$entity->description = $result[ "description" ];
+				$entity->active = $result[ "active" ] == 1;
+
+				$list[ $entity->id ] = $entity;
+			}
+			
+			return $list;
+		}
 		
 		public function Create( $opts = array() ){
 			if( !in_array( "description", $opts ) ){

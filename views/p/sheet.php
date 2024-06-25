@@ -69,7 +69,7 @@
 	$pdf->Cell( $width_buffer, 0, "" );
 	$pdf->Cell( $width_third, 0, "Attributs", "", 0, "", TRUE );
 	$pdf->Cell( $width_buffer, 0, "" );
-	$pdf->Cell( $width_third, 0, "Race : " . PdfEncode( $character_infos->race_nom ), "", 0, "", TRUE );
+	$pdf->Cell( $width_third, 0, "Race : " . PdfEncode( $character_infos->GetRaceDescription() ), "", 0, "", TRUE );
 	$pdf->Ln();
 	
 	$pdf->Cell( 25, 0, "P. de Vie : " );

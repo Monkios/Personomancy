@@ -41,7 +41,7 @@
 					}
 				
 					$pdf->Cell( $w[ 7 ], $h, $personnage->nom, 1 );
-					$pdf->Cell( $w[ 8 ], $h, $personnage->race_nom, 1 );
+					$pdf->Cell( $w[ 8 ], $h, $personnage->GetRaceDescription(), 1 );
 					$pdf->Cell( $w[ 9 ], $h, $personnage->faction_nom, 1 );
 					$pdf->Cell( $w[ 10 ], $h, "", 1 );
 					

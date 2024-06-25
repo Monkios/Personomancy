@@ -237,6 +237,7 @@ CREATE TABLE `personnage` (
   `joueur` int UNSIGNED NOT NULL,
   `nom` varchar(100) NOT NULL DEFAULT '',
   `race_id` int UNSIGNED NOT NULL,
+  `race_secondaire_id` int UNSIGNED NULL,
   `cite_etat_id` int UNSIGNED NOT NULL,
   `croyance_id` int UNSIGNED NOT NULL,
   `point_capacite_raciale` tinyint NOT NULL,
@@ -419,6 +420,8 @@ ALTER TABLE `personnage`
   ADD FOREIGN KEY (`joueur`) REFERENCES `joueur` (`id`);
 ALTER TABLE `personnage`
   ADD FOREIGN KEY (`race_id`) REFERENCES `race` (`id`);
+ALTER TABLE `personnage`
+  ADD FOREIGN KEY (`race_secondaire_id`) REFERENCES `race` (`id`);
 ALTER TABLE `personnage`
   ADD FOREIGN KEY (`cite_etat_id`) REFERENCES `cite_etat` (`id`);
 ALTER TABLE `personnage`

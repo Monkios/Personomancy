@@ -10,6 +10,8 @@
 		public $croyance_nom = "n.d.";
 		public $race_id = -1;
 		public $race_nom = "n.d.";
+		public $race_secondaire_id = -1;
+		public $race_secondaire_nom = "n.d.";
 		
 		public $note = "";
 		public $commentaire = FALSE;
@@ -36,12 +38,20 @@
 		public $choix_connaissances = array();
 		public $choix_voies = array();
 		
-		public function GetPointsVie(){
+		/*public function GetPointsVie(){
 			return 1234; //CHARACTER_BASE_HP + ( $this->constitution * CHARACTER_HP_PER_CON );
 		}
 		
 		public function GetPointsMagie(){
 			return 9876; //CHARACTER_BASE_MP + ( $this->spiritisme * CHARACTER_MP_PER_SPI );
+		}*/
+
+		public function GetRaceDescription(){
+			if( $this->race_secondaire_id <= 0 ){
+				return $this->race_nom;
+			} else {
+				return $this->race_nom . "-" . $this->race_secondaire_nom;
+			}
 		}
 
 		// Retourne le nombre d'XP qui dépassent la limite de ce qui peut

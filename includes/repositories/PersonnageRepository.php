@@ -104,6 +104,10 @@
 				Message::Fatale( "Création impossible : La race n'a pu être enregistrée.", func_get_args() );
 				return FALSE;
 			}
+			if( !array_key_exists( "race_secondaire_id", $opts ) || $opts[ "race_id" ] != "" && !is_numeric( $opts[ "race_id" ] ) ){
+				Message::Fatale( "Création impossible : La race secondaire n'a pu être enregistrée.", func_get_args() );
+				return FALSE;
+			}
 			if( !array_key_exists( "cite_etat_id", $opts ) || $opts[ "cite_etat_id" ] != "" && !is_numeric( $opts[ "cite_etat_id" ] ) ){
 				Message::Fatale( "Création impossible : La cité-État n'a pu être enregistrée.", func_get_args() );
 				return FALSE;
@@ -115,14 +119,15 @@
 			
 			// Insertion
 			$sql = "INSERT INTO personnage (
-							joueur, nom, race_id, cite_etat_id, croyance_id,
+							joueur, nom, race_id, race_secondaire_id, cite_etat_id, croyance_id,
 							point_capacite_raciale, point_experience, total_experience,
 							commentaire, notes )
-						VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+						VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 			$params = array(
 					$opts[ "player_id" ],
 					$opts[ "nom" ],
 					$opts[ "race_id" ],
+					( $opts[ "race_secondaire_id" ] != 0 ) ? $opts[ "race_secondaire_id" ] : NULL,
 					$opts[ "cite_etat_id" ],
 					$opts[ "croyance_id" ],
 					CHARACTER_BASE_PCR,
@@ -1033,6 +1038,8 @@
 						ce.nom AS cite_etat_nom,
 						ra.id AS race_id,
 						ra.nom AS race_nom,
+						rs.id AS race_secondaire_id,
+						rs.nom AS race_secondaire_nom,
 						cr.id AS croyance_id,
 						cr.nom AS croyance_nom,
 						p.notes, p.commentaire
@@ -1042,6 +1049,7 @@
 						LEFT JOIN joueur j ON p.joueur = j.id
 						LEFT JOIN cite_etat ce ON p.cite_etat_id = ce.id
 						LEFT JOIN race ra ON p.race_id = ra.id
+						LEFT JOIN race rs ON p.race_secondaire_id = rs.id
 						LEFT JOIN croyance cr ON p.croyance_id = cr.id
 					WHERE p.est_detruit = '0'";
 			
@@ -1080,6 +1088,8 @@
 				$entity->cite_etat_nom = $result[ "cite_etat_nom" ];
 				$entity->race_id = $result[ "race_id" ];
 				$entity->race_nom = $result[ "race_nom" ];
+				$entity->race_secondaire_id = $result[ "race_secondaire_id" ];
+				$entity->race_secondaire_nom = $result[ "race_secondaire_nom" ];
 				$entity->croyance_id = $result[ "croyance_id" ];
 				$entity->croyance_nom = $result[ "croyance_nom" ];
 				

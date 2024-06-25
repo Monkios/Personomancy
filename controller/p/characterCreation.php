@@ -12,10 +12,15 @@
 	$character_cite_etat = 0;
 	$character_croyance = 0;
 	$character_race = 0;
+	$character_race_secondaire = 0;
 	
-	$list_cites_etats = Dictionary::GetCitesEtats();
-	$list_croyances = Dictionary::GetCroyances();
-	$list_races = Dictionary::GetRaces();
+	$cite_etat_repository = new CiteEtatRepository();
+	$croyance_repository = new CroyanceRepository();
+	$race_repository = new RaceRepository();
+
+	$list_cites_etats = $cite_etat_repository->FindAll();
+	$list_croyances = $croyance_repository->FindAll();
+	$list_races = $race_repository->FindAll();
 	
 	$erreur = false;
 	if( isset( $_POST ) && isset( $_POST['character_create'] ) ){
@@ -31,6 +36,14 @@
 			Message::Erreur( "Vous n'avez choisit aucune race pour ce personnage." );
 		} else {
 			$character_race = $_POST['character_race'];
+		}
+		if( !empty( $_POST['character_race_secondaire'] ) || $_POST['character_race_secondaire'] != 0 ){
+			if( !is_numeric( $_POST['character_race_secondaire'] ) || !array_key_exists( $_POST['character_race_secondaire'], $list_races ) ){
+				$erreur = true;
+				Message::Erreur( "La race secondaire que vous avec choisit pour ce personnage est invalide." );
+			} else {
+				$character_race_secondaire = $_POST['character_race_secondaire'];
+			}
 		}
 		if( empty( $_POST['character_cite_etat'] ) || !is_numeric( $_POST['character_cite_etat'] ) || !array_key_exists( $_POST['character_cite_etat'], $list_cites_etats ) ){
 			$erreur = true;
@@ -49,7 +62,7 @@
 		if( !$erreur ){
 			// Inserer le nouveau personnage
 			$sheet = new CharacterSheet();
-			$character = $sheet->Create( $joueur->Id, $character_name, $character_race, $character_cite_etat, $character_croyance );
+			$character = $sheet->Create( $joueur->Id, $character_name, $character_race, $character_race_secondaire, $character_cite_etat, $character_croyance );
 			if( $character !== FALSE ){
 				Message::Notice( "Création du personnage : ". $character_name );
 				

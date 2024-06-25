@@ -52,3 +52,7 @@ ul#messages_list {
 
 .is_yes { color: #4A4; }
 .is_no { color: #A44; }
+
+.hidden {
+	display: none;
+}

@@ -32,13 +32,17 @@
 			return FALSE;
 		}
 		
-		public function Create( $player_id, $nom, $race_id, $cite_etat_id, $croyance_id ){
+		public function Create( $player_id, $nom, $race_id, $race_secondaire_id, $cite_etat_id, $croyance_id ){
 			if( !Community::GetPlayer( $player_id ) ){
 				Message::Fatale( "Identifiant de joueur invalide.", func_get_args() );
 				return FALSE;
 			}
 			if( count( Dictionary::GetRaces( $race_id ) ) == 0 ){
-				Message::Fatale( "Identifiant de cité-État invalide.", func_get_args() );
+				Message::Fatale( "Identifiant de race invalide.", func_get_args() );
+				return FALSE;
+			}
+			if( $race_secondaire_id != 0 && count( Dictionary::GetRaces( $race_secondaire_id ) ) == 0 ){
+				Message::Fatale( "Identifiant de race secondaire invalide.", func_get_args() );
 				return FALSE;
 			}
 			if( count( Dictionary::GetCitesEtats( $cite_etat_id ) ) == 0 ){
@@ -51,7 +55,7 @@
 			}
 			
 			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->Create( array( "player_id" => $player_id, "nom" => $nom, "race_id" => $race_id, "cite_etat_id" => $cite_etat_id, "croyance_id" => $croyance_id ) );
+			$c = $personnage_repository->Create( array( "player_id" => $player_id, "nom" => $nom, "race_id" => $race_id, "race_secondaire_id" => $race_secondaire_id, "cite_etat_id" => $cite_etat_id, "croyance_id" => $croyance_id ) );
 			
 			if( $c !== FALSE ){
 				$character_id = $c->id;
