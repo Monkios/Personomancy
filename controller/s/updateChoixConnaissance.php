@@ -44,6 +44,6 @@
 	$nav_links = array( "Liste des choix de connaissances" => "?s=super&a=listChoixConnaissances" );
 	
 	include "./views/top.php";
-	include "./views/a/updateChoixConnaissance.php";
+	include "./views/s/updateChoixConnaissance.php";
 	include "./views/bottom.php";
 ?>

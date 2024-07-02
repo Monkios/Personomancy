@@ -16,6 +16,6 @@
 	}
 	
 	include "./views/top.php";
-	include "./views/a/listCitesEtats.php";
+	include "./views/s/listCitesEtats.php";
 	include "./views/bottom.php";
 ?>

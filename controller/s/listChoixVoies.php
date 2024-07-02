@@ -14,6 +14,6 @@
 	}
 	
 	include "./views/top.php";
-	include "./views/a/listChoixVoies.php";
+	include "./views/s/listChoixVoies.php";
 	include "./views/bottom.php";
 ?>

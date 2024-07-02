@@ -9,7 +9,7 @@
 				<th>Animateur</th>
 				<th>Administrateur</th>
 <?php
-			if( $_SESSION[ SESSION_KEY ][ "User" ]->IsSuperAdmin ){
+			if( $user_identity->HasAccess( Identity::IS_SUPERADMIN ) ){
 ?>
 				<th>Super-admin</th>
 <?php
@@ -45,7 +45,7 @@
 					<a href="?<?php echo $url_opts; ?>&admin=<?php echo $player->IsAdministrateur ? "f" : "t"; ?>" class="<?php echo $player->IsAdministrateur ? "is_yes" : "is_no"; ?>"><?php echo $player->IsAdministrateur ? "Oui" : "-"; ?></a>
 				</td>
 <?php
-			if( $_SESSION[ SESSION_KEY ][ "User" ]->IsSuperAdmin ){
+			if( $user_identity->HasAccess( Identity::IS_SUPERADMIN ) ){
 ?>
 				<td>
 					<a href="?<?php echo $url_opts; ?>&super=<?php echo $player->IsSuperAdmin ? "f" : "t"; ?>" class="<?php echo $player->IsSuperAdmin ? "is_yes" : "is_no"; ?>"><?php echo $player->IsSuperAdmin ? "Oui" : "-"; ?></a>

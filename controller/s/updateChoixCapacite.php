@@ -44,6 +44,6 @@
 	$nav_links = array( "Liste des choix de capacités" => "?s=super&a=listChoixCapacites" );
 	
 	include "./views/top.php";
-	include "./views/a/updateChoixCapacite.php";
+	include "./views/s/updateChoixCapacite.php";
 	include "./views/bottom.php";
 ?>

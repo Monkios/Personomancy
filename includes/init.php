@@ -6,7 +6,7 @@
 	
 	define( "MANCY_NAME", "Mancy - Outil de gestion de personnage" );
 	define( "MANCY_NAME_ABBREV", "Mancy" );
-	define( "MANCY_VERSION", "3.0-b.2" );
+	define( "MANCY_VERSION", "3.2" );
 	define( "IS_DEV_MODE", TRUE );
 	
 	$default_section = "user";

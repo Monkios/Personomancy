@@ -26,6 +26,6 @@
 	$nav_links = array( "Liste des cités-États" => "?s=super&a=listCitesEtats" );
 	
 	include "./views/top.php";
-	include "./views/a/updateCiteEtat.php";
+	include "./views/s/updateCiteEtat.php";
 	include "./views/bottom.php";
 ?>

@@ -27,10 +27,17 @@
 <?php
 			} else {
 				foreach( $character_list[ $player_id ] as $character ){
+					$character_link = "";
+					if( $user_identity->HasAccess( Identity::IS_ANIMATEUR ) ){
+						$character_link = "<a href='?s=player&a=characterUpdate&c=" . $character->id . "'>🔗</a>";
+					}
 ?>
 					<tr>
 						<td><input type="checkbox" name="character_id[]" value="<?php echo $character->id; ?>"<?php echo ( !$character->est_vivant ) ? " disabled='disabled'" : ""; ?> /></td>
-						<td><?php echo $character->nom; ?></td>
+						<td>
+							<?php echo $character->nom; ?>
+							<?php echo $character_link; ?>
+						</td>
 						<td><?php echo $character->GetStatus(); ?></td>
 						<td><?php echo $character->px_restants; ?> / <?php echo $character->px_totaux; ?></td>
 						<td><?php echo Date::FormatSQLDate( $character->dernier_changement_date ); ?> par <?php echo $character->dernier_changement_par; ?></td>

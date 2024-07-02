@@ -63,6 +63,6 @@
 	$nav_links = array( "Liste des capacités raciales" => "?s=super&a=listCapacitesRaciales" );
 	
 	include "./views/top.php";
-	include "./views/a/updateCapaciteRaciale.php";
+	include "./views/s/updateCapaciteRaciale.php";
 	include "./views/bottom.php";
 ?>

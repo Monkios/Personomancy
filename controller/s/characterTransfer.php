@@ -25,6 +25,6 @@
 	}
 
 	include "./views/top.php";
-	include "./views/a/characterTransfer.php";
+	include "./views/s/characterTransfer.php";
 	include "./views/bottom.php";
 ?>

@@ -23,7 +23,7 @@
 					<span><?php echo ( $player->IsAdministrateur ) ? "Oui" : "Non"; ?></span>
 				</div>
 <?php
-	if( $_SESSION[ SESSION_KEY ][ "User" ]->IsSuperAdmin ){
+	if( $user_identity->HasAccess( Identity::IS_SUPERADMIN ) ){
 ?>
 				<div>
 					<label>Est super-admin :</label>

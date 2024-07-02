@@ -26,6 +26,6 @@
 	$nav_links = array( "Liste des croyances" => "?s=super&a=listCroyances" );
 	
 	include "./views/top.php";
-	include "./views/a/updateCroyance.php";
+	include "./views/s/updateCroyance.php";
 	include "./views/bottom.php";
 ?>

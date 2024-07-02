@@ -44,7 +44,7 @@
 			}
 
 			// Accessible seulement aux super-admins
-			if( isset( $_GET['super'] ) && $_SESSION[ SESSION_KEY ][ "User" ]->IsSuperAdmin ){
+			if( isset( $_GET['super'] ) && $user_identity->HasAccess( Identity::IS_SUPERADMIN ) ){
 				if( $_GET['super'] == "f" && $p->IsSuperAdmin ){
 					$identity->SetPlayerAccess( Identity::IS_SUPERADMIN, FALSE );
 					Message::Notice( "Joueur '" . $p->getFullName() . "' n'est plus super-admin." );

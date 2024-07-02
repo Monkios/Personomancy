@@ -48,7 +48,7 @@
 			</ul>
 		</div>
 <?php
-	if( $joueur->IsAnimateur ){
+	if( $user_identity->HasAccess( Identity::IS_ANIMATEUR ) ){
 ?>
 		<div>
 			<h2>Animateurs</h2>
@@ -60,13 +60,13 @@
 		</div>
 <?php
 	}
-	if( $joueur->IsAdministrateur ){
+	if( $user_identity->HasAccess( Identity::IS_ADMINISTRATEUR ) ){
 ?>
 		<div>
 			<h2>Administrateurs</h2>
 			<ul>
 				<li><a href="?s=admin&a=userList">Gestion des utilisateurs</a></li>
-				<li><a href="?s=admin&a=assignXP">Gestion massive de l'XP</a>TODO</li>
+				<li><a href="?s=admin&a=assignXP">Gestion massive de l'XP</a></li>
 				<li><a href="?s=admin&a=characterLog">Journal des modifications</a></li>
 				<!--<li><a href="?s=admin&a=characterTransfer">Transfert de personnage</a>TODO</li>
 				<li><a href="?s=admin&a=destroyDeadCharacters">Destruction des personnages désactivés</a>TODO</li>-->
@@ -74,7 +74,7 @@
 		</div>
 <?php
 	}
-	if( $joueur->IsSuperAdmin ){
+	if( $user_identity->HasAccess( Identity::IS_SUPERADMIN ) ){
 ?>
 <div>
 			<h2>Super-admins</h2>

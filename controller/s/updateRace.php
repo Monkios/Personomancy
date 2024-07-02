@@ -26,6 +26,6 @@
 	$nav_links = array( "Liste des races" => "?s=super&a=listRaces" );
 	
 	include "./views/top.php";
-	include "./views/a/updateRaces.php";
+	include "./views/s/updateRaces.php";
 	include "./views/bottom.php";
 ?>

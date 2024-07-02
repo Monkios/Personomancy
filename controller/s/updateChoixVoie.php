@@ -44,6 +44,6 @@
 	$nav_links = array( "Liste des choix de voies" => "?s=super&a=listChoixVoies" );
 	
 	include "./views/top.php";
-	include "./views/a/updateChoixVoie.php";
+	include "./views/s/updateChoixVoie.php";
 	include "./views/bottom.php";
 ?>

@@ -30,6 +30,6 @@
 	$nav_links = array( "Liste des capacités" => "?s=super&a=listCapacites" );
 	
 	include "./views/top.php";
-	include "./views/a/updateCapacite.php";
+	include "./views/s/updateCapacite.php";
 	include "./views/bottom.php";
 ?>

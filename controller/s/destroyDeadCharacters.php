@@ -23,6 +23,6 @@
 	}
 	
 	include "./views/top.php";
-	include "./views/a/destroyDeadCharacters.php";
+	include "./views/s/destroyDeadCharacters.php";
 	include "./views/bottom.php";
 ?>

@@ -1,6 +1,6 @@
 <?php
-	$is_animateur = $_SESSION[ SESSION_KEY ][ "User" ]->IsAnimateur;
-	$is_administrateur = $_SESSION[ SESSION_KEY ][ "User" ]->IsAdministrateur;
+	$is_animateur = $user_identity->HasAccess( Identity::IS_ANIMATEUR );
+	$is_administrateur = $user_identity->HasAccess( Identity::IS_ADMINISTRATEUR );
 	
 	if( is_numeric( $_GET["c"] ) ){
 		$character_id = $_GET["c"];

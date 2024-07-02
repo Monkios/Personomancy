@@ -18,28 +18,31 @@
 	define( "SMTP_PORT", "465" );
 	define( "SMTP_USERNAME", "smtp.username" );
 	define( "SMTP_PASSWORD", "smtp.password" );
+	define( "MAIL_IMAP_SENT_MAILBOX", "{imap.provider}/Mailbox name}" );
 	
 	define( "IDENTITY_TRIGGER_ACTIVATION", 3 ); // Mois depuis la dernière connexion qui force l'activation
-	define( "PASSWORD_GEN_LENGTH", 10 ); // Longueur du mot de passe généré
+	define( "PASSWORD_GEN_LENGTH", 16 ); // Longueur du mot de passe généré
 	
 	define( "SESSION_KEY", "Mancy_SessionKey" );
 	
-	define( "CHARACTER_BASE_XP", 250 );
+	define( "CHARACTER_BASE_XP", 10 );
+	define( "CHARACTER_BASE_AUTOMATICS", "{\"capacites\":[],\"connaissances\":[],\"capacites_raciales\":[],\"voies\":[4]}" );
+	define( "CHARACTER_BASE_PCR", 4 );
+	//define( "CHARACTER_BASE_HP", 3 );
+	//define( "CHARACTER_BASE_MP", 3 );
+
 	define( "CHARACTER_COST_CONN_AVANCEE", 1);
 	define( "CHARACTER_COST_CONN_MAITRE", 2);
 	define( "CHARACTER_COST_CONN_SYNERGIQUE", 3);
 	define( "CHARACTER_COST_CONN_LEGENDAIRE", 4);
+	define( "CHARACTER_COST_VOIE_MULTIPLIER", 1 );
+	define( "CHARACTER_CONN_LEGENDAIRE_TRESHOLD", 3 );
 
-	define( "CHARACTER_BASE_PCR", 4 );
-	define( "CHARACTER_BASE_HP", 15 );
-	define( "CHARACTER_BASE_MP", 10 );
+	define( "CHARACTER_DEFAULT_COMMENTS", "L'équipe d'animation pourra laisser ses commentaires ici." );
+	define( "CHARACTER_DEFAULT_NOTES", "Vous pouvez prendre des notes à propos de votre personnage ici." );
 	
-	define( "CHARACTER_HP_PER_CON", 3 );	
-	define( "CHARACTER_MP_PER_SPI", 3 );
-	
-	define( "CHARACTER_MAX_CAPACITES_SELECTIONS", 16 );
-	define( "CHARACTER_MAX_XP_INVESTED", 1250 );
-	define( "CHARACTER_REBUILD_PERTE_TAUX", 0.75 );
+	define( "CHARACTER_MAX_SELECTION_COUNT", 3 );
+	define( "CHARACTER_MAX_XP_INVESTED", 75 );
 	
 	define( "LOG_LEVEL", Message::$Notice );
 	define( "LOG_FILE", "./logs/messages." . date( "y-m" ) . ".log" );

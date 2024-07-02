@@ -20,6 +20,6 @@
 	}
 	
 	include "./views/top.php";
-	include "./views/a/listCapacitesRaciales.php";
+	include "./views/s/listCapacitesRaciales.php";
 	include "./views/bottom.php";
 ?>

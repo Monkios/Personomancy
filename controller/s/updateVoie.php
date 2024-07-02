@@ -26,6 +26,6 @@
 	$nav_links = array( "Liste des voies" => "?s=super&a=listVoies" );
 	
 	include "./views/top.php";
-	include "./views/a/updateVoie.php";
+	include "./views/s/updateVoie.php";
 	include "./views/bottom.php";
 ?>
