@@ -8,9 +8,9 @@
 	$personnage_repository = new PersonnageRepository();
 	if( !isset( $_GET[ "alive" ] ) || $_GET[ "alive" ] == "y" ){
 		$only_alives = TRUE;
-		$chars = $personnage_repository->FindAllAlives( $sort_by );
+		$chars = $personnage_repository->GetAllCharactersAlive( $sort_by );
 	} else {
-		$chars = $personnage_repository->FindAll( $sort_by );
+		$chars = $personnage_repository->GetAllCharacters( $sort_by );
 	}
 	
 	include "./views/top.php";

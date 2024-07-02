@@ -222,6 +222,7 @@ CREATE TABLE `joueur` (
   `password` varchar(40) NOT NULL,
   `est_animateur` tinyint NOT NULL DEFAULT 0,
   `est_administrateur` tinyint NOT NULL DEFAULT 0,
+  `est_superadmin` tinyint NOT NULL DEFAULT 0,
   `active` tinyint NOT NULL DEFAULT 0,
   `date_insert` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_modify` timestamp NOT NULL DEFAULT current_timestamp(),

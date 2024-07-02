@@ -7,6 +7,7 @@
 		public $Salt;
 		public $IsAnimateur = FALSE;
 		public $IsAdministrateur = FALSE;
+		public $IsSuperAdmin = FALSE;
 		public $IsActive = FALSE;
 		public $DateInsert;
 		public $DateModify;

@@ -21,8 +21,12 @@
 			// Les administrateurs peuvent changer les points d'expérience des personnages créés
 			// Les animateurs peuvent changer les points d'expérience de leurs personnages créés
 			$can_change_xp = $personnage->est_cree && ( $is_administrateur || ( $is_animateur && $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id ));
-			$xp_change_min = ( $personnage->px_totaux - CHARACTER_BASE_XP ) * -1;
-			$xp_change_max = CHARACTER_MAX_XP_INVESTED - $personnage->px_totaux;
+			$xp_change_min = 0;
+			$xp_change_max = 0;
+			if( $can_change_xp ){
+				$xp_change_min = ( $personnage->px_totaux - CHARACTER_BASE_XP ) * -1;
+				$xp_change_max = CHARACTER_MAX_XP_INVESTED - $personnage->px_totaux;
+			}
 			// Les administrateurs peuvent détruire les personnages
 			// Les animateurs peuvent détruire leurs personnages
 			//$can_destroy = $is_administrateur || ( $is_animateur && $personnage->joueur_id == $_SESSION[ SESSION_KEY ][ "User" ]->Id );

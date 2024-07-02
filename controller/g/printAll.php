@@ -20,12 +20,12 @@
 	$list_sorts_cercles = Dictionary::GetSortsWithCercles();
 	
 	$personnage_repository = new PersonnageRepository();
-	$partials = $pr->FindAllAlives();
+	$partials = $pr->GetAllCharactersAlive();
 	
 	$chars = array();
 	foreach( $partials as $id => $c ){
 		if( $c->est_cree ){
-			$chars[ $id ] = $personnage_repository->FindComplete( $c->id );
+			$chars[ $id ] = $personnage_repository->GetCharacterComplete( $c->id );
 		}
 	}
 	

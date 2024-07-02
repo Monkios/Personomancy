@@ -22,6 +22,16 @@
 					<label>Est administrateur :</label>
 					<span><?php echo ( $player->IsAdministrateur ) ? "Oui" : "Non"; ?></span>
 				</div>
+<?php
+	if( $_SESSION[ SESSION_KEY ][ "User" ]->IsSuperAdmin ){
+?>
+				<div>
+					<label>Est super-admin :</label>
+					<span><?php echo ( $player->IsSuperAdmin ) ? "Oui" : "Non"; ?></span>
+				</div>
+<?php
+	}
+?>
 				<div>
 					<label for="email">Courriel :</label>
 					<input type="email" name="email" id="email" value="<?php echo $player->Email; ?>" />

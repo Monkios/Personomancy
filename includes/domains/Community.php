@@ -5,7 +5,7 @@
 		public static function GetPlayer( $id ){
 			if( is_numeric( $id ) ){
 				$sql = "SELECT j.id, j.prenom, j.nom, j.courriel, j.salt,
-						j.est_animateur, j.est_administrateur, j.active, j.date_insert, j.date_modify,
+						j.est_animateur, j.est_administrateur, j.est_superadmin, j.active, j.date_insert, j.date_modify,
 						(
 							SELECT COUNT( p.id )
 							FROM personnage p
@@ -37,7 +37,7 @@
 		
 		public static function GetPlayerList( $active_only = FALSE ){
 			$sql = "SELECT j.id, j.prenom, j.nom, j.courriel, j.salt,
-						j.est_animateur, j.est_administrateur, j.active, j.date_insert, j.date_modify,
+						j.est_animateur, j.est_administrateur, j.est_superadmin, j.active, j.date_insert, j.date_modify,
 						(
 							SELECT COUNT( p.id )
 							FROM personnage p
@@ -68,6 +68,7 @@
 				$player->IsActive = $r[ "active" ] == 1;
 				$player->IsAnimateur = $r[ "est_animateur" ] == 1;
 				$player->IsAdministrateur = $r[ "est_administrateur" ] == 1;
+				$player->IsSuperAdmin = $r[ "est_superadmin" ] == 1;
 				$player->DateInsert = $r[ "date_insert" ];
 				$player->DateModify = $r[ "date_modify" ];
 				$player->NbCharacters = $r[ "nb_characters" ];

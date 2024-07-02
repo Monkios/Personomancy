@@ -12,6 +12,7 @@
 	$default_section = "user";
 	$default_action = "index";
 	$section_types = array(
+		"super" => "s",
 		"admin" => "a",
 		"gm"  => "g",
 		"player" => "p",
@@ -47,6 +48,7 @@
 	require_once "./includes/domains/Identity.php";
 	require_once "./includes/domains/CharacterLog.php";
 	require_once "./includes/domains/Community.php";
+	require_once "./includes/domains/Roster.php";
 	
 	require_once "./includes/services/Database.php";
 	require_once "./includes/services/Date.php";

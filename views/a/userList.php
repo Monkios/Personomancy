@@ -8,6 +8,13 @@
 				<th>Activé</th>
 				<th>Animateur</th>
 				<th>Administrateur</th>
+<?php
+			if( $_SESSION[ SESSION_KEY ][ "User" ]->IsSuperAdmin ){
+?>
+				<th>Super-admin</th>
+<?php
+			}
+?>
 				<th>Insertion</th>
 				<th>Mise-à-jour</th>
 				<th></th>
@@ -37,6 +44,15 @@
 				<td>
 					<a href="?<?php echo $url_opts; ?>&admin=<?php echo $player->IsAdministrateur ? "f" : "t"; ?>" class="<?php echo $player->IsAdministrateur ? "is_yes" : "is_no"; ?>"><?php echo $player->IsAdministrateur ? "Oui" : "-"; ?></a>
 				</td>
+<?php
+			if( $_SESSION[ SESSION_KEY ][ "User" ]->IsSuperAdmin ){
+?>
+				<td>
+					<a href="?<?php echo $url_opts; ?>&super=<?php echo $player->IsSuperAdmin ? "f" : "t"; ?>" class="<?php echo $player->IsSuperAdmin ? "is_yes" : "is_no"; ?>"><?php echo $player->IsSuperAdmin ? "Oui" : "-"; ?></a>
+				</td>
+<?php
+			}
+?>
 				<td><?php echo Date::FormatSQLDate( $player->DateInsert ); ?></td>
 				<td><?php echo Date::FormatSQLDate( $player->DateModify ); ?></td>
 				<td><a href="?s=admin&a=userProfile&u=<?php echo $player->Id; ?>">Modifier</a></td>

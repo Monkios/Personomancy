@@ -6,10 +6,9 @@
 	$reload_page = FALSE;
 	$raison_xp = "";
 	
-	$personnage_repository = new PersonnageRepository();
 	foreach( $player_list as $player ){
 		if( $player->IsActive && $player->NbCharacters > 0 ){
-			$character_list[ $player->Id ] = $personnage_repository->FindAllByPlayerId( $player->Id, TRUE );
+			$character_list[ $player->Id ] = Roster::GetAllCharactersByPlayer( $player->Id, TRUE );
 		} else {
 			$character_list[ $player->Id ] = array();
 		}
@@ -22,7 +21,7 @@
 				$raison_xp = $reasons_list[ $_POST[ "reasons_list" ] ];
 			} else {
 				if( isset( $_POST[ "raison_xp" ] ) ){
-					$raison_xp = mb_convert_encoding( Security::FilterInput( $_POST[ "raison_xp" ] ), 'ISO-8859-1', 'UTF-8');
+					$raison_xp = Security::FilterInput( $_POST[ "raison_xp" ] );
 				}
 			}
 			

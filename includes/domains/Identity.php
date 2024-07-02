@@ -3,6 +3,7 @@
 		const IS_ACTIVE = "active";
 		const IS_ANIMATEUR = "est_animateur";
 		const IS_ADMINISTRATEUR = "est_administrateur";
+		const IS_SUPERADMIN = "est_superadmin";
 		
 		private $player = FALSE;
 		
@@ -20,8 +21,6 @@
 			Message::Erreur( "Invalid Player ID." );
 			return FALSE;
 		}
-		
-		public function GetPlayer(){ return $this->player; }
 		
 		public static function GetConnectingPlayer( $email, $password ){
 			$connecting = Community::GetPlayerByEMail( $email );
@@ -72,8 +71,10 @@
 
 					$identity = new Identity( $joueur->Id );
 					$identity->ChangePasswordTo( $password_temp );
+
+					$player = Community::GetPlayer( $joueur->Id );
 					
-					return self::SendActivationEmail( $identity->GetPlayer(), $password_temp );
+					return self::SendActivationEmail( $player, $password_temp );
 				}
 			}
 			return FALSE;
@@ -90,6 +91,9 @@
 						break;
 					case Identity::IS_ADMINISTRATEUR :
 						return $this->player->IsAdministrateur == 1;
+						break;
+					case Identity::IS_SUPERADMIN :
+						return $this->player->IsSuperAdmin == 1;
 						break;
 					default :
 						Message::Fatale( "Type d'accès inconnu.", $access );
@@ -113,6 +117,9 @@
 						break;
 					case Identity::IS_ADMINISTRATEUR :
 						$sql .= "est_administrateur";
+						break;
+					case Identity::IS_SUPERADMIN :
+						$sql .= "est_superadmin";
 						break;
 					default :
 						Message::Fatale( "Type d'accès inconnu.", $access );
@@ -197,9 +204,9 @@
 			return mt_rand();
 		}
 		
+		/*
 		public function AssignCharacter( $character_id ){
-			$personnage_repository = new PersonnageRepository();
-			if( $this->player && $personnage_repository->Find( $character_id ) !== FALSE ){
+			if( $this->player && Roster::GetCharacter( $character_id ) !== FALSE ){
 				$sql = "UPDATE personnage SET joueur = ? WHERE id = ?";
 				Database::Manipulation( $sql, array( $this->player->Id, $character_id ) );
 				
@@ -207,6 +214,7 @@
 			}
 			return FALSE;
 		}
+		*/
 
 		private static function GetActivationUrl( $player ){
 			return "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?s=user&a=activate&m=" . urlencode( $player->Email ) . "&k=" . self::GenerateActivationKey( $player->Email, $player->Salt );

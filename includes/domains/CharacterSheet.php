@@ -2,12 +2,6 @@
 	class CharacterSheet {
 		public function __construct(){}
 		
-		/*
-		public static function GetSelectionCost( $s ){
-			return $s * 5;
-		}
-		*/
-		
 		public static function GetSelectionCompoundCost( $selection, $current = 0 ){
 			$cost = 0;
 			for( $i = $current; $i < $selection; $i++ ){
@@ -18,8 +12,7 @@
 		
 		public function Load( $character_id ){
 			if( is_numeric( $character_id ) ){
-				$personnage_repository = new PersonnageRepository();
-				$c = $personnage_repository->FindComplete( $character_id );
+				$c = Roster::GetCharacterComplete( $character_id );
 				
 				if( $c !== FALSE ){
 					return $c;
@@ -83,9 +76,8 @@
 				Message::Fatale( "Identifiant de croyance invalide.", func_get_args() );
 				return FALSE;
 			}
-			
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->Find( $character_id );
+
+			$c = Roster::GetCharacter( $character_id );
 			
 			$c->nom = $nom;
 			$c->race_id = $race_id;
@@ -98,8 +90,7 @@
 		}
 		
 		public function BuyCapaciteRaciale( $character_id, $new_cr ){
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->FindComplete( $character_id );
+			$c = Roster::GetCharacterComplete( $character_id );
 			// Valide que le personnage peut acheer des capacite raciales
 			if( $c != FALSE ){
 				$capacite_raciale_repository = new CapaciteRacialeRepository();
@@ -108,6 +99,7 @@
 				$race_repository = new RaceRepository();
 				$list_capacites_raciales = $race_repository->GetCapacitesRacialesByRace( $c->race_id );
 				if( $c->pc_raciales >= $list_capacites_raciales[ $new_cr ][ 1 ] ){
+					$personnage_repository = new PersonnageRepository();
 					if( $personnage_repository->BuyCapaciteRaciale( $c, $new_cr ) ){
 						$this->RecordAction( $c->id, CharacterSheet::RECORD_RACIALE_CAPACITE, $new_cr, $list_capacites_raciales[ $new_cr ][ 1 ], "Ajout de la capacité raciale : " . $cr->nom, TRUE );
 						return $c;
@@ -131,8 +123,7 @@
 		}
 		
 		public function BuyChoixCapacite( $character_id, $list_id, $choix_id ){
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->FindComplete( $character_id );
+			$c = Roster::GetCharacterComplete( $character_id );
 			// Valide que le personnage peut acheter de obtenir cette capacite
 			if( $c != FALSE && array_key_exists( $list_id, $c->choix_capacites ) ){
 				$choix_capacite_repository = new ChoixCapaciteRepository();
@@ -140,6 +131,7 @@
 				if( $choix_capacite && $choix_capacite->active ){
 					$liste_capacites = $choix_capacite_repository->GetCapacites( $choix_capacite );
 					if( array_key_exists( $choix_id, $liste_capacites ) ){
+						$personnage_repository = new PersonnageRepository();
 						if( $personnage_repository->BuyChoixCapacite( $c, $list_id, $choix_id ) ){
 							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_CAPACITE, $list_id, $choix_id, "Sélection de la capacité : " . $liste_capacites[ $choix_id ]->nom, TRUE );
 							return $c;
@@ -171,8 +163,7 @@
 		}
 
 		public function BuyChoixCapaciteRaciale( $character_id, $list_id, $choix_id ){
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->FindComplete( $character_id );
+			$c = Roster::GetCharacterComplete( $character_id );
 			// Valide que le personnage peut obtenir cette capacité raciale
 			if( $c != FALSE && array_key_exists( $list_id, $c->choix_capacites_raciales ) ){
 				$choix_capacite_raciale_repository = new ChoixCapaciteRacialeRepository();
@@ -180,6 +171,7 @@
 				if( $choix_capacite_raciale && $choix_capacite_raciale->active ){
 					$liste_capacites_raciales = $choix_capacite_raciale_repository->GetCapacitesRaciales( $choix_capacite_raciale );
 					if( array_key_exists( $choix_id, $liste_capacites_raciales ) ){
+						$personnage_repository = new PersonnageRepository();
 						if( $personnage_repository->BuyChoixCapaciteRaciale( $c, $list_id, $choix_id ) ){
 							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_CAPACITE_RACIALE, $list_id, $choix_id, "Sélection de la capacité raciale : " . $liste_capacites_raciales[ $choix_id ]->nom, TRUE );
 							return $c;
@@ -211,8 +203,7 @@
 		}
 
 		public function BuyChoixConnaissance( $character_id, $list_id, $choix_id ){
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->FindComplete( $character_id );
+			$c = Roster::GetCharacterComplete( $character_id );
 			// Valide que le personnage peut obtenir cette connaissance
 			if( $c != FALSE && array_key_exists( $list_id, $c->choix_connaissances ) ){
 				$choix_connaissance_repository = new ChoixConnaissanceRepository();
@@ -220,6 +211,7 @@
 				if( $choix_connaissance && $choix_connaissance->active ){
 					$liste_connaissances = $choix_connaissance_repository->GetConnaissances( $choix_connaissance );
 					if( array_key_exists( $choix_id, $liste_connaissances ) ){
+						$personnage_repository = new PersonnageRepository();
 						if( $personnage_repository->BuyChoixConnaissance( $c, $list_id, $choix_id ) ){
 							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_CONNAISSANCE, $list_id, $choix_id, "Sélection de la connaissance : " . $liste_connaissances[ $choix_id ]->nom, TRUE );
 							return $c;
@@ -251,8 +243,7 @@
 		}
 
 		public function BuyChoixVoie( $character_id, $list_id, $choix_id ){
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->FindComplete( $character_id );
+			$c = Roster::GetCharacterComplete( $character_id );
 			// Valide que le personnage peut obtenir cette voie
 			if( $c != FALSE && array_key_exists( $list_id, $c->choix_voies ) ){
 				$choix_voie_repository = new ChoixVoieRepository();
@@ -260,6 +251,7 @@
 				if( $choix_voie && $choix_voie->active ){
 					$liste_voies = $choix_voie_repository->GetVoies( $choix_voie );
 					if( array_key_exists( $choix_id, $liste_voies ) ){
+						$personnage_repository = new PersonnageRepository();
 						if( $personnage_repository->BuyChoixVoie( $c, $list_id, $choix_id ) ){
 							$this->RecordAction( $c->id, CharacterSheet::RECORD_CHOIX_VOIE, $list_id, $choix_id, "Sélection de la voie : " . $liste_voies[ $choix_id ]->nom, TRUE );
 							return $c;
@@ -291,9 +283,7 @@
 		}
 		
 		public function BuyCapacite( $character_id, $capacite_id, $nb_selections ){
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->FindComplete( $character_id );
-			
+			$c = Roster::GetCharacterComplete( $character_id );
 			if( $c != FALSE && $c->est_vivant
 					&& array_key_exists( $capacite_id, $c->capacites ) ){
 				$capacite_repository = new CapaciteRepository();
@@ -306,6 +296,7 @@
 						&& in_array( $capacite->voie_id, $c->voies ) ){
 					$xp_cost = self::GetSelectionCompoundCost( $curr_score + $nb_selections, $curr_score );
 					if( $c->CanAfford( $xp_cost ) ){
+						$personnage_repository = new PersonnageRepository();
 						if( $personnage_repository->AddCapacite( $c, $capacite_id, $nb_selections ) ){
 							$c->px_restants -= $xp_cost;
 						
@@ -344,9 +335,7 @@
 		}
 		
 		public function BuyVoie( $character_id, $voie_id ){
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->FindComplete( $character_id );
-			
+			$c = Roster::GetCharacterComplete( $character_id );
 			if( $c != FALSE && $c->est_vivant
 					&& !in_array( $voie_id, $c->voies ) ){
 				$voie_repository = new VoieRepository();
@@ -355,6 +344,7 @@
 				if( $voie && $voie->active ){
 					$xp_cost = $c->GetNextVoieCost();
 					if( $c->CanAfford( $xp_cost ) ){
+						$personnage_repository = new PersonnageRepository();
 						if( $personnage_repository->AddVoie( $c, $voie_id ) ){
 							$c->px_restants -= $xp_cost;
 						
@@ -391,9 +381,7 @@
 		}
 		
 		public function BuyConnaissance( $character_id, $connaissance_id ){
-			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->FindComplete( $character_id );
-			
+			$c = Roster::GetCharacterComplete( $character_id );
 			if( $c != FALSE && $c->est_vivant
 					&& !in_array( $connaissance_id, $c->connaissances ) ){
 				$connaissance_repository = new ConnaissanceRepository();
@@ -401,6 +389,7 @@
 				
 				if( $connaissance && $connaissance->active ){
 					if( $c->CanAfford( $connaissance->cout ) ){
+						$personnage_repository = new PersonnageRepository();
 						if( $personnage_repository->AddConnaissance( $c, $connaissance_id ) ){
 							$c->px_restants -= $connaissance->cout;
 						
@@ -437,8 +426,7 @@
 			
 			return FALSE;
 		}
-		
-		/*
+
 		public function SaveCommentaire( Personnage $character, $commentaire ){
 			$personnage_repository = new PersonnageRepository();
 			
@@ -454,7 +442,6 @@
 			
 			return FALSE;
 		}
-		*/
 		
 		public function SaveNotes( Personnage $character, $notes ){
 			$personnage_repository = new PersonnageRepository();
@@ -474,7 +461,7 @@
 		
 		public function Activate( $id ){
 			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->Find( $id );
+			$c = Roster::GetCharacter( $id );
 			
 			if( $c
 					&& !$c->est_cree
@@ -496,7 +483,7 @@
 		/*
 		public function Deactivate( $id ){
 			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->Find( $id );
+			$c = Roster::GetCharacter( $id );
 			
 			if( $c && $c->est_vivant ){
 				if( $personnage_repository->Deactivate( $c ) ){
@@ -510,7 +497,7 @@
 		
 		public function Destroy( $id ){
 			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->Find( $id );
+			$c = Roster::GetCharacter( $id );
 			
 			if( $c && !$c->est_vivant ){
 				if( $personnage_repository->Delete( $c->id ) ){
@@ -524,7 +511,7 @@
 		
 		public function RebuildComplet( $id, $suffix = FALSE ){
 			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->Find( $id );
+			$c = Roster::GetCharacter( $id );
 			
 			if( !$suffix ){
 				$suffix = " [REMPLACÉ " . date( "Y-m-d" ) . "]";
@@ -538,7 +525,7 @@
 		
 		public function RebuildPerte( $id, $suffix = FALSE ){
 			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->Find( $id );
+			$c = Roster::GetCharacter( $id );
 			
 			if( !$suffix ){
 				$suffix = " [REMPLACÉ (à perte) " . date( "Y-m-d" ) . "]";
@@ -586,7 +573,7 @@
 		public function ManageExperience( $character_id, $modificateur, $silent = FALSE, $modif_total = FALSE, $raison = "" ){
 			if( is_numeric( $modificateur ) ){
 				$personnage_repository = new PersonnageRepository();
-				$c = $personnage_repository->Find( $character_id );
+				$c = Roster::GetCharacter( $character_id );
 				
 				if( $c && $c->est_vivant ){
 					$c->px_restants += $modificateur;
@@ -701,7 +688,7 @@
 				} else {
 					// Sinon, remet le personnage comme il etait
 					$personnage_repository = new PersonnageRepository();
-					$character = $personnage_repository->FindComplete( $character->id );
+					$character = Roster::GetCharacterComplete( $character->id );
 				}
 			}
 			
@@ -724,7 +711,7 @@
 		const RECORD_CHOIX_VOIE = 24;
 		private function RecordAction( $character_id, $quoi, $pourquoi, $combien, $note = "", $can_backtrack = true ){
 			$personnage_repository = new PersonnageRepository();
-			$c = $personnage_repository->Find( $character_id );
+			$c = Roster::GetCharacter( $character_id );
 			
 			if( $c ) {
 				if( is_numeric( $quoi ) && is_numeric( $pourquoi ) && is_numeric( $combien ) ){

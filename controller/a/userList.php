@@ -42,6 +42,19 @@
 					Message::Erreur( "Impossible de compléter la demande en lien avec le statut 'Est admin' de ce joueur." );
 				}
 			}
+
+			// Accessible seulement aux super-admins
+			if( isset( $_GET['super'] ) && $_SESSION[ SESSION_KEY ][ "User" ]->IsSuperAdmin ){
+				if( $_GET['super'] == "f" && $p->IsSuperAdmin ){
+					$identity->SetPlayerAccess( Identity::IS_SUPERADMIN, FALSE );
+					Message::Notice( "Joueur '" . $p->getFullName() . "' n'est plus super-admin." );
+				} else if( $_GET['super'] == "t" && !$p->IsSuperAdmin ){
+					$identity->SetPlayerAccess( Identity::IS_SUPERADMIN, TRUE );
+					Message::Notice( "Joueur '" . $p->getFullName() . "' est maintenant super-admin." );
+				} else {
+					Message::Erreur( "Impossible de compléter la demande en lien avec le statut 'Est super-admin' de ce joueur." );
+				}
+			}
 			
 			header( "Location: ?s=admin&a=userList#player_" . $p->Id );
 			die();
