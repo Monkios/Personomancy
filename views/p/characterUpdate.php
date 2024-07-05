@@ -460,7 +460,7 @@
 <?php
 		if( $last_modification ){
 			$last_modification = FALSE;
-			if( $journal_desc->CanBacktrack && $personnage->est_vivant ){
+			if( $journal_desc->CanBacktrack && $personnage->est_vivant && ( $last_log->Quoi != CharacterSheet::RECORD_XP || $is_administrateur ) ){
 ?>
 						<button type="submit" name="perso_rollback_id" value="<?php echo $journal_desc->Id; ?>">Annuler</button>
 <?php

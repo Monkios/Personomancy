@@ -316,7 +316,7 @@
 								AND c.prereq_voie_primaire IN ( SELECT voie_id FROM personnage_voie WHERE personnage_id = p.id )
 								AND (
 									( c.prereq_voie_secondaire IS NULL AND c.prereq_capacite IS NULL ) -- AVANCÉE + MAÎTRE
-									OR c.prereq_capacite IN ( SELECT capacite_id FROM personnage_capacite WHERE personnage_id = p.id AND niveau >= " . CHARACTER_CONN_LEGENDAIRE_TRESHOLD . " ) -- LÉGENDAIRE
+									OR c.prereq_capacite IN ( SELECT capacite_id FROM personnage_capacite WHERE personnage_id = p.id AND niveau >= '" . CHARACTER_CONN_LEGENDAIRE_TRESHOLD . "' ) -- LÉGENDAIRE
 									OR c.prereq_voie_secondaire IN ( SELECT voie_id FROM personnage_voie WHERE personnage_id = p.id ) -- SYNERGIQUE
 								)
 						ORDER BY c.nom";

@@ -84,6 +84,7 @@
 			$c->cite_etat_id = $cite_etat_id;
 			$c->croyance_id = $croyance_id;
 			
+			$personnage_repository = new PersonnageRepository();
 			$personnage_repository->Save( $c );
 
 			return $c;
